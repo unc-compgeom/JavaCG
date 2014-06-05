@@ -3,10 +3,11 @@ package algorithms;
 import predicates.Predicate;
 import util.CG;
 import cg.Point;
+import cg.PointSet;
 import cg.Polygon;
 
 public class JarvisMarch {
-	public static void doJarvisMarch(Polygon pl, Polygon hull) {
+	public static void doJarvisMarch(PointSet pl, Polygon hull) {
 		Point min = leftmost(pl);
 		do {
 			hull.addPoint(min);
@@ -27,7 +28,7 @@ public class JarvisMarch {
 	 * @param p
 	 * @return the leftmost point
 	 */
-	private static Point leftmost(Polygon p) {
+	private static Point leftmost(PointSet p) {
 		Point leftmost = p.getPoint(0);
 		for (int i = 1; i < p.numPoints(); i++) {
 			if (leftmost.getX() > p.getPoint(i).getX()) {

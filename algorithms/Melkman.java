@@ -3,11 +3,12 @@ package algorithms;
 import predicates.Predicate;
 import util.CG;
 import cg.Point;
+import cg.PointSet;
 import cg.Polygon;
 
 public class Melkman {
 
-	public static void doMelkman(Polygon points, Polygon hull) {
+	public static void doMelkman(PointSet points, Polygon hull) {
 		Point p0 = points.getPoint(0);
 		Point p1 = points.getPoint(1);
 		hull.addFirst(p0);
