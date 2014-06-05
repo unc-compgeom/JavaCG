@@ -12,7 +12,7 @@ import cg.PointSetComponent;
 public class CG {
 	public static void sleep() {
 		try {
-			Thread.sleep(200);
+			Thread.sleep(150);
 		} catch (InterruptedException e) {
 		}
 	}

@@ -7,6 +7,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
+import util.CG;
 import util.CGObservable;
 import util.CGObserver;
 
@@ -42,9 +43,15 @@ public class PointSetComponent extends LinkedList<Point> implements
 	}
 
 	@Override
+	public boolean add(Point pt) {
+		boolean tf = super.add(pt);
+		notifyObservers(false);
+		return tf;
+	};
+
+	@Override
 	public void addPoint(Point pt) {
 		this.add(pt);
-		notifyObservers();
 	}
 
 	@Override
@@ -119,6 +126,19 @@ public class PointSetComponent extends LinkedList<Point> implements
 	}
 
 	@Override
+	public void push(Point p) {
+		super.push(p);
+		notifyObservers();
+	};
+
+	@Override
+	public Point pop() {
+		Point p = super.pop();
+		notifyObservers();
+		return p;
+	};
+
+	@Override
 	public void paintComponent(Graphics g) {
 		for (Point p : this) {
 			p.setColor(c);
@@ -141,8 +161,14 @@ public class PointSetComponent extends LinkedList<Point> implements
 	}
 
 	private void notifyObservers() {
+		notifyObservers(true);
+	}
+
+	private void notifyObservers(boolean sleep) {
 		for (CGObserver o : observers) {
 			o.update(this);
 		}
+		if (sleep)
+			CG.sleep();
 	}
 }

@@ -10,8 +10,7 @@ public class JarvisMarch {
 	public static void doJarvisMarch(PointSet pl, Polygon hull) {
 		Point min = leftmost(pl);
 		do {
-			hull.addPoint(min);
-			CG.sleep();
+			hull.addLast(min);
 			min = pl.getPoint(min != pl.getPoint(0) ? 0 : 1);
 			for (int i = 1; i < pl.numPoints(); i++) {
 				if (!Predicate.isPointLeftOrOnSegment(pl.getPoint(i),

@@ -12,19 +12,15 @@ public class GrahmScan {
 		Point min = findSmallestYX(points);
 		PointSet sorted = CG.sortByAngle(points, min);
 		hull.push(sorted.getPoint(0));
-		CG.sleep();
 		hull.push(sorted.getPoint(1));
-		CG.sleep();
 		int i = 2;
 		while (i < points.numPoints()) {
 			if (Predicate.isPointLeftOrOnSegment(sorted.getPoint(i),
 					hull.getSecond(), hull.getFirst())) {
 				hull.push(sorted.getPoint(i));
-				CG.sleep();
 				i++;
 			} else {
 				hull.pop();
-				CG.sleep();
 			}
 		}
 	}

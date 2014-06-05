@@ -14,7 +14,6 @@ public class Melkman {
 		hull.addFirst(p0);
 		hull.addFirst(p1);
 		hull.addLast(p1);
-		CG.sleep();
 		for (int i = 2; i < points.numPoints(); i++) {
 			if (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 					hull.getLast(), points.getPoint(i))
@@ -23,17 +22,14 @@ public class Melkman {
 				while (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 						hull.getLast(), points.getPoint(i))) {
 					hull.removeLast();
-					CG.sleep();
 
 				}
 				while (!Predicate.isLeftOrInside(points.getPoint(i),
 						hull.getFirst(), hull.getSecond())) {
 					hull.removeFirst();
-					CG.sleep();
 				}
 				hull.addFirst(points.getPoint(i));
 				hull.addLast(points.getPoint(i));
-				CG.sleep();
 			}
 		}
 	}
