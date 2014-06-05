@@ -142,6 +142,7 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		drawableItems.add(p);
 		for (Thread t : runningAlgorithms) {
 			t.stop();
+			// there must be a better way
 		}
 		runningAlgorithms.removeAll(runningAlgorithms);
 		repaint();

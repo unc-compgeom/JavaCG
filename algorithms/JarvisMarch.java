@@ -1,7 +1,6 @@
 package algorithms;
 
 import predicates.Predicate;
-import util.CG;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
