@@ -7,9 +7,9 @@ import java.awt.event.ActionListener;
 import cg.PointComponent;
 
 public class Controller implements ActionListener {
-	Model model;
+	ViewModel model;
 
-	public Controller(Model model) {
+	public Controller(ViewModel model) {
 		this.model = model;
 	}
 
@@ -17,8 +17,11 @@ public class Controller implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		// model actions
-		case "makeRandomPoints":
+		case "viewMakeRandomPoints":
 			model.makeRandomPoints();
+			break;
+		case "viewMakeRandomPolygon":
+			model.makeRandomPolygon();
 			break;
 		case "runGrahm":
 			model.runGrahm();

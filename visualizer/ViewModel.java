@@ -19,7 +19,7 @@ import cg.PointSetComponent;
 import cg.Polygon;
 import cg.PolygonComponent;
 
-public class Model implements CGObservable {
+public class ViewModel implements CGObservable {
 	private Dimension size;
 	private Polygon polygon;
 	private PointSet pointSet;
@@ -28,7 +28,7 @@ public class Model implements CGObservable {
 	private List<CGObserver> observers;
 	private List<PointSet> drawnObjects;
 
-	public Model() {
+	public ViewModel() {
 		isPolygonActive = false;
 		pointSet = new PointSetComponent();
 		polygon = new PolygonComponent();
@@ -50,6 +50,18 @@ public class Model implements CGObservable {
 		notifyObservers();
 	}
 
+	
+	public void makeRandomPolygon() {
+		int width = size.width;
+		int height = size.height;
+		Random Ayn = new Random();
+		for (int i = 0; i < 64; i++) {
+			polygon.addPoint(new PointComponent(Ayn.nextInt(width), Ayn
+					.nextInt(height)));
+		}
+		notifyObservers();
+	}
+	
 	public Dimension getSize() {
 		return size;
 	}
