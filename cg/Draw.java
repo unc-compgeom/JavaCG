@@ -11,7 +11,7 @@ import util.CGObserver;
 public abstract class Draw implements CGObservable {
 	private Color c;
 	private List<CGObserver> observers;
-	
+
 	Draw() {
 		observers = new LinkedList<CGObserver>();
 	}
@@ -36,5 +36,10 @@ public abstract class Draw implements CGObservable {
 		for (CGObserver o : observers) {
 			o.update(this);
 		}
+	}
+
+	@Override
+	public void addObservers(List<CGObserver> observers) {
+		this.observers.addAll(observers);
 	}
 }

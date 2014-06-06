@@ -160,6 +160,11 @@ public class PointSetComponent extends LinkedList<Point> implements
 		this.observers.add(o);
 	}
 
+	@Override
+	public void addObservers(List<CGObserver> observers) {
+		this.observers.addAll(observers);
+	}
+
 	private void notifyObservers() {
 		notifyObservers(true);
 	}
