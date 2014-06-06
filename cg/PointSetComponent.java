@@ -176,4 +176,14 @@ public class PointSetComponent extends LinkedList<Point> implements
 		if (sleep)
 			CG.sleep();
 	}
+
+	@Override
+	public void removeObserver(CGObserver o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public void removeAllObservers() {
+		observers.removeAll(observers);
+	}
 }

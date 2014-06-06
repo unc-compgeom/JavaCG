@@ -26,11 +26,15 @@ public class Model implements CGObservable {
 	private List<Thread> runningAlgorithms;
 	private boolean isPolygonActive; // either draw polygon or point set
 	private List<CGObserver> observers;
+	private List<PointSet> drawnObjects;
 
 	public Model() {
 		isPolygonActive = false;
 		pointSet = new PointSetComponent();
 		polygon = new PolygonComponent();
+		drawnObjects = new LinkedList<PointSet>();
+		drawnObjects.add(pointSet);
+		drawnObjects.add(polygon);
 		runningAlgorithms = new LinkedList<Thread>();
 		observers = new Vector<CGObserver>();
 	}
@@ -55,7 +59,10 @@ public class Model implements CGObservable {
 	}
 
 	public void reset() {
-		pointSet.removeAll(pointSet);
+		for (PointSet o : drawnObjects) {
+			o.removeAllObservers();
+			o.removeAll(o);
+		}
 		for (Thread t : runningAlgorithms) {
 			t.stop();
 			// there must be a better way
@@ -67,6 +74,7 @@ public class Model implements CGObservable {
 	public void runMelkman() {
 		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
 		final Polygon ch = new PolygonComponent();
+		drawnObjects.add(ch);
 		ch.addObservers(observers);
 		ch.setColor(Color.RED);
 		runningAlgorithms.add(new Thread(new Runnable() {
@@ -78,8 +86,10 @@ public class Model implements CGObservable {
 		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
 		if (isPolygonActive) {
 			polygon = new PolygonComponent();
+			drawnObjects.add(polygon);
 		} else {
 			pointSet = new PointSetComponent();
+			drawnObjects.add(pointSet);
 		}
 
 	}
@@ -87,6 +97,7 @@ public class Model implements CGObservable {
 	public void runJarvis() {
 		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
 		final Polygon ch = new PolygonComponent();
+		drawnObjects.add(ch);
 		ch.addObservers(observers);
 		ch.setColor(Color.RED);
 		runningAlgorithms.add(new Thread(new Runnable() {
@@ -98,8 +109,10 @@ public class Model implements CGObservable {
 		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
 		if (isPolygonActive) {
 			polygon = new PolygonComponent();
+			drawnObjects.add(polygon);
 		} else {
 			pointSet = new PointSetComponent();
+			drawnObjects.add(pointSet);
 		}
 
 	}
@@ -107,6 +120,7 @@ public class Model implements CGObservable {
 	public void runGrahm() {
 		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
 		final Polygon ch = new PolygonComponent();
+		drawnObjects.add(ch);
 		ch.addObservers(observers);
 		ch.setColor(Color.RED);
 		runningAlgorithms.add(new Thread(new Runnable() {
@@ -118,8 +132,10 @@ public class Model implements CGObservable {
 		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
 		if (isPolygonActive) {
 			polygon = new PolygonComponent();
+			drawnObjects.add(polygon);
 		} else {
 			pointSet = new PointSetComponent();
+			drawnObjects.add(pointSet);
 		}
 	}
 
@@ -170,6 +186,16 @@ public class Model implements CGObservable {
 
 	public void enablePoints() {
 		isPolygonActive = false;
+	}
+
+	@Override
+	public void removeObserver(CGObserver o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public void removeAllObservers() {
+		observers.removeAll(observers);
 	}
 
 }

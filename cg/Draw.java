@@ -42,4 +42,14 @@ public abstract class Draw implements CGObservable {
 	public void addObservers(List<CGObserver> observers) {
 		this.observers.addAll(observers);
 	}
+
+	@Override
+	public void removeObserver(CGObserver o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public void removeAllObservers() {
+		observers.removeAll(observers);
+	}
 }
