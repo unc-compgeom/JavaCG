@@ -37,6 +37,9 @@ public class Controller implements ActionListener {
 		case "runChan":
 			model.runChan();
 			break;
+		case "runCalipers":
+			model.runCalipers();
+			break;
 		case "reset":
 			model.reset();
 			break;
