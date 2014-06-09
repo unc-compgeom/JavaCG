@@ -23,7 +23,7 @@ public class Predicate {
 		// find the determinant of the matrix
 		// [[ q.x-p.x, q.y-p.y]
 		// [ r.x-p.x, r.y-p.y]]
-		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
+		long det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
 		Orientation o;
 		if (det > 0) {
@@ -39,10 +39,6 @@ public class Predicate {
 	public static boolean isPointOnLine(Point p, Line l) {
 		Point p1 = l.getP1(), p2 = l.getP1();
 		return findOrientation(p, p1, p2) == Orientation.COLINEAR;
-	}
-
-	public static boolean isPointLeftOrOnSegment(Point p, Line l) {
-		return isPointLeftOrOnSegment(p, l.getP1(), l.getP2());
 	}
 
 	/**

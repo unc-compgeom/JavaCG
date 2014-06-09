@@ -4,9 +4,9 @@ import util.CGObservable;
 
 public interface Point extends Comparable<Point>, CGObservable {
 
-	public void setPoint(Point p1);
+	public void setX(int x);
 
-	public void setPoint(int x1, int y1);
+	public void setY(int y);
 
 	public int getX();
 
@@ -15,5 +15,5 @@ public interface Point extends Comparable<Point>, CGObservable {
 	public Point add(Point p1);
 
 	public Point sub(Point p1);
-	
+
 }

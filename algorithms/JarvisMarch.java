@@ -1,38 +1,35 @@
 package algorithms;
 
 import predicates.Predicate;
+import predicates.Predicate.Orientation;
+import util.CG;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
 public class JarvisMarch {
-	public static void doJarvisMarch(PointSet pl, Polygon hull) {
-		Point min = leftmost(pl);
+	public static void doJarvisMarch(PointSet points, Polygon hull) {
+		Point min = CG.findSmallestYX(points);
+		Point p, q = min;
+		int i = 0;
 		do {
-			hull.addLast(min);
-			min = pl.getPoint(min != pl.getPoint(0) ? 0 : 1);
-			for (int i = 1; i < pl.numPoints(); i++) {
-				if (!Predicate.isPointLeftOrOnSegment(pl.getPoint(i),
-						hull.getLast(), min)) {
-					min = pl.getPoint(i);
-				}
-			}
-		} while (!min.equals(hull.getPoint(0)));
+			hull.addLast(q);
+			p = hull.get(i);
+			q = nextHullPoint(points, p);
+			i++;
+		} while (!q.equals(min));
 	}
 
-	/**
-	 * Find the leftmost point of polygon p
-	 * 
-	 * @param p
-	 * @return the leftmost point
-	 */
-	private static Point leftmost(PointSet p) {
-		Point leftmost = p.getPoint(0);
-		for (int i = 1; i < p.numPoints(); i++) {
-			if (leftmost.getX() > p.getPoint(i).getX()) {
-				leftmost = p.getPoint(i);
+	private static Point nextHullPoint(PointSet points, Point p) {
+		Point q = p;
+		for (Point r : points) {
+			Orientation o = Predicate.findOrientation(p, q, r);
+			if (o == Orientation.CLOCKWISE
+					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
+							.distSquared(p, q))) {
+				q = r;
 			}
 		}
-		return leftmost;
+		return q;
 	}
 }

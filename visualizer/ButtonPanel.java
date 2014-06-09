@@ -5,20 +5,21 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 class ButtonPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 733262376848960367L;
-
+	private JButton randomPoints, drawPolygon;
 	public ButtonPanel(ActionListener a) {
 		super();
-		JButton drawPolygon = new JButton("Draw polygon");
+		drawPolygon = new JButton("Draw polygon");
 		drawPolygon.setActionCommand("viewEnablePolygon");
 		drawPolygon.addActionListener(a);
 		drawPolygon.addActionListener(this);
 		add(drawPolygon);
-		JButton randomPoints = new JButton("Generate random points");
-		randomPoints.setActionCommand("makeRandomPoints");
+		randomPoints = new JButton("Generate random points");
+		randomPoints.setActionCommand("viewMakeRandomPoints");
 		randomPoints.addActionListener(a);
 		add(randomPoints);
 		JButton runGrahm = new JButton("Grahm Scan");
@@ -33,25 +34,35 @@ class ButtonPanel extends JPanel implements ActionListener {
 		runMelkman.setActionCommand("runMelkman");
 		runMelkman.addActionListener(a);
 		add(runMelkman);
+		JButton runChan = new JButton("Chan");
+		runChan.setActionCommand("runChan");
+		runChan.addActionListener(a);
+		add(runChan);
 		JButton reset = new JButton("Reset");
 		reset.setActionCommand("reset");
 		reset.addActionListener(a);
 		add(reset);
+		JTextField delay = new JTextField("Delay (ns)");
+		delay.setActionCommand("delaySet");
+		delay.addActionListener(a);
+		add(delay);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "viewEnablePolygon": {
-			JButton b = (JButton) e.getSource();
-			b.setText(" Draw points ");
-			b.setActionCommand("viewEnablePoints");
+			drawPolygon.setText("Draw points");
+			drawPolygon.setActionCommand("viewEnablePoints");
+			randomPoints.setActionCommand("viewMakeRandomPolygon");
+			randomPoints.setText("Generate Random Polygon");
 			break;
 		}
 		case "viewEnablePoints": {
-			JButton b = (JButton) e.getSource();
-			b.setText("Draw Polygon");
-			b.setActionCommand("viewEnablePolygon");
+			drawPolygon.setText("Draw polygon");
+			drawPolygon.setActionCommand("viewEnablePolygon");
+			randomPoints.setActionCommand("viewMakeRandomPoints");
+			randomPoints.setText("Generate Random Points");
 			break;
 		}
 		}

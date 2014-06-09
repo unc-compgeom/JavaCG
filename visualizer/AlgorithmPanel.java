@@ -8,9 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import util.CGObservable;
 import util.CGObserver;
@@ -86,11 +88,29 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	 * Observer methods
 	 */
 	@Override
-	public void update(CGObservable o) {
+	public void update(CGObservable o, int delay) {
 		if (!drawableItems.contains(o)) {
 			drawableItems.add(o);
-			
 		}
-		repaint();
+		SwingWorker w = new SwingWorker<Void, Void>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				repaint();
+				return null;
+			}
+		};
+		w.execute();
+		try {
+			w.get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void update(CGObservable o) {
+		update(o, 0);
 	}
 }

@@ -1,28 +1,16 @@
 package cg;
 
 import java.util.Deque;
+import java.util.List;
 
 import util.CGObservable;
 
-public interface PointSet extends CGObservable, Deque<Point> {
+public interface PointSet extends CGObservable, List<Point>, Deque<Point>,
+		Cloneable, java.io.Serializable {
 
-	public void clear();
+	public void remove(Point pt);
 
-	public boolean isEmpty();
-
-	public int numPoints();
-
-	public void addPoint(Point pt);
-
-	public void removePoint(Point pt);
-
-	public void removeElementAt(int i);
-
-	public Point getPoint(int index);
-
-	public void setPoint(int index, Point pt);
-
-	public void setPoint(int index, int x, int y);
+	public void removeAll();
 
 	public Point getSecond();
 

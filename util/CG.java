@@ -17,36 +17,88 @@ public class CG {
 		}
 	}
 
-	public static PointSet sortByAngle(PointSet p, final Point pt) {
+	/**
+	 * This method finds the point in the set <code>points</code> that has the
+	 * smallest Y value. If there is a tie, it finds the point with the smallest
+	 * Y and X value.
+	 * 
+	 * @param points
+	 * @return the point with the lowest Y, X value.
+	 */
+	public static Point findSmallestYX(PointSet points) {
+		Point min = points.get(0);
+		int minY = min.getY();
+		Point lookingAt;
+		for (int i = 1; i < points.size(); i++) {
+			lookingAt = points.get(i);
+			if (lookingAt.getY() <= minY) {
+				if (lookingAt.getY() < minY) {
+					min = lookingAt;
+					minY = min.getY();
+				} else {
+					min = (min.getX() < lookingAt.getX()) ? min : lookingAt;
+					minY = min.getY();
+				}
+			}
+		}
+		return min;
+	}
+
+	public static PointSet lexicographicalSort(PointSet points) {
+		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
+		sorter.addAll(points);
+		PointSet sorted = new PointSetComponent();
+		while (!sorter.isEmpty()) {
+			sorted.add(sorter.remove());
+		}
+		return sorted;
+	}
+
+	/**
+	 * This method sorts <code>points</code> in increasing order by the angle
+	 * they make with the point at location zero.
+	 * 
+	 * @param points
+	 *            the points to sort
+	 * @return the sorted set of points
+	 */
+	public static PointSet sortByAngle(PointSet points) {
+		final Point compare = points.getFirst();
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>(
 				new Comparator<Point>() {
 					@Override
-					public int compare(Point p1, Point p2) {
-						Orientation orient = Predicate.findOrientation(pt, p1,
-								p2);
-						if (orient == Orientation.COLINEAR) {
-							return (distSquared(pt, p1) > distSquared(pt, p2)) ? 1
-									: -1;
+					public int compare(Point p, Point q) {
+						Orientation o = Predicate
+								.findOrientation(q, compare, p);
+						if (o == Orientation.CLOCKWISE) {
+							return -1;
+						} else if (o == Orientation.COUNTERCLOCKWISE) {
+							return 1;
 						} else {
-							return (orient == Orientation.COUNTERCLOCKWISE) ? -1
-									: 1;
+							// colinear
+							long dP = distSquared(compare, p);
+							long dQ = distSquared(compare, q);
+							if (dP < dQ) {
+								return -1;
+							} else if (dP > dQ) {
+								return 1;
+							} else {
+								return 0;
+							}
 						}
 					}
 
-					private int distSquared(Point p, Point q) {
-						int px = p.getX(), py = p.getY(), qx = q.getX(), qy = q
-								.getY();
-						return (px - qx) * (px - qx) + (py - qy) * (py - qy);
-					}
 				});
-		for (int i = 0; i < p.numPoints(); i++) {
-			sorter.add(p.getPoint(i));
-		}
-		PointSet points = new PointSetComponent();
+		sorter.addAll(points);
+		PointSet sorted = new PointSetComponent();
 		while (!sorter.isEmpty()) {
-			points.addPoint(sorter.remove());
+			sorted.add(sorter.remove());
 		}
-		return points;
+		return sorted;
 	}
 
+	public static long distSquared(Point p, Point q) {
+		long dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
+		return dx * dx + dy * dy;
+	}
 }

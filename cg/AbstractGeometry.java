@@ -8,11 +8,11 @@ import java.util.List;
 import util.CGObservable;
 import util.CGObserver;
 
-public abstract class Draw implements CGObservable {
+public abstract class AbstractGeometry implements CGObservable {
 	private Color c;
 	private List<CGObserver> observers;
 
-	Draw() {
+	AbstractGeometry() {
 		observers = new LinkedList<CGObserver>();
 	}
 
@@ -51,5 +51,10 @@ public abstract class Draw implements CGObservable {
 	@Override
 	public void removeAllObservers() {
 		observers.removeAll(observers);
+	}
+
+	@Override
+	public List<CGObserver> getObservers() {
+		return observers;
 	}
 }

@@ -2,21 +2,13 @@ package cg;
 
 import java.awt.Graphics;
 
-public class LineComponent extends Draw implements Line {
+public class LineComponent extends AbstractGeometry implements Line {
 	private Point p1;
 	private Point p2;
-
-	public LineComponent() {
-		this(new PointComponent(), new PointComponent());
-	}
 
 	public LineComponent(Point p1, Point p2) {
 		this.p1 = p1;
 		this.p2 = p2;
-	}
-
-	public LineComponent(Line l) {
-		this(l.getP1(), l.getP2());
 	}
 
 	@Override
@@ -25,14 +17,14 @@ public class LineComponent extends Draw implements Line {
 	}
 
 	@Override
-	public void setP1(Point p1) {
-		this.p1 = p1;
-		notifyObservers();
+	public Point getP2() {
+		return this.p2;
 	}
 
 	@Override
-	public Point getP2() {
-		return this.p2;
+	public void setP1(Point p1) {
+		this.p1 = p1;
+		notifyObservers();
 	}
 
 	@Override
@@ -43,7 +35,7 @@ public class LineComponent extends Draw implements Line {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		//super.paintComponent(g);
+		super.paintComponent(g);
 		g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
 		p1.paintComponent(g);
 		p2.paintComponent(g);

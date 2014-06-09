@@ -7,7 +7,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-import util.CG;
 import util.CGObservable;
 import util.CGObserver;
 
@@ -26,44 +25,25 @@ public class PointSetComponent extends LinkedList<Point> implements
 		Collections.addAll(this, pts);
 	}
 
+	// /////////////// // LinkedList OVERRIDES // /////////////// //
 	@Override
 	public void clear() {
-		this.clear();
+		super.clear();
 		notifyObservers();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return this.isEmpty();
-	}
-
-	@Override
-	public int numPoints() {
-		return this.size();
 	}
 
 	@Override
 	public boolean add(Point pt) {
 		boolean tf = super.add(pt);
-		notifyObservers(false);
+		notifyObservers();
 		return tf;
-	};
-
-	@Override
-	public void addPoint(Point pt) {
-		this.add(pt);
 	}
 
 	@Override
-	public void removePoint(Point pt) {
-		this.remove(pt);
+	public Point remove(int i) {
+		Point removed = super.remove(i);
 		notifyObservers();
-	}
-
-	@Override
-	public void removeElementAt(int i) {
-		this.remove(i);
-		notifyObservers();
+		return removed;
 	}
 
 	@Override
@@ -90,53 +70,45 @@ public class PointSetComponent extends LinkedList<Point> implements
 		Point p = super.removeLast();
 		notifyObservers();
 		return p;
-	};
-
-	@Override
-	public Point getPoint(int index) {
-		return this.get(index);
-	}
-
-	@Override
-	public Point getSecond() {
-		Point tmp = super.removeFirst();
-		Point ret = getFirst();
-		super.addFirst(tmp);
-		return ret;
-	}
-
-	@Override
-	public Point getSecondToLast() {
-		Point tmp = super.removeLast();
-		Point ret = getLast();
-		super.addLast(tmp);
-		return ret;
-	}
-
-	@Override
-	public void setPoint(int index, Point pt) {
-		this.get(index).setPoint(pt);
-		notifyObservers();
-	}
-
-	@Override
-	public void setPoint(int index, int x, int y) {
-		this.get(index).setPoint(x, y);
-		notifyObservers();
 	}
 
 	@Override
 	public void push(Point p) {
 		super.push(p);
 		notifyObservers();
-	};
+	}
 
 	@Override
 	public Point pop() {
 		Point p = super.pop();
 		notifyObservers();
 		return p;
-	};
+	}
+
+	// /////////////// // LinkedList additions // /////////////// //
+	@Override
+	public void remove(Point pt) {
+		super.remove(pt);
+		notifyObservers();
+	}
+
+	@Override
+	public void removeAll() {
+		super.removeAll(this);
+		notifyObservers();
+	}
+
+	@Override
+	public Point getSecond() {
+		return get(1);
+	}
+
+	@Override
+	public Point getSecondToLast() {
+		return get(size() - 2);
+	}
+
+	// /////////////// // Drawable functionality // /////////////// //
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -144,6 +116,7 @@ public class PointSetComponent extends LinkedList<Point> implements
 			p.setColor(c);
 			p.paintComponent(g);
 		}
+		g.setColor(c);
 	}
 
 	@Override
@@ -166,15 +139,9 @@ public class PointSetComponent extends LinkedList<Point> implements
 	}
 
 	private void notifyObservers() {
-		notifyObservers(true);
-	}
-
-	private void notifyObservers(boolean sleep) {
 		for (CGObserver o : observers) {
 			o.update(this);
 		}
-		if (sleep)
-			CG.sleep();
 	}
 
 	@Override
@@ -185,5 +152,10 @@ public class PointSetComponent extends LinkedList<Point> implements
 	@Override
 	public void removeAllObservers() {
 		observers.removeAll(observers);
+	}
+
+	@Override
+	public List<CGObserver> getObservers() {
+		return observers;
 	}
 }

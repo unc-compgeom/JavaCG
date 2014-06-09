@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.SwingWorker;
+
 import util.CGObservable;
 import util.CGObserver;
+import algorithms.Chan;
 import algorithms.GrahmScan;
 import algorithms.JarvisMarch;
 import algorithms.Melkman;
@@ -19,7 +22,7 @@ import cg.PointSetComponent;
 import cg.Polygon;
 import cg.PolygonComponent;
 
-public class ViewModel implements CGObservable {
+public class ViewModel implements CGObservable, CGObserver {
 	private Dimension size;
 	private Polygon polygon;
 	private PointSet pointSet;
@@ -27,6 +30,7 @@ public class ViewModel implements CGObservable {
 	private boolean isPolygonActive; // either draw polygon or point set
 	private List<CGObserver> observers;
 	private List<PointSet> drawnObjects;
+	private int delay = 250; // animation delay in ms.
 
 	public ViewModel() {
 		isPolygonActive = false;
@@ -44,24 +48,23 @@ public class ViewModel implements CGObservable {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.addPoint(new PointComponent(Ayn.nextInt(width), Ayn
+			pointSet.add(new PointComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
-		notifyObservers();
+		notifyObservers(0);
 	}
 
-	
 	public void makeRandomPolygon() {
 		int width = size.width;
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.addPoint(new PointComponent(Ayn.nextInt(width), Ayn
+			polygon.add(new PointComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
 		notifyObservers();
 	}
-	
+
 	public Dimension getSize() {
 		return size;
 	}
@@ -80,14 +83,14 @@ public class ViewModel implements CGObservable {
 			// there must be a better way
 		}
 		runningAlgorithms.removeAll(runningAlgorithms);
-		notifyObservers();
+		notifyObservers(0);
 	}
 
 	public void runMelkman() {
 		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
 		final Polygon ch = new PolygonComponent();
 		drawnObjects.add(ch);
-		ch.addObservers(observers);
+		ch.addObserver(this);
 		ch.setColor(Color.RED);
 		runningAlgorithms.add(new Thread(new Runnable() {
 			@Override
@@ -110,7 +113,7 @@ public class ViewModel implements CGObservable {
 		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
 		final Polygon ch = new PolygonComponent();
 		drawnObjects.add(ch);
-		ch.addObservers(observers);
+		ch.addObserver(this);
 		ch.setColor(Color.RED);
 		runningAlgorithms.add(new Thread(new Runnable() {
 			@Override
@@ -133,12 +136,43 @@ public class ViewModel implements CGObservable {
 		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
 		final Polygon ch = new PolygonComponent();
 		drawnObjects.add(ch);
-		ch.addObservers(observers);
+		ch.addObserver(this);
+		ch.setColor(Color.RED);
+		(new SwingWorker<Void, Void>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				GrahmScan.doGrahmScan(poly, ch);
+				return null;
+			}
+			
+		}).execute();
+//		runningAlgorithms.add(new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				GrahmScan.doGrahmScan(poly, ch);
+//			}
+//		}));
+//		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
+		if (isPolygonActive) {
+			polygon = new PolygonComponent();
+			drawnObjects.add(polygon);
+		} else {
+			pointSet = new PointSetComponent();
+			drawnObjects.add(pointSet);
+		}
+	}
+
+	public void runChan() {
+		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
+		final Polygon ch = new PolygonComponent();
+		drawnObjects.add(ch);
+		ch.addObserver(this);
 		ch.setColor(Color.RED);
 		runningAlgorithms.add(new Thread(new Runnable() {
 			@Override
 			public void run() {
-				GrahmScan.doGrahmScan(poly, ch);
+				Chan.doChan(poly, ch);
 			}
 		}));
 		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
@@ -153,25 +187,41 @@ public class ViewModel implements CGObservable {
 
 	public void addPoint(PointComponent p) {
 		if (isPolygonActive) {
-			polygon.addPoint(p);
+			polygon.add(p);
 		} else {
-			pointSet.addPoint(p);
+			pointSet.add(p);
 		}
-		notifyObservers();
+		notifyObservers(0);
 	}
 
-	private void notifyObservers(CGObservable d) {
+	public void enablePolygon() {
+		isPolygonActive = true;
+	}
+
+	public void enablePoints() {
+		isPolygonActive = false;
+	}
+
+	private void notifyObservers(CGObservable d, int delay) {
 		for (CGObserver o : observers) {
-			o.update(d);
+			o.update(d, delay);
+		}
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+		}
+	}
+
+	private void notifyObservers(int delay) {
+		if (isPolygonActive) {
+			notifyObservers(polygon, delay);
+		} else {
+			notifyObservers(pointSet, delay);
 		}
 	}
 
 	private void notifyObservers() {
-		if (isPolygonActive) {
-			notifyObservers(polygon);
-		} else {
-			notifyObservers(pointSet);
-		}
+		notifyObservers(delay);
 	}
 
 	@Override
@@ -192,14 +242,6 @@ public class ViewModel implements CGObservable {
 		this.observers.addAll(observers);
 	}
 
-	public void enablePolygon() {
-		isPolygonActive = true;
-	}
-
-	public void enablePoints() {
-		isPolygonActive = false;
-	}
-
 	@Override
 	public void removeObserver(CGObserver o) {
 		observers.remove(o);
@@ -208,6 +250,25 @@ public class ViewModel implements CGObservable {
 	@Override
 	public void removeAllObservers() {
 		observers.removeAll(observers);
+	}
+
+	@Override
+	public List<CGObserver> getObservers() {
+		return observers;
+	}
+
+	@Override
+	public void update(CGObservable o, int delay) {
+		notifyObservers(o, delay);
+	}
+
+	@Override
+	public void update(CGObservable o) {
+		notifyObservers(o, delay);
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 
 }

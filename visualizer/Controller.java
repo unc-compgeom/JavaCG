@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JTextField;
+
 import cg.PointComponent;
 
 public class Controller implements ActionListener {
@@ -32,8 +34,20 @@ public class Controller implements ActionListener {
 		case "runMelkman":
 			model.runMelkman();
 			break;
+		case "runChan":
+			model.runChan();
+			break;
 		case "reset":
 			model.reset();
+			break;
+		case "delaySet":
+			try {
+				model.setDelay(Integer.parseInt(((JTextField) e.getSource())
+						.getText()));
+			} catch (NumberFormatException exc) {
+				((JTextField) e.getSource()).setText("250");
+				((JTextField) e.getSource()).selectAll();
+			}
 			break;
 		// view actions
 		case "viewResized":
@@ -52,7 +66,7 @@ public class Controller implements ActionListener {
 		default:
 			System.out
 					.println("Default action handler; do nothing for action: "
-							+ e.getActionCommand());
+							+ e.getActionCommand() + " " + e.getSource());
 			break;
 		}
 	}
