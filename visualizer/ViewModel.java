@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import util.CGObservable;
 import util.CGObserver;
+import algorithms.Calipers;
 import algorithms.GrahmScan;
 import algorithms.JarvisMarch;
 import algorithms.Melkman;
@@ -142,6 +143,40 @@ public class ViewModel implements CGObservable {
 			}
 		}));
 		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
+		if (isPolygonActive) {
+			polygon = new PolygonComponent();
+			drawnObjects.add(polygon);
+		} else {
+			pointSet = new PointSetComponent();
+			drawnObjects.add(pointSet);
+		}
+	}
+	
+	public void runCalipers(){
+		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
+		final Polygon ch = new PolygonComponent();
+		final Polygon diamline = new PolygonComponent();
+		final Polygon support1 = new PolygonComponent();
+		final Polygon support2 = new PolygonComponent();
+		drawnObjects.add(ch);
+		ch.addObservers(observers);
+		ch.setColor(Color.RED);
+		drawnObjects.add(diamline);
+		diamline.addObservers(observers);
+		diamline.setColor(Color.GREEN);
+		drawnObjects.add(support1);
+		support1.addObservers(observers);
+		support1.setColor(Color.BLUE);
+		drawnObjects.add(support2);
+		support2.addObservers(observers);
+		support2.setColor(Color.BLUE);
+		runningAlgorithms.add(new Thread(new Runnable(){
+			@Override
+			public void run(){
+				Calipers.doCalipers(poly, ch, diamline, support1, support2);
+			}
+		}));
+		runningAlgorithms.get(runningAlgorithms.size()-1).start();
 		if (isPolygonActive) {
 			polygon = new PolygonComponent();
 			drawnObjects.add(polygon);

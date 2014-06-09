@@ -4,11 +4,12 @@ import predicates.Predicate;
 import util.CG;
 import cg.Point;
 import cg.PointComponent;
+import cg.PointSet;
 import cg.Polygon;
 
 public class Calipers {
 	
-	public static void doCalipers(Polygon points, Polygon hull, Polygon diamline, Polygon support1, Polygon support2) {
+	public static void doCalipers(PointSet points, Polygon hull, Polygon diamline, Polygon support1, Polygon support2) {
 		hull = getConvexHull(points, hull);
 		int i=0;
 		int j=1;
@@ -27,6 +28,7 @@ public class Calipers {
 					diamline.remove();
 					diamline.remove();
 				}
+			/*
 				if(!support1.isEmpty()){
 					support1.remove();
 					support1.remove();
@@ -35,6 +37,7 @@ public class Calipers {
 					support2.remove();
 					support2.remove();
 				}
+			*/
 				diamline.addPoint(pi);
 				diamline.addPoint(pj);
 				CG.sleep();
@@ -60,7 +63,7 @@ public class Calipers {
 	}
 	
 	/** Uses Jarvis march to compute convex hull */
-	private static Polygon getConvexHull(Polygon pl, Polygon hull){
+	private static Polygon getConvexHull(PointSet pl, Polygon hull){
 		Point min = leftmost(pl);
 		do {
 			hull.addPoint(min);
@@ -75,7 +78,7 @@ public class Calipers {
 		return hull;
 	}
 	
-	private static Point leftmost(Polygon p) {
+	private static Point leftmost(PointSet p) {
 		Point leftmost = p.getPoint(0);
 		for (int i = 1; i < p.numPoints(); i++) {
 			if (leftmost.getX() > p.getPoint(i).getX()) {

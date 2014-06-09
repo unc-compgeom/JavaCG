@@ -32,6 +32,9 @@ public class Controller implements ActionListener {
 		case "runMelkman":
 			model.runMelkman();
 			break;
+		case "runCalipers":
+			model.runCalipers();
+			break;
 		case "reset":
 			model.reset();
 			break;

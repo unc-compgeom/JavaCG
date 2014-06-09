@@ -33,6 +33,10 @@ class ButtonPanel extends JPanel implements ActionListener {
 		runMelkman.setActionCommand("runMelkman");
 		runMelkman.addActionListener(a);
 		add(runMelkman);
+		JButton runCalipers = new JButton("Calipers");
+		runCalipers.setActionCommand("runCalipers");
+		runCalipers.addActionListener(a);
+		add(runCalipers);
 		JButton reset = new JButton("Reset");
 		reset.setActionCommand("reset");
 		reset.addActionListener(a);

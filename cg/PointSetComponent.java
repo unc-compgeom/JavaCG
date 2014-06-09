@@ -34,7 +34,7 @@ public class PointSetComponent extends LinkedList<Point> implements
 
 	@Override
 	public boolean isEmpty() {
-		return this.isEmpty();
+		return super.isEmpty();
 	}
 
 	@Override
