@@ -19,7 +19,7 @@ public class CG {
 
 	public static PointSet sortByAngle(PointSet p, final Point pt) {
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>(
-				new Comparator<Point>() {
+				11, new Comparator<Point>() {
 					@Override
 					public int compare(Point p1, Point p2) {
 						Orientation orient = Predicate.findOrientation(pt, p1,
