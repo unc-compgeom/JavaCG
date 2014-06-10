@@ -32,20 +32,8 @@ public class PointSetComponent extends LinkedList<Point> implements
 		notifyObservers();
 	}
 
-	@Override
-<<<<<<< HEAD
-=======
-	public boolean isEmpty() {
-		return super.isEmpty();
-	}
 
 	@Override
-	public int numPoints() {
-		return this.size();
-	}
-
-	@Override
->>>>>>> 66a8db095a3cd475ed6986e95038956d32f706f0
 	public boolean add(Point pt) {
 		boolean tf = super.add(pt);
 		notifyObservers();
