@@ -4,15 +4,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import algorithms.Algorithm;
 
 class ButtonPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 733262376848960367L;
 	private JButton randomPoints, drawPolygon;
+	private JComboBox<Algorithm> algorithms;
+	private ActionListener a;
+
 	public ButtonPanel(ActionListener a) {
 		super();
+		this.a = a;
 		drawPolygon = new JButton("Draw polygon");
 		drawPolygon.setActionCommand("viewEnablePolygon");
 		drawPolygon.addActionListener(a);
@@ -22,30 +29,12 @@ class ButtonPanel extends JPanel implements ActionListener {
 		randomPoints.setActionCommand("viewMakeRandomPoints");
 		randomPoints.addActionListener(a);
 		add(randomPoints);
-		JButton runGrahm = new JButton("Grahm Scan");
-		runGrahm.setActionCommand("runGrahm");
-		runGrahm.addActionListener(a);
-		add(runGrahm);
-		JButton runJarvis = new JButton("Jarvis March");
-		runJarvis.setActionCommand("runJarvis");
-		runJarvis.addActionListener(a);
-		add(runJarvis);
-		JButton runMelkman = new JButton("Melkman");
-		runMelkman.setActionCommand("runMelkman");
-		runMelkman.addActionListener(a);
-		add(runMelkman);
-		JButton runChan = new JButton("Chan");
-		runChan.setActionCommand("runChan");
-		runChan.addActionListener(a);
-		add(runChan);
-		JButton runCalipers = new JButton("Calipers");
-		runCalipers.setActionCommand("runCalipers");
-		runCalipers.addActionListener(a);
-		add(runCalipers);
-		JButton runMonotoneChain = new JButton("Monotone Chain");
-		runMonotoneChain.setActionCommand("runMonotoneChain");
-		runMonotoneChain.addActionListener(a);
-		add(runMonotoneChain);
+		algorithms = new JComboBox<Algorithm>(Algorithm.values());
+		add(algorithms);
+		JButton run = new JButton("Run");
+		run.setActionCommand("run");
+		run.addActionListener(this);
+		add(run);
 		JButton reset = new JButton("Reset");
 		reset.setActionCommand("reset");
 		reset.addActionListener(a);
@@ -73,6 +62,13 @@ class ButtonPanel extends JPanel implements ActionListener {
 			randomPoints.setText("Generate Random Points");
 			break;
 		}
+		case "run":
+			a.actionPerformed(new ActionEvent(this,
+					ActionEvent.ACTION_PERFORMED, Algorithm.values()[algorithms
+							.getSelectedIndex()].toString()));
+			break;
+		default:
+			System.out.println("Unhandled action in ButtonPanel: " + e.getActionCommand());
 		}
 
 	}

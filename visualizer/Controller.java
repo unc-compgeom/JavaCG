@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
 
+import algorithms.Algorithm;
 import cg.PointComponent;
 
 public class Controller implements ActionListener {
@@ -19,30 +20,11 @@ public class Controller implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		// model actions
 		case "viewMakeRandomPoints":
 			model.makeRandomPoints();
 			break;
 		case "viewMakeRandomPolygon":
 			model.makeRandomPolygon();
-			break;
-		case "runGrahm":
-			model.runGrahm();
-			break;
-		case "runJarvis":
-			model.runJarvis();
-			break;
-		case "runMelkman":
-			model.runMelkman();
-			break;
-		case "runChan":
-			model.runChan();
-			break;
-		case "runCalipers":
-			model.runCalipers();
-			break;
-		case "runMonotoneChain":
-			model.runMonotoneChain();
 			break;
 		case "reset":
 			model.reset();
@@ -57,7 +39,6 @@ public class Controller implements ActionListener {
 				((JTextField) e.getSource()).selectAll();
 			}
 			break;
-		// view actions
 		case "viewResized":
 			model.setSize((Dimension) e.getSource());
 			break;
@@ -72,9 +53,12 @@ public class Controller implements ActionListener {
 			model.enablePoints();
 			break;
 		default:
-			System.out
-					.println("Default action handler; do nothing for action: "
-							+ e.getActionCommand() + " " + e.getSource());
+			try {
+				model.runAlgorithm(Algorithm.fromString(e.getActionCommand()));
+			} catch (IllegalArgumentException exc) {
+				System.out.println("Unhandled action in Controller: "
+						+ e.getActionCommand() + " " + e.getSource());
+			}
 			break;
 		}
 	}

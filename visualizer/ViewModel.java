@@ -12,6 +12,7 @@ import javax.swing.SwingWorker;
 
 import util.CGObservable;
 import util.CGObserver;
+import algorithms.Algorithm;
 import algorithms.Chan;
 import algorithms.Calipers;
 import algorithms.GrahmScan;
@@ -32,10 +33,6 @@ public class ViewModel implements CGObservable, CGObserver {
 	private List<CGObserver> observers;
 	private List<PointSet> drawnObjects;
 	private int delay = 250; // animation delay in ms.
-
-	private enum Algorithms {
-		CALIPERS, CHAN, GRAHM_SCAN, JARVIS_MARCH, MELKMAN, MONOTONE_CHAIN
-	}
 
 	public ViewModel() {
 		isPolygonActive = false;
@@ -91,11 +88,7 @@ public class ViewModel implements CGObservable, CGObserver {
 		notifyObservers(0);
 	}
 
-	public void runMelkman() {
-		runAlgorithm(Algorithms.MELKMAN);
-	}
-
-	private void runAlgorithm(final Algorithms algorithm) {
+	public void runAlgorithm(final Algorithm algorithm) {
 		final PointSet points = (isPolygonActive) ? polygon : pointSet;
 		final Polygon hull = new PolygonComponent();
 		drawnObjects.add(hull);
@@ -142,26 +135,6 @@ public class ViewModel implements CGObservable, CGObserver {
 			pointSet = new PointSetComponent();
 			drawnObjects.add(pointSet);
 		}
-	}
-
-	public void runJarvis() {
-		runAlgorithm(Algorithms.JARVIS_MARCH);
-	}
-
-	public void runGrahm() {
-		runAlgorithm(Algorithms.GRAHM_SCAN);
-	}
-
-	public void runChan() {
-		runAlgorithm(Algorithms.CHAN);
-	}
-
-	public void runCalipers() {
-		runAlgorithm(Algorithms.CALIPERS);
-	}
-
-	public void runMonotoneChain() {
-		runAlgorithm(Algorithms.MONOTONE_CHAIN);
 	}
 
 	public void addPoint(PointComponent p) {
