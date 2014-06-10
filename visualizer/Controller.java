@@ -34,6 +34,7 @@ public class Controller implements ActionListener {
 			try {
 				model.setDelay(Integer.parseInt(((JTextField) e.getSource())
 						.getText()));
+				((JTextField) e.getSource()).selectAll();
 			} catch (NumberFormatException exc) {
 				((JTextField) e.getSource()).setText("250");
 				((JTextField) e.getSource()).selectAll();

@@ -14,12 +14,9 @@ public class PointComponent extends AbstractGeometry implements Point {
 
 	@Override
 	public int compareTo(Point p) {
-		return  (x < p.getX()) ?	-1 :
-				(x > p.getX()) ? 	 1 :
-				(y < p.getY()) ? 	-1 :
-				(y > p.getY()) ? 	 1 :
-									 0 ;
-		}
+		return (x < p.getX()) ? -1 : (x > p.getX()) ? 1 : (y < p.getY()) ? -1
+				: (y > p.getY()) ? 1 : 0;
+	}
 
 	public Point add(Point p1) {
 		return new PointComponent(x + p1.getX(), y + p1.getY());
@@ -55,5 +52,10 @@ public class PointComponent extends AbstractGeometry implements Point {
 		g.fillOval(x - 1, y - 1, 3, 3);
 		g.setColor(Color.BLACK);
 		g.drawOval(x - 1, y - 1, 3, 3);
+	}
+
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
 	}
 }

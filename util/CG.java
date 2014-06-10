@@ -1,7 +1,9 @@
 package util;
 
+import java.awt.Color;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
@@ -10,7 +12,6 @@ import cg.PointSet;
 import cg.PointSetComponent;
 
 public class CG {
-	
 
 	/**
 	 * This method finds the point in the set <code>points</code> that has the
@@ -120,5 +121,10 @@ public class CG {
 	public static long cross(Point o, Point a, Point b) {
 		return (a.getX() - o.getX()) * (b.getY() - o.getY())
 				- (a.getY() - o.getY()) * (b.getX() - o.getX());
+	}
+
+	public static Color randomColor() {
+		Random Ayn = new Random();
+		return new Color(Ayn.nextInt(256), Ayn.nextInt(256), Ayn.nextInt(256));
 	}
 }

@@ -19,6 +19,7 @@ import algorithms.GrahmScan;
 import algorithms.JarvisMarch;
 import algorithms.Melkman;
 import algorithms.MonotoneChain;
+import algorithms.QuickHull;
 import cg.PointComponent;
 import cg.PointSet;
 import cg.PointSetComponent;
@@ -119,6 +120,9 @@ public class ViewModel implements CGObservable, CGObserver {
 					break;
 				case MONOTONE_CHAIN:
 					MonotoneChain.doMonotoneChain(points, hull);
+					break;
+				case QUICKHULL:
+					QuickHull.doQuickHull(points, hull);
 					break;
 				default:
 					System.out

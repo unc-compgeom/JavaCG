@@ -4,7 +4,7 @@ public enum Algorithm {
 
 	CALIPERS("Calipers"), CHAN("Chan"), GRAHM_SCAN("Grahm scan"), JARVIS_MARCH(
 			"Jarvis march"), MELKMAN("Melkman"), MONOTONE_CHAIN(
-			"Monotone chain");
+			"Monotone chain"), QUICKHULL("Quickhull");
 
 	private String s;
 

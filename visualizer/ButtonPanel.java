@@ -1,5 +1,6 @@
 package visualizer;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -42,6 +43,7 @@ class ButtonPanel extends JPanel implements ActionListener {
 		JTextField delay = new JTextField("Delay (ns)");
 		delay.setActionCommand("delaySet");
 		delay.addActionListener(a);
+		delay.setMinimumSize(new Dimension(delay.getWidth(), delay.getHeight()));
 		add(delay);
 	}
 
@@ -68,7 +70,8 @@ class ButtonPanel extends JPanel implements ActionListener {
 							.getSelectedIndex()].toString()));
 			break;
 		default:
-			System.out.println("Unhandled action in ButtonPanel: " + e.getActionCommand());
+			System.out.println("Unhandled action in ButtonPanel: "
+					+ e.getActionCommand());
 		}
 
 	}
