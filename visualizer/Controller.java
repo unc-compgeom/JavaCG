@@ -9,7 +9,8 @@ import javax.swing.JTextField;
 import cg.PointComponent;
 
 public class Controller implements ActionListener {
-	ViewModel model;
+	private ViewModel model;
+	private View view;
 
 	public Controller(ViewModel model) {
 		this.model = model;
@@ -42,6 +43,7 @@ public class Controller implements ActionListener {
 			break;
 		case "reset":
 			model.reset();
+			view.reset();
 			break;
 		case "delaySet":
 			try {
@@ -72,6 +74,10 @@ public class Controller implements ActionListener {
 							+ e.getActionCommand() + " " + e.getSource());
 			break;
 		}
+	}
+
+	public void addView(View v) {
+		this.view = v;
 	}
 
 }

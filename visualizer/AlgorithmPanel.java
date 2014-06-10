@@ -21,18 +21,19 @@ import cg.PointSetComponent;
 class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	private static final long serialVersionUID = 717443380063382616L;
 	private List<Drawable> drawableItems;
-	private PointSetComponent p;
 	private ActionListener a;
 
 	AlgorithmPanel(ActionListener a) {
 		super();
 		this.a = a;
 		addMouseListener(this);
-		p = new PointSetComponent();
 		drawableItems = new LinkedList<Drawable>();
-		drawableItems.add(p);
 		JLabel j = new JLabel("test area");
 		add(j);
+	}
+
+	public void reset() {
+		drawableItems = new LinkedList<Drawable>();
 	}
 
 	/**

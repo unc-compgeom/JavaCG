@@ -51,7 +51,7 @@ public class ViewModel implements CGObservable, CGObserver {
 		int width = size.width;
 		int height = size.height;
 		Random Ayn = new Random();
-		for (int i = 0; i < 64; i++) {
+		for (int i = 0; i < 4096; i++) {
 			pointSet.add(new PointComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
@@ -66,7 +66,7 @@ public class ViewModel implements CGObservable, CGObserver {
 			polygon.add(new PointComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
-		notifyObservers();
+		notifyObservers(0);
 	}
 
 	public Dimension getSize() {
@@ -82,6 +82,12 @@ public class ViewModel implements CGObservable, CGObserver {
 			o.removeAllObservers();
 			o.removeAll(o);
 		}
+		drawnObjects = null;
+		drawnObjects = new LinkedList<PointSet>();
+		pointSet = null;
+		pointSet = new PointSetComponent();
+		polygon = null;
+		polygon = new PolygonComponent();
 		notifyObservers(0);
 	}
 
@@ -122,7 +128,6 @@ public class ViewModel implements CGObservable, CGObserver {
 					System.out
 							.println("Algorithm not yet implemented in ViewModel.");
 					break;
-
 				}
 				return null;
 			}
@@ -185,10 +190,6 @@ public class ViewModel implements CGObservable, CGObserver {
 		} else {
 			notifyObservers(pointSet, delay);
 		}
-	}
-
-	private void notifyObservers() {
-		notifyObservers(delay);
 	}
 
 	@Override

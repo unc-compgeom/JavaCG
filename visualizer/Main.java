@@ -6,6 +6,7 @@ public class Main {
 		ViewModel m = new ViewModel();
 		Controller c = new Controller(m); 
 		View v = new View(c);
+		c.addView(v);
 		m.addObserver(v);
 	}
 
