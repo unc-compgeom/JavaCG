@@ -16,7 +16,6 @@ import javax.swing.SwingWorker;
 import util.CGObservable;
 import util.CGObserver;
 import cg.Drawable;
-import cg.PointSetComponent;
 
 class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	private static final long serialVersionUID = 717443380063382616L;

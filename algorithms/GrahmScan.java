@@ -27,13 +27,6 @@ public class GrahmScan {
 			} else {
 				hull.pop();
 			}
-			// if (Predicate.isPointLeftOrOnSegment(sorted.getPoint(i),
-			// hull.getSecond(), hull.getFirst())) {
-			// hull.push(sorted.getPoint(i));
-			// i++;
-			// } else {
-			// hull.pop();
-			// }
 		}
 	}
 }

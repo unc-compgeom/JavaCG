@@ -10,12 +10,7 @@ import cg.PointSet;
 import cg.PointSetComponent;
 
 public class CG {
-	public static void sleep() {
-		try {
-			Thread.sleep(150);
-		} catch (InterruptedException e) {
-		}
-	}
+	
 
 	/**
 	 * This method finds the point in the set <code>points</code> that has the
