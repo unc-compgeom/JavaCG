@@ -28,11 +28,14 @@ public class ViewModel implements CGObservable, CGObserver {
 	private Dimension size;
 	private Polygon polygon;
 	private PointSet pointSet;
-	private List<Thread> runningAlgorithms;
 	private boolean isPolygonActive; // either draw polygon or point set
 	private List<CGObserver> observers;
 	private List<PointSet> drawnObjects;
 	private int delay = 250; // animation delay in ms.
+
+	private enum Algorithms {
+		CALIPERS, CHAN, GRAHM_SCAN, JARVIS_MARCH, MELKMAN
+	}
 
 	public ViewModel() {
 		isPolygonActive = false;
@@ -41,7 +44,6 @@ public class ViewModel implements CGObservable, CGObserver {
 		drawnObjects = new LinkedList<PointSet>();
 		drawnObjects.add(pointSet);
 		drawnObjects.add(polygon);
-		runningAlgorithms = new LinkedList<Thread>();
 		observers = new Vector<CGObserver>();
 	}
 
@@ -80,27 +82,51 @@ public class ViewModel implements CGObservable, CGObserver {
 			o.removeAllObservers();
 			o.removeAll(o);
 		}
-		for (Thread t : runningAlgorithms) {
-			t.stop();
-			// there must be a better way
-		}
-		runningAlgorithms.removeAll(runningAlgorithms);
 		notifyObservers(0);
 	}
 
 	public void runMelkman() {
-		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
-		final Polygon ch = new PolygonComponent();
-		drawnObjects.add(ch);
-		ch.addObserver(this);
-		ch.setColor(Color.RED);
-		runningAlgorithms.add(new Thread(new Runnable() {
+		runAlgorithm(Algorithms.MELKMAN);
+	}
+
+	private void runAlgorithm(final Algorithms algorithm) {
+		final PointSet points = (isPolygonActive) ? polygon : pointSet;
+		final Polygon hull = new PolygonComponent();
+		drawnObjects.add(hull);
+		hull.addObserver(this);
+		hull.setColor(Color.RED);
+		(new SwingWorker<Void, Void>() {
 			@Override
-			public void run() {
-				Melkman.doMelkman(poly, ch);
+			protected Void doInBackground() throws Exception {
+				switch (algorithm) {
+				case CALIPERS:
+					Polygon diamline = new PolygonComponent();
+					drawnObjects.add(diamline);
+					diamline.addObservers(hull.getObservers());
+					diamline.setColor(Color.GREEN);
+					Calipers.doCalipers(points, hull, diamline);
+					break;
+				case CHAN:
+					Chan.doChan(points, hull);
+					break;
+				case GRAHM_SCAN:
+					GrahmScan.doGrahmScan(points, hull);
+					break;
+				case JARVIS_MARCH:
+					JarvisMarch.doJarvisMarch(points, hull);
+					break;
+				case MELKMAN:
+					Melkman.doMelkman(points, hull);
+					break;
+				default:
+					System.out
+							.println("Algorithm not yet implemented in ViewModel.");
+					break;
+
+				}
+				return null;
 			}
-		}));
-		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
+		}).execute();
 		if (isPolygonActive) {
 			polygon = new PolygonComponent();
 			drawnObjects.add(polygon);
@@ -108,117 +134,22 @@ public class ViewModel implements CGObservable, CGObserver {
 			pointSet = new PointSetComponent();
 			drawnObjects.add(pointSet);
 		}
-
 	}
 
 	public void runJarvis() {
-		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
-		final Polygon ch = new PolygonComponent();
-		drawnObjects.add(ch);
-		ch.addObserver(this);
-		ch.setColor(Color.RED);
-		runningAlgorithms.add(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				JarvisMarch.doJarvisMarch(poly, ch);
-			}
-		}));
-		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
-		if (isPolygonActive) {
-			polygon = new PolygonComponent();
-			drawnObjects.add(polygon);
-		} else {
-			pointSet = new PointSetComponent();
-			drawnObjects.add(pointSet);
-		}
-
+		runAlgorithm(Algorithms.JARVIS_MARCH);
 	}
 
 	public void runGrahm() {
-		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
-		final Polygon ch = new PolygonComponent();
-		drawnObjects.add(ch);
-		ch.addObserver(this);
-		ch.setColor(Color.RED);
-		(new SwingWorker<Void, Void>() {
-
-			@Override
-			protected Void doInBackground() throws Exception {
-				GrahmScan.doGrahmScan(poly, ch);
-				return null;
-			}
-			
-		}).execute();
-//		runningAlgorithms.add(new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				GrahmScan.doGrahmScan(poly, ch);
-//			}
-//		}));
-//		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
-		if (isPolygonActive) {
-			polygon = new PolygonComponent();
-			drawnObjects.add(polygon);
-		} else {
-			pointSet = new PointSetComponent();
-			drawnObjects.add(pointSet);
-		}
+		runAlgorithm(Algorithms.GRAHM_SCAN);
 	}
 
 	public void runChan() {
-		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
-		final Polygon ch = new PolygonComponent();
-		drawnObjects.add(ch);
-		ch.addObserver(this);
-		ch.setColor(Color.RED);
-		runningAlgorithms.add(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Chan.doChan(poly, ch);
-			}
-		}));
-		runningAlgorithms.get(runningAlgorithms.size() - 1).start();
-		if (isPolygonActive) {
-			polygon = new PolygonComponent();
-			drawnObjects.add(polygon);
-		} else {
-			pointSet = new PointSetComponent();
-			drawnObjects.add(pointSet);
-		}
+		runAlgorithm(Algorithms.CHAN);
 	}
-	
-	public void runCalipers(){
-		final PointSet poly = (isPolygonActive) ? polygon : pointSet;
-		final Polygon ch = new PolygonComponent();
-		final Polygon diamline = new PolygonComponent();
-		final Polygon support1 = new PolygonComponent();
-		final Polygon support2 = new PolygonComponent();
-		drawnObjects.add(ch);
-		ch.addObservers(observers);
-		ch.setColor(Color.RED);
-		drawnObjects.add(diamline);
-		diamline.addObservers(observers);
-		diamline.setColor(Color.GREEN);
-		drawnObjects.add(support1);
-		support1.addObservers(observers);
-		support1.setColor(Color.BLUE);
-		drawnObjects.add(support2);
-		support2.addObservers(observers);
-		support2.setColor(Color.BLUE);
-		runningAlgorithms.add(new Thread(new Runnable(){
-			@Override
-			public void run(){
-				Calipers.doCalipers(poly, ch, diamline, support1, support2);
-			}
-		}));
-		runningAlgorithms.get(runningAlgorithms.size()-1).start();
-		if (isPolygonActive) {
-			polygon = new PolygonComponent();
-			drawnObjects.add(polygon);
-		} else {
-			pointSet = new PointSetComponent();
-			drawnObjects.add(pointSet);
-		}
+
+	public void runCalipers() {
+		runAlgorithm(Algorithms.CALIPERS);
 	}
 
 	public void addPoint(PointComponent p) {

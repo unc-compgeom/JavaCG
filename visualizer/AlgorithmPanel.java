@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -92,8 +91,7 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		if (!drawableItems.contains(o)) {
 			drawableItems.add(o);
 		}
-		SwingWorker w = new SwingWorker<Void, Void>() {
-
+		SwingWorker<Void, Void> w = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
 				repaint();
@@ -101,12 +99,6 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 			}
 		};
 		w.execute();
-		try {
-			w.get();
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	@Override
