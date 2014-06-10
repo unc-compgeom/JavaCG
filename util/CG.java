@@ -44,6 +44,13 @@ public class CG {
 		return min;
 	}
 
+	/**
+	 * Sort the points of <code>points</code> by x-coordinate (in case of a tie,
+	 * sort by y-coordinate).
+	 * 
+	 * @param points
+	 * @return A PointSet of the sorted points
+	 */
 	public static PointSet lexicographicalSort(PointSet points) {
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
 		sorter.addAll(points);
@@ -97,8 +104,26 @@ public class CG {
 		return sorted;
 	}
 
+	/**
+	 * 
+	 * @param p
+	 * @param q
+	 * @return distance squared between points p and q.
+	 */
 	public static long distSquared(Point p, Point q) {
 		long dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
 		return dx * dx + dy * dy;
+	}
+
+	/**
+	 * 
+	 * @param o
+	 * @param a
+	 * @param b
+	 * @return the cross product of the two vectors oa, ob
+	 */
+	public static long cross(Point o, Point a, Point b) {
+		return (a.getX() - o.getX()) * (b.getY() - o.getY())
+				- (a.getY() - o.getY()) * (b.getX() - o.getX());
 	}
 }

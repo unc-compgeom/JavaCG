@@ -41,6 +41,9 @@ public class Controller implements ActionListener {
 		case "runCalipers":
 			model.runCalipers();
 			break;
+		case "runMonotoneChain":
+			model.runMonotoneChain();
+			break;
 		case "reset":
 			model.reset();
 			view.reset();

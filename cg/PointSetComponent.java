@@ -32,7 +32,6 @@ public class PointSetComponent extends LinkedList<Point> implements
 		notifyObservers();
 	}
 
-
 	@Override
 	public boolean add(Point pt) {
 		boolean tf = super.add(pt);
@@ -45,6 +44,13 @@ public class PointSetComponent extends LinkedList<Point> implements
 		Point removed = super.remove(i);
 		notifyObservers();
 		return removed;
+	}
+
+	@Override
+	public boolean removeAll(java.util.Collection<?> c) {
+		boolean b = super.removeAll(c);
+		notifyObservers();
+		return b;
 	}
 
 	@Override

@@ -12,12 +12,12 @@ import javax.swing.SwingWorker;
 
 import util.CGObservable;
 import util.CGObserver;
-
 import algorithms.Chan;
 import algorithms.Calipers;
 import algorithms.GrahmScan;
 import algorithms.JarvisMarch;
 import algorithms.Melkman;
+import algorithms.MonotoneChain;
 import cg.PointComponent;
 import cg.PointSet;
 import cg.PointSetComponent;
@@ -34,7 +34,7 @@ public class ViewModel implements CGObservable, CGObserver {
 	private int delay = 250; // animation delay in ms.
 
 	private enum Algorithms {
-		CALIPERS, CHAN, GRAHM_SCAN, JARVIS_MARCH, MELKMAN
+		CALIPERS, CHAN, GRAHM_SCAN, JARVIS_MARCH, MELKMAN, MONOTONE_CHAIN
 	}
 
 	public ViewModel() {
@@ -51,7 +51,7 @@ public class ViewModel implements CGObservable, CGObserver {
 		int width = size.width;
 		int height = size.height;
 		Random Ayn = new Random();
-		for (int i = 0; i < 4096; i++) {
+		for (int i = 0; i < 64; i++) {
 			pointSet.add(new PointComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
@@ -124,6 +124,9 @@ public class ViewModel implements CGObservable, CGObserver {
 				case MELKMAN:
 					Melkman.doMelkman(points, hull);
 					break;
+				case MONOTONE_CHAIN:
+					MonotoneChain.doMonotoneChain(points, hull);
+					break;
 				default:
 					System.out
 							.println("Algorithm not yet implemented in ViewModel.");
@@ -155,6 +158,10 @@ public class ViewModel implements CGObservable, CGObserver {
 
 	public void runCalipers() {
 		runAlgorithm(Algorithms.CALIPERS);
+	}
+
+	public void runMonotoneChain() {
+		runAlgorithm(Algorithms.MONOTONE_CHAIN);
 	}
 
 	public void addPoint(PointComponent p) {
