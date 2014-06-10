@@ -24,7 +24,7 @@ public class JarvisMarch {
 		Point q = p;
 		for (Point r : points) {
 			Orientation o = Predicate.findOrientation(p, q, r);
-			if (o == Orientation.CLOCKWISE
+			if (o == Orientation.COUNTERCLOCKWISE
 					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
 							.distSquared(p, q))) {
 				q = r;
