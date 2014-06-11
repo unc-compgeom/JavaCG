@@ -1,6 +1,10 @@
 package cg;
 
-public interface Polygon extends PointSet  {
-	public Line getLine(int lineNum);
+import java.util.Deque;
+
+import util.CGObservable;
+
+public interface Polygon extends CGObservable, Deque<Vertex>, VertexSet {
+	//public HalfEdge getHalfEdge(int lineNum);
 
 }

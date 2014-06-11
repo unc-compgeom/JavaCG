@@ -7,9 +7,9 @@ import java.util.Random;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
-import cg.Point;
-import cg.PointSet;
-import cg.PointSetComponent;
+import cg.Vertex;
+import cg.VertexSet;
+import cg.VertexSetComponent;
 
 public class CG {
 
@@ -21,10 +21,10 @@ public class CG {
 	 * @param points
 	 * @return the point with the lowest Y, X value.
 	 */
-	public static Point findSmallestYX(PointSet points) {
-		Point min = points.get(0);
+	public static Vertex findSmallestYX(VertexSet points) {
+		Vertex min = points.get(0);
 		int minY = min.getY();
-		Point lookingAt;
+		Vertex lookingAt;
 		for (int i = 1; i < points.size(); i++) {
 			lookingAt = points.get(i);
 			if (lookingAt.getY() <= minY) {
@@ -47,10 +47,10 @@ public class CG {
 	 * @param points
 	 * @return A PointSet of the sorted points
 	 */
-	public static PointSet lexicographicalSort(PointSet points) {
-		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
+	public static VertexSet lexicographicalSort(VertexSet points) {
+		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>();
 		sorter.addAll(points);
-		PointSet sorted = new PointSetComponent();
+		VertexSet sorted = new VertexSetComponent();
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
@@ -65,12 +65,12 @@ public class CG {
 	 *            the points to sort
 	 * @return the sorted set of points
 	 */
-	public static PointSet sortByAngle(PointSet points) {
-		final Point compare = points.getFirst();
-		PriorityQueue<Point> sorter = new PriorityQueue<Point>(
-				new Comparator<Point>() {
+	public static VertexSet sortByAngle(VertexSet points) {
+		final Vertex compare = points.getFirst();
+		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>(
+				new Comparator<Vertex>() {
 					@Override
-					public int compare(Point p, Point q) {
+					public int compare(Vertex p, Vertex q) {
 						Orientation o = Predicate
 								.findOrientation(q, compare, p);
 						if (o == Orientation.CLOCKWISE) {
@@ -93,7 +93,7 @@ public class CG {
 
 				});
 		sorter.addAll(points);
-		PointSet sorted = new PointSetComponent();
+		VertexSet sorted = new VertexSetComponent();
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
@@ -106,7 +106,7 @@ public class CG {
 	 * @param q
 	 * @return distance squared between points p and q.
 	 */
-	public static long distSquared(Point p, Point q) {
+	public static long distSquared(Vertex p, Vertex q) {
 		long dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
 		return dx * dx + dy * dy;
 	}
@@ -118,7 +118,7 @@ public class CG {
 	 * @param b
 	 * @return the cross product of the two vectors oa, ob
 	 */
-	public static long cross(Point o, Point a, Point b) {
+	public static long cross(Vertex o, Vertex a, Vertex b) {
 		return (a.getX() - o.getX()) * (b.getY() - o.getY())
 				- (a.getY() - o.getY()) * (b.getX() - o.getX());
 	}

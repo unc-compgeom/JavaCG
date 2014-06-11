@@ -3,14 +3,14 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
-import cg.Point;
-import cg.PointSet;
+import cg.Vertex;
+import cg.VertexSet;
 import cg.Polygon;
 
 public class JarvisMarch {
-	public static void doJarvisMarch(PointSet points, Polygon hull) {
-		Point min = CG.findSmallestYX(points);
-		Point p, q = min;
+	public static void doJarvisMarch(VertexSet points, Polygon hull) {
+		Vertex min = CG.findSmallestYX(points);
+		Vertex p, q = min;
 		int i = 0;
 		do {
 			hull.addLast(q);
@@ -20,9 +20,9 @@ public class JarvisMarch {
 		} while (!q.equals(min));
 	}
 
-	private static Point nextHullPoint(PointSet points, Point p) {
-		Point q = p;
-		for (Point r : points) {
+	private static Vertex nextHullPoint(VertexSet points, Vertex p) {
+		Vertex q = p;
+		for (Vertex r : points) {
 			Orientation o = Predicate.findOrientation(p, q, r);
 			if (o == Orientation.COUNTERCLOCKWISE
 					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
