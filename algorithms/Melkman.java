@@ -1,15 +1,15 @@
 package algorithms;
 
 import predicates.Predicate;
-import cg.Point;
-import cg.PointSet;
+import cg.Vertex;
+import cg.VertexSet;
 import cg.Polygon;
 
 public class Melkman {
 
-	public static void doMelkman(PointSet points, Polygon hull) {
-		Point p0 = points.get(0);
-		Point p1 = points.get(1);
+	public static void doMelkman(VertexSet points, Polygon hull) {
+		Vertex p0 = points.get(0);
+		Vertex p1 = points.get(1);
 		hull.addFirst(p0);
 		hull.addFirst(p1);
 		hull.addLast(p1);

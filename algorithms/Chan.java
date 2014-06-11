@@ -3,21 +3,21 @@ package algorithms;
 import java.awt.Color;
 
 import util.CG;
-import cg.PointSet;
-import cg.PointSetComponent;
+import cg.VertexSet;
+import cg.VertexSetComponent;
 import cg.Polygon;
 import cg.PolygonComponent;
 
 public class Chan {
 
-	public static void doChan(PointSet points, Polygon hull) {
+	public static void doChan(VertexSet points, Polygon hull) {
 		for (int t = 1; t < points.size(); t++) {
 			int m = (int) Math.pow(2, Math.pow(2, t));
-			PointSet[] divided = new PointSet[m];
+			VertexSet[] divided = new VertexSet[m];
 			Polygon[] hulls = new Polygon[m];
 			for (int ps = 0; ps < hulls.length; ps++) {
 				Color c = CG.randomColor();
-				divided[ps] = new PointSetComponent();
+				divided[ps] = new VertexSetComponent();
 				divided[ps].setColor(c);
 				hulls[ps] = new PolygonComponent();
 				hulls[ps].setColor(c);
@@ -37,15 +37,15 @@ public class Chan {
 			// hull.addLast(p);
 			// }
 			// }
-			for (PointSet p : divided) {
-				p.removeAll();
+			for (VertexSet p : divided) {
+				p.clear();
 				p.removeAllObservers();
 			}
 			for (Polygon p : hulls) {
-				p.removeAll();
+				p.clear();
 				p.removeAllObservers();
 			}
-			hull.removeAll();
+			hull.clear();
 		}
 	}
 

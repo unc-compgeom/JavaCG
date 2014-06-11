@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 
 import algorithms.Algorithm;
-import cg.PointComponent;
+import cg.VertexComponent;
 
 public class Controller implements ActionListener {
 	private ViewModel model;
@@ -45,7 +45,7 @@ public class Controller implements ActionListener {
 			break;
 		case "viewAddPoint":
 			java.awt.Point p = (java.awt.Point) e.getSource();
-			model.addPoint(new PointComponent(p.x, p.y));
+			model.addPoint(new VertexComponent(p.x, p.y));
 			break;
 		case "viewEnablePolygon":
 			model.enablePolygon();

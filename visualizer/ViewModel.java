@@ -20,26 +20,26 @@ import algorithms.JarvisMarch;
 import algorithms.Melkman;
 import algorithms.MonotoneChain;
 import algorithms.QuickHull;
-import cg.PointComponent;
-import cg.PointSet;
-import cg.PointSetComponent;
+import cg.VertexComponent;
+import cg.VertexSet;
+import cg.VertexSetComponent;
 import cg.Polygon;
 import cg.PolygonComponent;
 
 public class ViewModel implements CGObservable, CGObserver {
 	private Dimension size;
 	private Polygon polygon;
-	private PointSet pointSet;
+	private VertexSet pointSet;
 	private boolean isPolygonActive; // either draw polygon or point set
 	private List<CGObserver> observers;
-	private List<PointSet> drawnObjects;
+	private List<VertexSet> drawnObjects;
 	private int delay = 250; // animation delay in ms.
 
 	public ViewModel() {
 		isPolygonActive = false;
-		pointSet = new PointSetComponent();
+		pointSet = new VertexSetComponent();
 		polygon = new PolygonComponent();
-		drawnObjects = new LinkedList<PointSet>();
+		drawnObjects = new LinkedList<VertexSet>();
 		drawnObjects.add(pointSet);
 		drawnObjects.add(polygon);
 		observers = new Vector<CGObserver>();
@@ -50,7 +50,7 @@ public class ViewModel implements CGObservable, CGObserver {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.add(new PointComponent(Ayn.nextInt(width), Ayn
+			pointSet.add(new VertexComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
 		notifyObservers(0);
@@ -61,7 +61,7 @@ public class ViewModel implements CGObservable, CGObserver {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.add(new PointComponent(Ayn.nextInt(width), Ayn
+			polygon.add(new VertexComponent(Ayn.nextInt(width), Ayn
 					.nextInt(height)));
 		}
 		notifyObservers(0);
@@ -76,21 +76,21 @@ public class ViewModel implements CGObservable, CGObserver {
 	}
 
 	public void reset() {
-		for (PointSet o : drawnObjects) {
+		for (VertexSet o : drawnObjects) {
 			o.removeAllObservers();
 			o.removeAll(o);
 		}
 		drawnObjects = null;
-		drawnObjects = new LinkedList<PointSet>();
+		drawnObjects = new LinkedList<VertexSet>();
 		pointSet = null;
-		pointSet = new PointSetComponent();
+		pointSet = new VertexSetComponent();
 		polygon = null;
 		polygon = new PolygonComponent();
 		notifyObservers(0);
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
-		final PointSet points = (isPolygonActive) ? polygon : pointSet;
+		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
 		final Polygon hull = new PolygonComponent();
 		drawnObjects.add(hull);
 		hull.addObserver(this);
@@ -136,12 +136,12 @@ public class ViewModel implements CGObservable, CGObserver {
 			polygon = new PolygonComponent();
 			drawnObjects.add(polygon);
 		} else {
-			pointSet = new PointSetComponent();
+			pointSet = new VertexSetComponent();
 			drawnObjects.add(pointSet);
 		}
 	}
 
-	public void addPoint(PointComponent p) {
+	public void addPoint(VertexComponent p) {
 		if (isPolygonActive) {
 			polygon.add(p);
 		} else {

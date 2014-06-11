@@ -2,14 +2,14 @@ package algorithms;
 
 import java.awt.Color;
 
-import cg.Point;
-import cg.PointSet;
+import cg.Vertex;
+import cg.VertexSet;
 import cg.Polygon;
 import cg.PolygonComponent;
 
 public class Calipers {
 
-	public static void doCalipers(PointSet points, Polygon hull,
+	public static void doCalipers(VertexSet points, Polygon hull,
 			Polygon diamline) {
 		Polygon support1 = new PolygonComponent();
 		Polygon support2 = new PolygonComponent();
@@ -27,8 +27,8 @@ public class Calipers {
 			j++;
 		}
 		while (j != 0) {
-			Point pi = hull.get(i);
-			Point pj = hull.get(j);
+			Vertex pi = hull.get(i);
+			Vertex pj = hull.get(j);
 			tempdiam = Math.sqrt(Math.hypot(
 					((double) pi.getX() - (double) pj.getX()),
 					((double) pi.getY() - (double) pj.getY())));
@@ -75,15 +75,15 @@ public class Calipers {
 
 	private static boolean cwIntersection(int i, int j, Polygon hull,
 			boolean first) {
-		Point pi = hull.get(i);
+		Vertex pi = hull.get(i);
 		// Point pi1 = first ? hull.getLast() : hull.get((i+1) % hull.size());
 		int temp = (i - 1) % hull.size();
 		if (temp < 0) {
 			temp += hull.size();
 		}
-		Point pi1 = hull.get(temp);
-		Point pj = hull.get(j % hull.size());
-		Point pj1 = hull.get((j + 1) % hull.size());
+		Vertex pi1 = hull.get(temp);
+		Vertex pj = hull.get(j % hull.size());
+		Vertex pj1 = hull.get((j + 1) % hull.size());
 		double slopei = (((double) pi.getY() - (double) pi1.getY()) / ((double) pi
 				.getX() - (double) pi1.getX()));
 		double slopej = (((double) pj.getY() - (double) pj1.getY()) / ((double) pj
