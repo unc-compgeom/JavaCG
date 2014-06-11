@@ -37,6 +37,11 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 		notifyObservers();
 		return tf;
 	}
+	@Override
+	public void add(int index, Vertex element) {
+		super.add(index, element);
+		notifyObservers();
+	}
 
 	@Override
 	public Vertex get(int index) {
