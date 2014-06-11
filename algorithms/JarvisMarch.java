@@ -1,5 +1,7 @@
 package algorithms;
 
+import java.util.Iterator;
+
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
@@ -22,7 +24,8 @@ public class JarvisMarch {
 
 	private static Vertex nextHullPoint(VertexSet points, Vertex p) {
 		Vertex q = p;
-		for (Vertex r : points) {
+		for (int i = 0; i < points.size(); i++) {
+			Vertex r = points.get(i);
 			Orientation o = Predicate.findOrientation(p, q, r);
 			if (o == Orientation.COUNTERCLOCKWISE
 					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG

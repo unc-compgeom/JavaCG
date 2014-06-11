@@ -318,15 +318,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public ListIterator<Vertex> listIterator(int index) {
-		ListIterator<Vertex> li = listIterator();
-		while (li.hasNext()) {
-			if (li.nextIndex() == index) {
-				break;
-			} else {
-				li.next();
-			}
-		}
-		return li;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
