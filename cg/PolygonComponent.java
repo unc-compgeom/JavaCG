@@ -24,8 +24,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public void add(int index, Vertex v) {
 		// manipulate all the pointers
-		// assume vertex v is properly constructed with an incident edge
-		// add at the end of the list
+		// assume vertex v only contains x and y coordinates.
 		Vertex after;
 		Vertex before;
 		if (size() == 0) {
@@ -88,6 +87,10 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		beforeR.setNext(newRight);
 		afterR.setPrevious(newRight);
 		afterR.setOrigin(v);
+		if (size() == 1) {
+			beforeL.setPrevious(afterL);
+			beforeR.setPrevious(afterR);
+		}
 		// finish
 		notifyObservers();
 	}
@@ -329,12 +332,14 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException();
+				throw new UnsupportedOperationException(
+						"Iterator does not support remove().");
 			}
 
 			@Override
-			public void set(Vertex e) {
-				throw new UnsupportedOperationException();
+			public void set(Vertex v) {
+				throw new UnsupportedOperationException(
+						"Iterator does not support set(Vertex v).");
 			}
 		};
 	}

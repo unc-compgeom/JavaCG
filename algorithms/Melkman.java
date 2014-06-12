@@ -1,9 +1,9 @@
 package algorithms;
 
 import predicates.Predicate;
+import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
-import cg.Polygon;
 
 public class Melkman {
 
@@ -12,7 +12,7 @@ public class Melkman {
 		Vertex p1 = points.get(1);
 		hull.addFirst(p0);
 		hull.addFirst(p1);
-		hull.addLast(p1);
+		hull.addLast(p1.clone());
 		for (int i = 2; i < points.size(); i++) {
 			if (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 					hull.getLast(), points.get(i))
@@ -28,7 +28,7 @@ public class Melkman {
 					hull.removeFirst();
 				}
 				hull.addFirst(points.get(i));
-				hull.addLast(points.get(i));
+				hull.addLast(points.get(i).clone());
 			}
 		}
 	}

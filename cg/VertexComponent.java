@@ -8,14 +8,25 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	private int y;
 	private HalfEdge incident;
 
+	public VertexComponent(int x, int y) {
+		this(x, y, null);
+	}
+
 	public VertexComponent(int x, int y, HalfEdge incident) {
 		this.x = x;
 		this.y = y;
 		this.incident = incident;
 	}
 
-	public VertexComponent(int x, int y) {
-		this(x, y, null);
+	@Override
+	public Vertex add(Vertex p1) {
+		return new VertexComponent(x + p1.getX(), y + p1.getY());
+	}
+
+	@Override
+	public Vertex clone() {
+		// TODO Auto-generated method stub
+		return new VertexComponent(x, y, null);
 	}
 
 	@Override
@@ -25,13 +36,8 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
-	public Vertex add(Vertex p1) {
-		return new VertexComponent(x + p1.getX(), y + p1.getY());
-	}
-
-	@Override
-	public Vertex sub(Vertex p1) {
-		return new VertexComponent(x - p1.getX(), y - p1.getY());
+	public HalfEdge getIncident() {
+		return incident;
 	}
 
 	@Override
@@ -45,6 +51,19 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
+	public void paintComponent(Graphics g) {
+		g.setColor(super.getColor());
+		g.fillOval(x - 1, y - 1, 3, 3);
+		g.setColor(Color.BLACK);
+		g.drawOval(x - 1, y - 1, 3, 3);
+	}
+
+	@Override
+	public void setIncident(HalfEdge incident) {
+		this.incident = incident;
+	}
+
+	@Override
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -55,21 +74,8 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
-	public HalfEdge getIncident() {
-		return incident;
-	}
-
-	@Override
-	public void setIncident(HalfEdge incident) {
-		this.incident = incident;
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		g.setColor(super.getColor());
-		g.fillOval(x - 1, y - 1, 3, 3);
-		g.setColor(Color.BLACK);
-		g.drawOval(x - 1, y - 1, 3, 3);
+	public Vertex sub(Vertex p1) {
+		return new VertexComponent(x - p1.getX(), y - p1.getY());
 	}
 
 	@Override

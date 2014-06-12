@@ -115,4 +115,10 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 		twin.setColor(super.getColor());
 		twin.getOrigin().paintComponent(g);
 	}
+
+	@Override
+	public String toString() {
+		return getOrigin().toString() + " -> "
+				+ getTwin().getOrigin().toString();
+	}
 }
