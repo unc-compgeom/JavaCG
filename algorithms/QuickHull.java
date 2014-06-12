@@ -3,10 +3,10 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
 import cg.VertexSetComponent;
-import cg.Polygon;
 
 public class QuickHull {
 	public static void doQuickHull(VertexSet points, Polygon hull) {
@@ -18,11 +18,11 @@ public class QuickHull {
 		findHull(points, hull, minMax[1], minMax[0]);
 	}
 
-	private static void findHull(VertexSet points, Polygon hull, Vertex a, Vertex b) {
+	private static void findHull(VertexSet points, Polygon hull, Vertex a,
+			Vertex b) {
 		VertexSet sub = new VertexSetComponent();
 		sub.addObservers(hull.getObservers());
 		sub.setColor(CG.randomColor());
-		
 
 		// get only points counterclockwise of segment ab
 		for (Vertex point : points) {

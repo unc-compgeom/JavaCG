@@ -149,63 +149,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public Iterator<Vertex> descendingIterator() {
-		return new ListIterator<Vertex>() {
-			private int index = 0;
-			private final Vertex start = get(size() - 1);
-			private Vertex current = start;
-
-			@Override
-			public void add(Vertex e) {
-				throw new UnsupportedOperationException();
-			}
-
-			@Override
-			public boolean hasNext() {
-				return !current.getIncident().getPrevious().getOrigin()
-						.equals(start);
-			}
-
-			@Override
-			public boolean hasPrevious() {
-				return !current.getIncident().getOrigin().equals(start);
-			}
-
-			@Override
-			public Vertex next() {
-				Vertex tmp = current;
-				current = current.getIncident().getPrevious().getOrigin();
-				index++;
-				return tmp;
-			}
-
-			@Override
-			public int nextIndex() {
-				return index;
-			}
-
-			@Override
-			public Vertex previous() {
-				Vertex tmp = current;
-				current = current.getIncident().getNext().getOrigin();
-				index--;
-				return tmp;
-			}
-
-			@Override
-			public int previousIndex() {
-				return index - 1;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-
-			@Override
-			public void set(Vertex e) {
-				throw new UnsupportedOperationException();
-			}
-		};
+		return vertices.descendingIterator();
 	}
 
 	@Override
@@ -258,7 +202,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public Iterator<Vertex> iterator() {
-		return listIterator();
+		return vertices.iterator();
 	}
 
 	@Override
@@ -279,74 +223,12 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public ListIterator<Vertex> listIterator() {
-		return new ListIterator<Vertex>() {
-
-			private int index = 0;
-			private final Vertex start = get(0);
-			private Vertex current = start;
-
-			@Override
-			public void add(Vertex v) {
-				throw new UnsupportedOperationException(
-						"Iterator does not support add(Vertex v)");
-			}
-
-			@Override
-			public boolean hasNext() {
-				if (current == null) {
-					return false;
-				}
-				return index != size();
-			}
-
-			@Override
-			public boolean hasPrevious() {
-				return index != 0;
-			}
-
-			@Override
-			public Vertex next() {
-				Vertex tmp = current;
-				current = current.getIncident().getNext().getOrigin();
-				index++;
-				return tmp;
-			}
-
-			@Override
-			public int nextIndex() {
-				return index;
-			}
-
-			@Override
-			public Vertex previous() {
-				Vertex tmp = current;
-				current = current.getIncident().getPrevious().getOrigin();
-				index--;
-				return tmp;
-			}
-
-			@Override
-			public int previousIndex() {
-				return index - 1;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException(
-						"Iterator does not support remove().");
-			}
-
-			@Override
-			public void set(Vertex v) {
-				throw new UnsupportedOperationException(
-						"Iterator does not support set(Vertex v).");
-			}
-		};
+		return vertices.listIterator();
 	}
 
 	@Override
 	public ListIterator<Vertex> listIterator(int index) {
-		throw new UnsupportedOperationException();
+		return vertices.listIterator(index);
 	}
 
 	@Override
@@ -574,5 +456,10 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public <T> T[] toArray(T[] a) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String toString() {
+		return vertices.toString();
 	}
 }
