@@ -1,5 +1,6 @@
 package cg;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collection;
 import java.util.HashSet;
@@ -52,9 +53,9 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 			notifyObservers();
 			return;
 		}
-		after = get(index);
+		after = get(index >= size() ? index - size() : index);
 		before = after.getIncident().getPrevious().getOrigin();
-		
+
 		HalfEdge newLeft = new HalfEdgeComponent();
 		HalfEdge newRight = new HalfEdgeComponent();
 
@@ -74,7 +75,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		newRight.setPrevious(beforeR);
 		newRight.setOrigin(afterL.getOrigin());
 		newRight.setTwin(newLeft);
-		
+
 		// edge construction complete
 		edges.add(newLeft);
 		edges.add(newRight);
@@ -106,7 +107,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	public boolean addAll(int index, Collection<? extends Vertex> c) {
 		for (Iterator<? extends Vertex> iterator = c.iterator(); iterator
 				.hasNext();) {
-			Vertex vertex = (Vertex) iterator.next();
+			Vertex vertex = iterator.next();
 			add(index, vertex);
 			index++;
 		}
@@ -121,7 +122,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public void addLast(Vertex v) {
 		// the polygon is always closed, so this is analogous to addFirst();
-		add(0, v);
+		add(size(), v);
 	}
 
 	@Override
@@ -259,7 +260,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		return new ListIterator<Vertex>() {
 
 			private int index = 0;
-			private Vertex start = get(0);
+			private final Vertex start = get(0);
 			private Vertex current = start;
 
 			@Override
@@ -269,6 +270,9 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 			@Override
 			public boolean hasNext() {
+				if (current == null) {
+					return false;
+				}
 				return !current.getIncident().getNext().getOrigin()
 						.equals(start);
 			}
@@ -341,11 +345,9 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public void paintComponent(Graphics g) {
 		for (int i = 0; i < size(); i++) {
-			super.paintComponent(g);
-			for (Iterator<HalfEdge> iterator = edges.iterator(); iterator
-					.hasNext();) {
-				HalfEdge e = (HalfEdge) iterator.next();
-				e.setColor(g.getColor());
+			for (Iterator<HalfEdge> it = edges.iterator(); it.hasNext();) {
+				HalfEdge e = it.next();
+				e.setColor(super.getColor());
 				e.paintComponent(g);
 			}
 		}
@@ -419,7 +421,6 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 			vertices.remove(v);
 			return v;
 		}
-
 		// manipulate all the pointers
 		// assume vertex v is properly constructed with an incident edge
 		// add at the end of the list
@@ -430,14 +431,11 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		HalfEdge beforeR = afterL.getTwin();
 		HalfEdge afterR = beforeL.getTwin();
 
-		afterL.setOrigin(afterR.getOrigin());
 		afterL.setPrevious(beforeL);
-
 		beforeL.setNext(afterL);
 
 		afterR.setOrigin(afterL.getOrigin());
 		afterR.setPrevious(beforeR);
-
 		beforeR.setNext(afterR);
 
 		// edge removal complete
@@ -506,7 +504,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		Vertex remove = null;
 		Iterator<Vertex> it = descendingIterator();
 		while (it.hasNext()) {
-			Vertex v = (Vertex) it.next();
+			Vertex v = it.next();
 			if (v.equals(o)) {
 				remove = (Vertex) o;
 				break;
@@ -526,6 +524,12 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		get(index).setX(v.getX());
 		get(index).setY(v.getY());
 		return v;
+	}
+
+	@Override
+	public void setColor(Color c) {
+		super.setColor(c);
+		vertices.setColor(c);
 	}
 
 	@Override

@@ -24,10 +24,12 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 				: (y > p.getY()) ? 1 : 0;
 	}
 
+	@Override
 	public Vertex add(Vertex p1) {
 		return new VertexComponent(x + p1.getX(), y + p1.getY());
 	}
 
+	@Override
 	public Vertex sub(Vertex p1) {
 		return new VertexComponent(x - p1.getX(), y - p1.getY());
 	}
@@ -64,7 +66,7 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		g.setColor(super.getColor());
 		g.fillOval(x - 1, y - 1, 3, 3);
 		g.setColor(Color.BLACK);
 		g.drawOval(x - 1, y - 1, 3, 3);

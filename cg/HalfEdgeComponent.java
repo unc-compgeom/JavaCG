@@ -7,8 +7,8 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 	private HalfEdge twin, next, previous;
 	private Face incidentFace;
 
-	public HalfEdgeComponent(Vertex origin, HalfEdge twin, HalfEdge next, HalfEdge previous,
-			Face incidentFace) {
+	public HalfEdgeComponent(Vertex origin, HalfEdge twin, HalfEdge next,
+			HalfEdge previous, Face incidentFace) {
 		super();
 		this.origin = origin;
 		this.twin = twin;
@@ -31,8 +31,8 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 			HalfEdge previous, Face indicentFace) {
 		super();
 		this.origin = origin;
-		this.twin = new HalfEdgeComponent(destination, this, previous.getTwin(),
-				next.getTwin(), incidentFace);
+		this.twin = new HalfEdgeComponent(destination, this,
+				previous.getTwin(), next.getTwin(), incidentFace);
 		this.next = next;
 		this.previous = previous;
 		this.incidentFace = indicentFace;
@@ -105,12 +105,14 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 	@Override
 	public void paintComponent(Graphics g) {
 		// get color
-		super.paintComponent(g);
+		g.setColor(super.getColor());
 		// draw line
 		g.drawLine(origin.getX(), origin.getY(), twin.getOrigin().getX(), twin
 				.getOrigin().getY());
 		// draw endpoints
+		origin.setColor(super.getColor());
 		origin.paintComponent(g);
+		twin.setColor(super.getColor());
 		twin.getOrigin().paintComponent(g);
 	}
 }

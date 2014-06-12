@@ -19,8 +19,8 @@ public class GrahmScan {
 		hull.push(sorted.get(1));
 		int i = 2;
 		while (i < sorted.size()) {
-			Vertex p1 = hull.getSecond();
 			Vertex p2 = hull.getFirst();
+			Vertex p1 = hull.getSecond();
 			if (Predicate.findOrientation(sorted.get(i), p1, p2) == Orientation.CLOCKWISE) {
 				hull.push(sorted.get(i));
 				i++;

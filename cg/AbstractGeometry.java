@@ -10,26 +10,30 @@ import util.CGObserver;
 
 public abstract class AbstractGeometry implements CGObservable {
 	private Color c;
-	private List<CGObserver> observers;
+	private final List<CGObserver> observers;
 
 	AbstractGeometry() {
 		observers = new LinkedList<CGObserver>();
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
-		g.setColor(c);
-		// paint must be completed by the subclass
-	}
-
-	@Override
-	public void setColor(Color c) {
-		this.c = c;
-	}
-
-	@Override
 	public void addObserver(CGObserver o) {
 		observers.add(o);
+	}
+
+	@Override
+	public void addObservers(List<CGObserver> observers) {
+		this.observers.addAll(observers);
+	}
+
+	@Override
+	public Color getColor() {
+		return this.c;
+	}
+
+	@Override
+	public List<CGObserver> getObservers() {
+		return observers;
 	}
 
 	protected void notifyObservers() {
@@ -39,8 +43,11 @@ public abstract class AbstractGeometry implements CGObservable {
 	}
 
 	@Override
-	public void addObservers(List<CGObserver> observers) {
-		this.observers.addAll(observers);
+	public abstract void paintComponent(Graphics g);
+
+	@Override
+	public void removeAllObservers() {
+		observers.removeAll(observers);
 	}
 
 	@Override
@@ -49,12 +56,7 @@ public abstract class AbstractGeometry implements CGObservable {
 	}
 
 	@Override
-	public void removeAllObservers() {
-		observers.removeAll(observers);
-	}
-
-	@Override
-	public List<CGObserver> getObservers() {
-		return observers;
+	public void setColor(Color c) {
+		this.c = c;
 	}
 }

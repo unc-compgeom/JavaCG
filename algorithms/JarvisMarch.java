@@ -1,7 +1,5 @@
 package algorithms;
 
-import java.util.Iterator;
-
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;

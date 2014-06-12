@@ -13,25 +13,25 @@ import javax.swing.SwingWorker;
 import util.CGObservable;
 import util.CGObserver;
 import algorithms.Algorithm;
-import algorithms.Chan;
 import algorithms.Calipers;
+import algorithms.Chan;
 import algorithms.GrahmScan;
 import algorithms.JarvisMarch;
 import algorithms.Melkman;
 import algorithms.MonotoneChain;
 import algorithms.QuickHull;
+import cg.Polygon;
+import cg.PolygonComponent;
 import cg.VertexComponent;
 import cg.VertexSet;
 import cg.VertexSetComponent;
-import cg.Polygon;
-import cg.PolygonComponent;
 
 public class ViewModel implements CGObservable, CGObserver {
 	private Dimension size;
 	private Polygon polygon;
 	private VertexSet pointSet;
 	private boolean isPolygonActive; // either draw polygon or point set
-	private List<CGObserver> observers;
+	private final List<CGObserver> observers;
 	private List<VertexSet> drawnObjects;
 	private int delay = 250; // animation delay in ms.
 
@@ -221,6 +221,11 @@ public class ViewModel implements CGObservable, CGObserver {
 
 	public void setDelay(int delay) {
 		this.delay = delay;
+	}
+
+	@Override
+	public Color getColor() {
+		return null;
 	}
 
 }

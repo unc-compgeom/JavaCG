@@ -3,6 +3,7 @@ package cg;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,10 +13,11 @@ import util.CGObserver;
 public class VertexSetComponent extends LinkedList<Vertex> implements
 		VertexSet, CGObservable {
 	private static final long serialVersionUID = -1545417749354389726L;
-	private List<CGObserver> observers;
+	private final List<CGObserver> observers;
 	private Color c;
 
 	public VertexSetComponent() {
+		super();
 		observers = new LinkedList<CGObserver>();
 	}
 
@@ -37,6 +39,7 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 		notifyObservers();
 		return tf;
 	}
+
 	@Override
 	public void add(int index, Vertex element) {
 		super.add(index, element);
@@ -106,6 +109,11 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 		return p;
 	}
 
+	@Override
+	public Iterator<Vertex> iterator() {
+		return super.iterator();
+	}
+
 	// /////////////// // LinkedList additions // /////////////// //
 	@Override
 	public void remove(Vertex v) {
@@ -126,26 +134,8 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 	// /////////////// // Drawable functionality // /////////////// //
 
 	@Override
-	public void paintComponent(Graphics g) {
-		for (Vertex p : this) {
-			p.setColor(c);
-			p.paintComponent(g);
-		}
-		g.setColor(c);
-	}
-
-	@Override
-	public void setColor(Color c) {
-		this.c = c;
-	}
-
-	protected Color getColor() {
-		return c;
-	}
-
-	@Override
 	public void addObserver(CGObserver o) {
-		this.observers.add(o);
+		observers.add(o);
 	}
 
 	@Override
@@ -153,15 +143,29 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 		this.observers.addAll(observers);
 	}
 
-	private void notifyObservers() {
+	@Override
+	public Color getColor() {
+		return this.c;
+	}
+
+	@Override
+	public List<CGObserver> getObservers() {
+		return observers;
+	}
+
+	protected void notifyObservers() {
 		for (CGObserver o : observers) {
 			o.update(this);
 		}
 	}
 
 	@Override
-	public void removeObserver(CGObserver o) {
-		observers.remove(o);
+	public void paintComponent(Graphics g) {
+		for (Iterator<Vertex> it = iterator(); it.hasNext();) {
+			Vertex v = it.next();
+			v.setColor(c);
+			v.paintComponent(g);
+		}
 	}
 
 	@Override
@@ -170,7 +174,12 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 	}
 
 	@Override
-	public List<CGObserver> getObservers() {
-		return observers;
+	public void removeObserver(CGObserver o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public void setColor(Color c) {
+		this.c = c;
 	}
 }
