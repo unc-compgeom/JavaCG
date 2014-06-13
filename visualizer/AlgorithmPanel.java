@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,20 +19,20 @@ import cg.Drawable;
 
 class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	private static final long serialVersionUID = 717443380063382616L;
-	private List<Drawable> drawableItems;
-	private ActionListener a;
+	private Collection<Drawable> drawableItems;
+	private final ActionListener a;
 
 	AlgorithmPanel(ActionListener a) {
 		super();
 		this.a = a;
 		addMouseListener(this);
-		drawableItems = new LinkedList<Drawable>();
+		drawableItems = new LinkedBlockingQueue<Drawable>();
 		JLabel j = new JLabel("test area");
 		add(j);
 	}
 
 	public void reset() {
-		drawableItems = new LinkedList<Drawable>();
+		drawableItems = new LinkedBlockingQueue<Drawable>();
 	}
 
 	/**

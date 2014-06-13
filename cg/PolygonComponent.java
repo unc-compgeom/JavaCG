@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class PolygonComponent extends AbstractGeometry implements Polygon {
 	private static final long serialVersionUID = -1523644503244611934L;
@@ -16,7 +17,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	public PolygonComponent() {
 		vertices = new VertexSetComponent();
-		edges = new HashSet<HalfEdge>();
+		edges = new LinkedBlockingQueue<HalfEdge>();
 		face = null;
 		// TODO fix face
 	}
@@ -251,8 +252,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public void paintComponent(Graphics g) {
 		for (int i = 0; i < size(); i++) {
-			for (Iterator<HalfEdge> it = edges.iterator(); it.hasNext();) {
-				HalfEdge e = it.next();
+			for (HalfEdge e : edges) {
 				e.setColor(super.getColor());
 				e.paintComponent(g);
 			}
