@@ -40,6 +40,7 @@ public class MonotoneChain {
 			}
 			upper.addLast(sorted.get(i));
 		}
+		// join
 		for (int i = 0; i < lower.size(); i++) {
 			hull.add(lower.get(i));
 		}

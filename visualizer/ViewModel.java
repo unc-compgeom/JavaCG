@@ -13,6 +13,7 @@ import javax.swing.SwingWorker;
 import util.CGObservable;
 import util.CGObserver;
 import algorithms.Algorithm;
+import algorithms.BentleyFaustPreparata;
 import algorithms.Calipers;
 import algorithms.Chan;
 import algorithms.GrahmScan;
@@ -98,36 +99,44 @@ public class ViewModel implements CGObservable, CGObserver {
 		(new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				switch (algorithm) {
-				case CALIPERS:
-					Polygon diamline = new PolygonComponent();
-					drawnObjects.add(diamline);
-					diamline.addObservers(hull.getObservers());
-					diamline.setColor(Color.GREEN);
-					Calipers.doCalipers(points, hull, diamline);
-					break;
-				case CHAN:
-					Chan.doChan(points, hull);
-					break;
-				case GRAHM_SCAN:
-					GrahmScan.doGrahmScan(points, hull);
-					break;
-				case JARVIS_MARCH:
-					JarvisMarch.doJarvisMarch(points, hull);
-					break;
-				case MELKMAN:
-					Melkman.doMelkman(points, hull);
-					break;
-				case MONOTONE_CHAIN:
-					MonotoneChain.doMonotoneChain(points, hull);
-					break;
-				case QUICKHULL:
-					QuickHull.doQuickHull(points, hull);
-					break;
-				default:
-					System.out
-							.println("Algorithm not yet implemented in ViewModel.");
-					break;
+				try {
+					switch (algorithm) {
+					case BENTLEY_FAUST_PREPARATA:
+						BentleyFaustPreparata.doBentleyFaustPreparata(points,
+								hull);
+						break;
+					case CALIPERS:
+						Polygon diamline = new PolygonComponent();
+						drawnObjects.add(diamline);
+						diamline.addObservers(hull.getObservers());
+						diamline.setColor(Color.GREEN);
+						Calipers.doCalipers(points, hull, diamline);
+						break;
+					case CHAN:
+						Chan.doChan(points, hull);
+						break;
+					case GRAHM_SCAN:
+						GrahmScan.doGrahmScan(points, hull);
+						break;
+					case JARVIS_MARCH:
+						JarvisMarch.doJarvisMarch(points, hull);
+						break;
+					case MELKMAN:
+						Melkman.doMelkman(points, hull);
+						break;
+					case MONOTONE_CHAIN:
+						MonotoneChain.doMonotoneChain(points, hull);
+						break;
+					case QUICKHULL:
+						QuickHull.doQuickHull(points, hull);
+						break;
+					default:
+						System.out
+								.println("Algorithm not yet implemented in ViewModel.");
+						break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return null;
 			}

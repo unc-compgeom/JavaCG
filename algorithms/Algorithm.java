@@ -1,10 +1,9 @@
 package algorithms;
 
 public enum Algorithm {
-
-	CALIPERS("Calipers"), CHAN("Chan"), GRAHM_SCAN("Grahm scan"), JARVIS_MARCH(
-			"Jarvis march"), MELKMAN("Melkman"), MONOTONE_CHAIN(
-			"Monotone chain"), QUICKHULL("Quickhull");
+	BENTLEY_FAUST_PREPARATA("Bentley Faust Preparata"), CALIPERS("Calipers"), CHAN(
+			"Chan"), GRAHM_SCAN("Grahm scan"), JARVIS_MARCH("Jarvis march"), MELKMAN(
+			"Melkman"), MONOTONE_CHAIN("Monotone chain"), QUICKHULL("Quickhull");
 
 	private String s;
 
