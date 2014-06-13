@@ -49,7 +49,6 @@ public class QuickHull {
 		findHull(sub, hull, a, c);
 		findHull(sub, hull, c, b);
 		// clean up
-
 		sub.clear();
 		sub.removeAllObservers();
 	}
@@ -57,7 +56,9 @@ public class QuickHull {
 	private static long distance(Vertex A, Vertex B, Vertex C) {
 		int ABx = B.getX() - A.getX();
 		int ABy = B.getY() - A.getY();
-		int num = ABx * (A.getY() - C.getY()) - ABy * (A.getX() - C.getX());
+		int ACx = A.getX() - C.getX();
+		int ACy = A.getY() - C.getY();
+		int num = ABx * ACy - ABy * ACx;
 		if (num < 0)
 			num = -num;
 		return num;
