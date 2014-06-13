@@ -121,4 +121,9 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 		return getOrigin().toString() + " -> "
 				+ getTwin().getOrigin().toString();
 	}
+
+	@Override
+	public int compareTo(HalfEdge o) {
+		return origin.compareTo(o.getOrigin());
+	}
 }
