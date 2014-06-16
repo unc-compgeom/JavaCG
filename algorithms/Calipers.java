@@ -1,7 +1,10 @@
 package algorithms;
 
+import java.awt.Color;
+
 import predicates.Predicate;
 import cg.Polygon;
+import cg.PolygonComponent;
 import cg.Vertex;
 import cg.VertexComponent;
 import cg.VertexSet;
@@ -16,7 +19,13 @@ public class Calipers {
 	 * 
 	 */
 	
-	public static void doCalipers(VertexSet Vertexs, Polygon hull, Polygon diamline, Polygon support1, Polygon support2) {
+	public static void doCalipers(VertexSet Vertexs, Polygon hull, Polygon diamline) {
+		Polygon support1 = new PolygonComponent();
+		Polygon support2 = new PolygonComponent();
+		support1.addObservers(hull.getObservers());
+		support1.setColor(Color.BLUE);
+		support2.addObservers(hull.getObservers());
+		support2.setColor(Color.BLUE);
 		hull = getConvexHull(Vertexs, hull);
 		int i=0;
 		int j=1;

@@ -69,7 +69,7 @@ public class CG {
 	 */
 	public static VertexSet sortByAngle(VertexSet points, final Vertex compare) {
 		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>(
-				new Comparator<Vertex>() {
+				11, new Comparator<Vertex>() {
 					@Override
 					public int compare(Vertex p, Vertex q) {
 						Orientation o = Predicate
