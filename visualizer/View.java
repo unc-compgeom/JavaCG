@@ -24,8 +24,17 @@ public class View implements CGObserver {
 		f.setVisible(true);
 	}
 
+	public void reset() {
+		p.reset();
+	}
+	
 	@Override
-	public void update(CGObservable arg) {
-		p.update(arg);
+	public void update(CGObservable arg, int delay) {
+		p.update(arg, delay);
+	}
+
+	@Override
+	public void update(CGObservable o) {
+		p.update(o);
 	}
 }

@@ -1,34 +1,34 @@
 package algorithms;
 
 import predicates.Predicate;
-import util.CG;
-import cg.Point;
-import cg.PointComponent;
-import cg.PointSet;
 import cg.Polygon;
+import cg.Vertex;
+import cg.VertexComponent;
+import cg.VertexSet;
 
 public class Calipers {
 	
 	/*
+	 * Support lines still intersect convex hull if not final answer
 	 * 
-	 * Rotating caliper algorithm input point set in 2D.  Output is maximum diameter of the convex hull
+	 * Rotating caliper algorithm input Vertex set in 2D.  Output is maximum diameter of the convex hull
 	 * and the minimum width of the convex hull.
 	 * 
 	 */
 	
-	public static void doCalipers(PointSet points, Polygon hull, Polygon diamline, Polygon support1, Polygon support2) {
-		hull = getConvexHull(points, hull);
+	public static void doCalipers(VertexSet Vertexs, Polygon hull, Polygon diamline, Polygon support1, Polygon support2) {
+		hull = getConvexHull(Vertexs, hull);
 		int i=0;
 		int j=1;
 		double diam = -1;
-//		double width = Double.POSITIVE_INFINITY;
+		//double width = Double.POSITIVE_INFINITY;
 		double tempdiam;
 		while(cwIntersection(0,j,hull)){
 			j++;
 		}
 		while(j!=0){
-			Point pi = hull.getPoint(i);
-			Point pj = hull.getPoint(j);
+			Vertex pi = hull.get(i);
+			Vertex pj = hull.get(j);
 			tempdiam = Math.pow((pi.getX()-pj.getX()), 2) + Math.pow((pi.getY()-pj.getY()), 2);
 			if(tempdiam>diam){
 				diam=tempdiam;
@@ -44,18 +44,16 @@ public class Calipers {
 					support2.remove();
 					support2.remove();
 				}
-				diamline.addPoint(pi);
-				diamline.addPoint(pj);
-				CG.sleep();
-				Point vector = perpendicular(i,j,hull);
-				support1.add(new PointComponent(pi.getX()+vector.getX(),pi.getY()+vector.getY()));
-				support1.add(new PointComponent(pi.getX()-vector.getX(),pi.getY()-vector.getY()));
-				support2.add(new PointComponent(pj.getX()+vector.getX(),pj.getY()+vector.getY()));
-				support2.add(new PointComponent(pj.getX()-vector.getX(),pj.getY()-vector.getY()));
-				CG.sleep();
+				diamline.add(pi);
+				diamline.add(pj);
+				Vertex vector = perpendicular(i,j,hull);
+				support1.add(new VertexComponent(pi.getX()+vector.getX(),pi.getY()+vector.getY()));
+				support1.add(new VertexComponent(pi.getX()-vector.getX(),pi.getY()-vector.getY()));
+				support2.add(new VertexComponent(pj.getX()+vector.getX(),pj.getY()+vector.getY()));
+				support2.add(new VertexComponent(pj.getX()-vector.getX(),pj.getY()-vector.getY()));
 			}
 			if(cwIntersection(i+1,j,hull)){
-				j=(j+1)%hull.numPoints();
+				j=(j+1)%hull.size();
 			}
 			else{
 				i++;
@@ -64,60 +62,60 @@ public class Calipers {
 	}
 	
 	/** Uses Jarvis march to compute convex hull */
-	private static Polygon getConvexHull(PointSet pl, Polygon hull){
-		Point min = leftmost(pl);
+	private static Polygon getConvexHull(VertexSet pl, Polygon hull){
+		Vertex min = leftmost(pl);
 		do {
-			hull.addPoint(min);
-			CG.sleep();
-			min = pl.getPoint(min != pl.getPoint(0) ? 0 : 1);
-			for (int i = 1; i < pl.numPoints(); i++) {
-				if (Predicate.isPointLeftOfLine(hull.getLast(), min,pl.getPoint(i))) {
-					min = pl.getPoint(i);
+			hull.add(min);
+			min = pl.get(min != pl.get(0) ? 0 : 1);
+			for (int i = 1; i < pl.size(); i++) {
+				if (Predicate.isPointLeftOfLine(hull.getLast(), min,pl.get(i))) {
+					min = pl.get(i);
 				}
 			}
-		} while (!min.equals(hull.getPoint(0)));
+		} while (!min.equals(hull.get(0)));
 		return hull;
 	}
 	
-	private static Point leftmost(PointSet p) {
-		Point leftmost = p.getPoint(0);
-		for (int i = 1; i < p.numPoints(); i++) {
-			if (leftmost.getX() > p.getPoint(i).getX()) {
-				leftmost = p.getPoint(i);
+	private static Vertex leftmost(VertexSet p) {
+		Vertex leftmost = p.get(0);
+		for (int i = 1; i < p.size(); i++) {
+			if (leftmost.getX() > p.get(i).getX()) {
+				leftmost = p.get(i);
 			}
 		}
 		return leftmost;
 	}
 
 	private static boolean cwIntersection(int i, int j, Polygon hull){
-		int tempi = i==0 ? hull.numPoints()-1 : i-1;
-		Point Pa = new PointComponent(hull.getPoint(tempi));
-		Point Pb = new PointComponent(hull.getPoint(i));
-		Point Pd = new PointComponent(hull.getPoint((j+1)%hull.numPoints()));
-		Pd.setPoint(Pd.getX()-hull.getPoint(j).getX()+Pb.getX(), Pd.getY()-hull.getPoint(j).getY()+Pb.getY());
+		int tempi = i==0 ? hull.size()-1 : i-1;
+		Vertex Pa = new VertexComponent(hull.get(tempi).getX(),hull.get(tempi).getY());
+		Vertex Pb = new VertexComponent(hull.get(i).getX(),hull.get(i).getY());
+		Vertex Pd = new VertexComponent(hull.get((j+1)%hull.size()).getX(),hull.get((j+1)%hull.size()).getY());
+		Pd.setX(Pd.getX()-hull.get(j).getX()+Pb.getX());
+		Pd.setY(Pd.getY()-hull.get(j).getY()+Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd)==Predicate.Orientation.CLOCKWISE;
 	}
 	
-	private static Point perpendicular(int i, int j, Polygon hull){
+	private static Vertex perpendicular(int i, int j, Polygon hull){
 		double [][]  perp1 = {{0.0,-1.0},{1.0,0.0}};
 		double [][]  vector1 = {{0},{0}};
 		double [][]  vector2 = {{0},{0}};
 		double [][]  vector3 = {{0},{0}};
 		double [][]  result1 = {{0},{0}};
 		if(cwIntersection(i+1,j,hull)){
-			i = i==0 ? hull.numPoints()-1 : i-1;
+			i = i==0 ? hull.size()-1 : i-1;
 		}
 		else{
-			j = j==0 ? hull.numPoints()-1 : j-1;
+			j = j==0 ? hull.size()-1 : j-1;
 		}
-		vector1[0][0] = hull.getPoint((i+1)%hull.numPoints()).getX()-hull.getPoint(i).getX();
-		vector1[1][0] = hull.getPoint((i+1)%hull.numPoints()).getY()-hull.getPoint(i).getY();
-		double dist = Math.sqrt(Math.pow((hull.getPoint((i+1)%hull.numPoints()).getX()-hull.getPoint(i).getX()), 2) + Math.pow((hull.getPoint((i+1)%hull.numPoints()).getY()-hull.getPoint(i).getY()), 2));
+		vector1[0][0] = hull.get((i+1)%hull.size()).getX()-hull.get(i).getX();
+		vector1[1][0] = hull.get((i+1)%hull.size()).getY()-hull.get(i).getY();
+		double dist = Math.sqrt(Math.pow((hull.get((i+1)%hull.size()).getX()-hull.get(i).getX()), 2) + Math.pow((hull.get((i+1)%hull.size()).getY()-hull.get(i).getY()), 2));
 		vector1[0][0] = vector1[0][0]/dist;
 		vector1[1][0] = vector1[1][0]/dist;
-		vector2[0][0] = hull.getPoint((j+1)%hull.numPoints()).getX()-hull.getPoint(j).getX();
-		vector2[1][0] = hull.getPoint((j+1)%hull.numPoints()).getY()-hull.getPoint(j).getY();
-		dist = Math.sqrt(Math.pow((hull.getPoint((j+1)%hull.numPoints()).getX()-hull.getPoint(j).getX()), 2) + Math.pow((hull.getPoint((j+1)%hull.numPoints()).getY()-hull.getPoint(j).getY()), 2));
+		vector2[0][0] = hull.get((j+1)%hull.size()).getX()-hull.get(j).getX();
+		vector2[1][0] = hull.get((j+1)%hull.size()).getY()-hull.get(j).getY();
+		dist = Math.sqrt(Math.pow((hull.get((j+1)%hull.size()).getX()-hull.get(j).getX()), 2) + Math.pow((hull.get((j+1)%hull.size()).getY()-hull.get(j).getY()), 2));
 		vector2[0][0] = vector2[0][0]/dist;
 		vector2[1][0] = vector2[1][0]/dist;
 		vector3[0][0]=(vector1[0][0]+vector2[0][0])/2;
@@ -129,7 +127,7 @@ public class Calipers {
                 }
             }
         }
-		return new PointComponent((int)(result1[0][0]*90),(int)(result1[1][0]*90));
+		return new VertexComponent((int)(result1[0][0]*90),(int)(result1[1][0]*90));
 	}
 	
 	

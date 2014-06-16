@@ -12,4 +12,6 @@ public interface CGObservable extends Drawable {
 	public void removeObserver(CGObserver o);
 
 	public void removeAllObservers();
+	
+	public List<CGObserver> getObservers();
 }

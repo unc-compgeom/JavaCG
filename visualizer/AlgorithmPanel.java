@@ -6,32 +6,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import util.CGObservable;
 import util.CGObserver;
 import cg.Drawable;
-import cg.PointSetComponent;
 
 class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	private static final long serialVersionUID = 717443380063382616L;
-	private List<Drawable> drawableItems;
-	private PointSetComponent p;
-	private ActionListener a;
+	private Collection<Drawable> drawableItems;
+	private final ActionListener a;
 
 	AlgorithmPanel(ActionListener a) {
 		super();
 		this.a = a;
 		addMouseListener(this);
-		p = new PointSetComponent();
-		drawableItems = new LinkedList<Drawable>();
-		drawableItems.add(p);
+		drawableItems = new LinkedBlockingQueue<Drawable>();
 		JLabel j = new JLabel("test area");
 		add(j);
+	}
+
+	public void reset() {
+		drawableItems = new LinkedBlockingQueue<Drawable>();
 	}
 
 	/**
@@ -86,11 +87,22 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	 * Observer methods
 	 */
 	@Override
-	public void update(CGObservable o) {
+	public void update(CGObservable o, int delay) {
 		if (!drawableItems.contains(o)) {
 			drawableItems.add(o);
-			
 		}
-		repaint();
+		SwingWorker<Void, Void> w = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				repaint();
+				return null;
+			}
+		};
+		w.execute();
+	}
+
+	@Override
+	public void update(CGObservable o) {
+		update(o, 0);
 	}
 }

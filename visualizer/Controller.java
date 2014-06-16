@@ -4,10 +4,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import cg.PointComponent;
+import javax.swing.JTextField;
+
+import algorithms.Algorithm;
+import cg.VertexComponent;
 
 public class Controller implements ActionListener {
-	ViewModel model;
+	private ViewModel model;
+	private View view;
 
 	public Controller(ViewModel model) {
 		this.model = model;
@@ -16,35 +20,32 @@ public class Controller implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		// model actions
 		case "viewMakeRandomPoints":
 			model.makeRandomPoints();
 			break;
 		case "viewMakeRandomPolygon":
 			model.makeRandomPolygon();
 			break;
-		case "runGrahm":
-			model.runGrahm();
-			break;
-		case "runJarvis":
-			model.runJarvis();
-			break;
-		case "runMelkman":
-			model.runMelkman();
-			break;
-		case "runCalipers":
-			model.runCalipers();
-			break;
 		case "reset":
 			model.reset();
+			view.reset();
 			break;
-		// view actions
+		case "delaySet":
+			try {
+				model.setDelay(Integer.parseInt(((JTextField) e.getSource())
+						.getText()));
+				((JTextField) e.getSource()).selectAll();
+			} catch (NumberFormatException exc) {
+				((JTextField) e.getSource()).setText("250");
+				((JTextField) e.getSource()).selectAll();
+			}
+			break;
 		case "viewResized":
 			model.setSize((Dimension) e.getSource());
 			break;
 		case "viewAddPoint":
 			java.awt.Point p = (java.awt.Point) e.getSource();
-			model.addPoint(new PointComponent(p.x, p.y));
+			model.addPoint(new VertexComponent(p.x, p.y));
 			break;
 		case "viewEnablePolygon":
 			model.enablePolygon();
@@ -53,11 +54,18 @@ public class Controller implements ActionListener {
 			model.enablePoints();
 			break;
 		default:
-			System.out
-					.println("Default action handler; do nothing for action: "
-							+ e.getActionCommand());
+			try {
+				model.runAlgorithm(Algorithm.fromString(e.getActionCommand()));
+			} catch (IllegalArgumentException exc) {
+				System.out.println("Unhandled action in Controller: "
+						+ e.getActionCommand() + " " + e.getSource());
+			}
 			break;
 		}
+	}
+
+	public void addView(View v) {
+		this.view = v;
 	}
 
 }

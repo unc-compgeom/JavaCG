@@ -1,14 +1,14 @@
 package predicates;
 
-import cg.Line;
-import cg.Point;
+import cg.HalfEdge;
+import cg.Vertex;
 
 public class Predicate {
 	public enum Orientation {
 		COUNTERCLOCKWISE, CLOCKWISE, COLINEAR
 	};
 
-	public static boolean isLeftOrInside(Point p, Point q, Point r) {
+	public static boolean isLeftOrInside(Vertex p, Vertex q, Vertex r) {
 		/* test = (qx-px)*(ry-py) - (qy-py)*(rx-px); */
 		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
@@ -19,11 +19,11 @@ public class Predicate {
 		return det >= 0;
 	}
 
-	public static Orientation findOrientation(Point p, Point q, Point r) {
+	public static Orientation findOrientation(Vertex p, Vertex q, Vertex r) {
 		// find the determinant of the matrix
 		// [[ q.x-p.x, q.y-p.y]
 		// [ r.x-p.x, r.y-p.y]]
-		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
+		long det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
 		Orientation o;
 		if (det > 0) {
@@ -36,13 +36,9 @@ public class Predicate {
 		return o;
 	}
 
-	public static boolean isPointOnLine(Point p, Line l) {
-		Point p1 = l.getP1(), p2 = l.getP1();
+	public static boolean isPointOnLine(Vertex p, HalfEdge l) {
+		Vertex p1 = l.getOrigin(), p2 = l.getOrigin();
 		return findOrientation(p, p1, p2) == Orientation.COLINEAR;
-	}
-
-	public static boolean isPointLeftOrOnSegment(Point p, Line l) {
-		return isPointLeftOrOnSegment(p, l.getP1(), l.getP2());
 	}
 
 	/**
@@ -52,19 +48,19 @@ public class Predicate {
 	 * @param r
 	 * @return T/F: Point p is left of or on segment qr.
 	 */
-	public static boolean isPointLeftOrOnSegment(Point p, Point q, Point r) {
+	public static boolean isPointLeftOrOnSegment(Vertex p, Vertex q, Vertex r) {
 		Orientation o = findOrientation(p, q, r);
 		if (o == Orientation.COUNTERCLOCKWISE) {
 			return true;
 		} else {
-			Point a = q.sub(p), b = r.sub(p);
+			Vertex a = q.sub(p), b = r.sub(p);
 			return o == Orientation.COLINEAR
 					&& Math.abs(a.getX() - b.getX()) > 0
 					&& Math.abs(a.getY() - b.getY()) > 0;
 		}
 	}
 
-	public static boolean isPointLeftOfLine(Point p, Point q, Point r) {
+	public static boolean isPointLeftOfLine(Vertex p, Vertex q, Vertex r) {
 		return findOrientation(p, q, r) == Orientation.COUNTERCLOCKWISE;
 	}
 }
