@@ -9,7 +9,6 @@ import java.awt.event.MouseListener;
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -27,8 +26,6 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		this.a = a;
 		addMouseListener(this);
 		drawableItems = new LinkedBlockingQueue<Drawable>();
-		JLabel j = new JLabel("test area");
-		add(j);
 	}
 
 	public void reset() {
@@ -38,6 +35,12 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	/**
 	 * JPanel methods
 	 */
+
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(400, 300);
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -52,11 +55,6 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		a.actionPerformed(new ActionEvent(getSize(),
 				ActionEvent.ACTION_PERFORMED, "viewResized"));
 	};
-
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(300, 300);
-	}
 
 	/**
 	 * Mouse listener methods

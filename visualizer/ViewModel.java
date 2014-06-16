@@ -136,6 +136,8 @@ public class ViewModel implements CGObservable, CGObserver {
 						break;
 					}
 				} catch (Exception e) {
+					System.out.println("Exception while running algorithm "
+							+ algorithm);
 					e.printStackTrace();
 				}
 				return null;
