@@ -59,14 +59,15 @@ public class CG {
 
 	/**
 	 * This method sorts <code>points</code> in increasing order by the angle
-	 * they make with the point at location zero.
+	 * they make with the point <code>compare</code>.
 	 * 
 	 * @param points
 	 *            the points to sort
-	 * @return the sorted set of points
+	 * @param compare
+	 *            the point from which all angles originate
+	 * @return A set of points sorted by angle
 	 */
-	public static VertexSet sortByAngle(VertexSet points) {
-		final Vertex compare = points.getFirst();
+	public static VertexSet sortByAngle(VertexSet points, final Vertex compare) {
 		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>(
 				new Comparator<Vertex>() {
 					@Override

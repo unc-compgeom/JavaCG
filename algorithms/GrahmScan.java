@@ -3,18 +3,15 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
-import cg.Polygon;
 
 public class GrahmScan {
 
 	public static void doGrahmScan(VertexSet points, Polygon hull) {
 		Vertex smallest = CG.findSmallestYX(points);
-		points.remove(smallest);
-		points.addFirst(smallest);
-		VertexSet sorted = CG.sortByAngle(points);
-
+		VertexSet sorted = CG.sortByAngle(points, smallest);
 		hull.push(sorted.get(0));
 		hull.push(sorted.get(1));
 		int i = 2;

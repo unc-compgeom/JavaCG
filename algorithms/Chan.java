@@ -3,10 +3,10 @@ package algorithms;
 import java.awt.Color;
 
 import util.CG;
-import cg.VertexSet;
-import cg.VertexSetComponent;
 import cg.Polygon;
 import cg.PolygonComponent;
+import cg.VertexSet;
+import cg.VertexSetComponent;
 
 public class Chan {
 
@@ -29,6 +29,7 @@ public class Chan {
 			}
 			int[] minHullPt = getMinHullPoint(hulls);
 			hull.addFirst(hulls[minHullPt[0]].get(minHullPt[1]));
+			// TODO fix
 			// for (int x = 0; x < m; x++) {
 			// Point p = nextHullPoint(hulls, hull.getLast());
 			// if (p.equals(hull.getFirst())) {
