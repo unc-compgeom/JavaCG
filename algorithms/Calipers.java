@@ -3,6 +3,8 @@ package algorithms;
 import java.awt.Color;
 
 import predicates.Predicate;
+import predicates.Predicate.Orientation;
+import util.CG;
 import cg.Polygon;
 import cg.PolygonComponent;
 import cg.Vertex;
@@ -71,7 +73,8 @@ public class Calipers {
 	}
 	
 	/** Uses Jarvis march to compute convex hull */
-	private static Polygon getConvexHull(VertexSet pl, Polygon hull){
+	private static Polygon getConvexHull(VertexSet points, Polygon hull){
+		/*
 		Vertex min = leftmost(pl);
 		do {
 			hull.add(min);
@@ -83,8 +86,34 @@ public class Calipers {
 			}
 		} while (!min.equals(hull.get(0)));
 		return hull;
+		*/
+		Vertex min = CG.findSmallestYX(points);
+		Vertex p, q = min;
+		int i = 0;
+		do {
+			hull.addLast(q);
+			p = hull.get(i);
+			q = nextHullPoint(points, p);
+			i++;
+		} while (!q.equals(min));
+		return hull;
 	}
 	
+	private static Vertex nextHullPoint(VertexSet points, Vertex p) {
+		Vertex q = p;
+		for (int i = 0; i < points.size(); i++) {
+			Vertex r = points.get(i);
+			Orientation o = Predicate.findOrientation(p, q, r);
+			if (o == Orientation.COUNTERCLOCKWISE
+					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
+							.distSquared(p, q))) {
+				q = r;
+			}
+		}
+		return q;
+	}
+	
+	/*
 	private static Vertex leftmost(VertexSet p) {
 		Vertex leftmost = p.get(0);
 		for (int i = 1; i < p.size(); i++) {
@@ -94,6 +123,7 @@ public class Calipers {
 		}
 		return leftmost;
 	}
+	*/
 
 	private static boolean cwIntersection(int i, int j, Polygon hull){
 		int tempi = i==0 ? hull.size()-1 : i-1;
