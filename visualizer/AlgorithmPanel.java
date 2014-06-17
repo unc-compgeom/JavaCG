@@ -18,18 +18,18 @@ import cg.Drawable;
 
 class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	private static final long serialVersionUID = 717443380063382616L;
-	private Collection<Drawable> drawableItems;
+	private Collection<CGObservable> drawableItems;
 	private final ActionListener a;
 
 	AlgorithmPanel(ActionListener a) {
 		super();
 		this.a = a;
 		addMouseListener(this);
-		drawableItems = new LinkedBlockingQueue<Drawable>();
+		drawableItems = new LinkedBlockingQueue<CGObservable>();
 	}
 
 	public void reset() {
-		drawableItems = new LinkedBlockingQueue<Drawable>();
+		drawableItems = new LinkedBlockingQueue<CGObservable>();
 	}
 
 	/**
@@ -44,8 +44,8 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for (Drawable c : drawableItems) {
-			c.paintComponent(g);
+		for (CGObservable c : drawableItems) {
+			((Drawable) c).paintComponent(g);
 		}
 	}
 

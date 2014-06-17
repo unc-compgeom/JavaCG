@@ -1,6 +1,8 @@
 package cg;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 	private Vertex origin;
@@ -107,12 +109,17 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 		// get color
 		g.setColor(super.getColor());
 		// draw line
-		g.drawLine(origin.getX(), origin.getY(), twin.getOrigin().getX(), twin
-				.getOrigin().getY());
+		Graphics2D g2D = (Graphics2D) g;
+		g2D.setStroke(new BasicStroke(getSize()));
+		g2D.drawLine(origin.getX(), origin.getY(), twin.getOrigin().getX(),
+				twin.getOrigin().getY());
+		g2D.setStroke(new BasicStroke());
 		// draw endpoints
+		origin.setSize(getSize());
 		origin.setColor(super.getColor());
 		origin.paintComponent(g);
 		twin.setColor(super.getColor());
+		twin.getOrigin().setSize(getSize());
 		twin.getOrigin().paintComponent(g);
 	}
 

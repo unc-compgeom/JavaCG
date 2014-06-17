@@ -139,6 +139,22 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	}
 
 	@Override
+	public Polygon clone() {
+		Polygon p = this.cloneEmpty();
+		p.addAll(vertices);
+		return p;
+	}
+
+	@Override
+	public Polygon cloneEmpty() {
+		Polygon p = new PolygonComponent();
+		p.addObservers(getObservers());
+		p.setSize(getSize());
+		p.setColor(getColor());
+		return p;
+	}
+
+	@Override
 	public boolean contains(Object o) {
 		return vertices.contains(o);
 	}
@@ -253,6 +269,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	public void paintComponent(Graphics g) {
 		for (int i = 0; i < size(); i++) {
 			for (HalfEdge e : edges) {
+				e.setSize(getSize());
 				e.setColor(super.getColor());
 				e.paintComponent(g);
 			}

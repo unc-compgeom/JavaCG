@@ -5,14 +5,16 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 
-import util.CGObservable;
 import util.CGObserver;
 
-public abstract class AbstractGeometry implements CGObservable {
+public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private final List<CGObserver> observers;
+	private int size;
 
 	AbstractGeometry() {
+		this.c = Color.black;
+		this.size = 1;
 		observers = new LinkedList<CGObserver>();
 	}
 
@@ -29,6 +31,11 @@ public abstract class AbstractGeometry implements CGObservable {
 	@Override
 	public Color getColor() {
 		return this.c;
+	}
+
+	@Override
+	public int getSize() {
+		return size;
 	}
 
 	@Override
@@ -58,5 +65,10 @@ public abstract class AbstractGeometry implements CGObservable {
 	@Override
 	public void setColor(Color c) {
 		this.c = c;
+	}
+
+	@Override
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

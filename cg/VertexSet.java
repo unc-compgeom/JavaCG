@@ -3,17 +3,20 @@ package cg;
 import java.util.Deque;
 import java.util.List;
 
-import util.CGObservable;
-
-public interface VertexSet extends CGObservable, List<Vertex>, Deque<Vertex>,
+public interface VertexSet extends Drawable, List<Vertex>, Deque<Vertex>,
 		Cloneable, java.io.Serializable {
 
-	public void remove(Vertex pt);
-
+	@Override
 	public void clear();
+
+	public VertexSet clone();
+
+	public VertexSet cloneEmpty();
 
 	public Vertex getSecond();
 
 	public Vertex getSecondToLast();
+
+	public void remove(Vertex pt);
 
 }

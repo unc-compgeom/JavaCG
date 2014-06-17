@@ -14,11 +14,13 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 		VertexSet, CGObservable {
 	private static final long serialVersionUID = -1545417749354389726L;
 	private final List<CGObserver> observers;
+	private int size;
 	private Color c;
 
 	public VertexSetComponent() {
 		super();
-		observers = new LinkedList<CGObserver>();
+		this.size = 1;
+		this.observers = new LinkedList<CGObserver>();
 	}
 
 	public VertexSetComponent(Vertex[] pts) {
@@ -35,6 +37,7 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 
 	@Override
 	public boolean add(Vertex v) {
+		v.setSize(getSize());
 		boolean tf = super.add(v);
 		notifyObservers();
 		return tf;
@@ -116,6 +119,22 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 
 	// /////////////// // LinkedList additions // /////////////// //
 	@Override
+	public VertexSet clone() {
+		VertexSet v = this.cloneEmpty();
+		v.addAll(this);
+		return v;
+	}
+
+	@Override
+	public VertexSet cloneEmpty() {
+		VertexSet v = new VertexSetComponent();
+		v.addObservers(getObservers());
+		v.setColor(getColor());
+		v.setSize(getSize());
+		return v;
+	}
+
+	@Override
 	public void remove(Vertex v) {
 		super.remove(v);
 		notifyObservers();
@@ -181,5 +200,18 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 	@Override
 	public void setColor(Color c) {
 		this.c = c;
+	}
+
+	@Override
+	public void setSize(int size) {
+		this.size = size;
+		for (Vertex v : this) {
+			v.setSize(size);
+		}
+	}
+
+	@Override
+	public int getSize() {
+		return size;
 	}
 }

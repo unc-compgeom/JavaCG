@@ -12,11 +12,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import algorithms.Algorithm;
 
-class ButtonPanel extends JPanel implements ActionListener {
+class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 
 	private static final long serialVersionUID = 733262376848960367L;
 
@@ -29,7 +31,7 @@ class ButtonPanel extends JPanel implements ActionListener {
 		elements = new HashMap<String, JComponent>();
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
-
+		// build buttons
 		// draw polygon/points
 		JButton drawPolygon = new JButton("Draw polygon");
 		drawPolygon.setActionCommand("viewEnablePolygon");
@@ -71,13 +73,16 @@ class ButtonPanel extends JPanel implements ActionListener {
 		add(reset, gc);
 
 		// delay field
-		JTextField delay = new JTextField("Delay (ns)");
-		delay.setActionCommand("delaySet");
-		delay.addActionListener(a);
-		delay.setMinimumSize(new Dimension(200, 25));
+		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 1000, 250);
+		speed.setMajorTickSpacing(250);
+		speed.setMinorTickSpacing(50);
+		speed.setPaintTicks(true);
+		speed.setPaintLabels(true);
+		speed.addChangeListener(this);
+		speed.setMinimumSize(new Dimension(160, 40));
 		gc.gridx++;
-		elements.put("delay", delay);
-		add(delay, gc);
+		elements.put("speed", speed);
+		add(speed, gc);
 	}
 
 	@Override
@@ -117,6 +122,18 @@ class ButtonPanel extends JPanel implements ActionListener {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(600, 25);
+		return new Dimension(700, 55);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if (e.getSource().equals(elements.get("speed"))) {
+			JSlider s = ((JSlider) e.getSource());
+			// if (s.getValueIsAdjusting()) {
+			// return;
+			// }
+			a.actionPerformed(new ActionEvent(this,
+					ActionEvent.ACTION_PERFORMED, "speedSet", s.getValue()));
+		}
 	}
 }

@@ -4,13 +4,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JTextField;
-
 import algorithms.Algorithm;
 import cg.VertexComponent;
 
 public class Controller implements ActionListener {
-	private ViewModel model;
+	private final ViewModel model;
 	private View view;
 
 	public Controller(ViewModel model) {
@@ -30,15 +28,11 @@ public class Controller implements ActionListener {
 			model.reset();
 			view.reset();
 			break;
-		case "delaySet":
-			try {
-				model.setDelay(Integer.parseInt(((JTextField) e.getSource())
-						.getText()));
-				((JTextField) e.getSource()).selectAll();
-			} catch (NumberFormatException exc) {
-				((JTextField) e.getSource()).setText("250");
-				((JTextField) e.getSource()).selectAll();
-			}
+		case "setLarge":
+			model.setLarge();
+			break;
+		case "speedSet":
+			model.setDelay(e.getModifiers());
 			break;
 		case "viewResized":
 			model.setSize((Dimension) e.getSource());

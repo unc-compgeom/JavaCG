@@ -2,7 +2,6 @@ package visualizer;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -21,6 +20,7 @@ import algorithms.JarvisMarch;
 import algorithms.Melkman;
 import algorithms.MonotoneChain;
 import algorithms.QuickHull;
+import cg.Drawable;
 import cg.Polygon;
 import cg.PolygonComponent;
 import cg.VertexComponent;
@@ -28,6 +28,8 @@ import cg.VertexSet;
 import cg.VertexSetComponent;
 
 public class ViewModel implements CGObservable, CGObserver {
+	private static final int LARGESIZE = 5;
+	private static final int SMALLSIZE = 1;
 	private Dimension size;
 	private Polygon polygon;
 	private VertexSet pointSet;
@@ -35,9 +37,11 @@ public class ViewModel implements CGObservable, CGObserver {
 	private final List<CGObserver> observers;
 	private List<VertexSet> drawnObjects;
 	private int delay = 250; // animation delay in ms.
+	private boolean isLarge;
 
 	public ViewModel() {
 		isPolygonActive = false;
+		isLarge = false;
 		pointSet = new VertexSetComponent();
 		polygon = new PolygonComponent();
 		drawnObjects = new LinkedList<VertexSet>();
@@ -87,12 +91,17 @@ public class ViewModel implements CGObservable, CGObserver {
 		pointSet = new VertexSetComponent();
 		polygon = null;
 		polygon = new PolygonComponent();
+		polygon.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
+		pointSet.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
+		drawnObjects.add(pointSet);
+		drawnObjects.add(polygon);
 		notifyObservers(0);
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
 		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
 		final Polygon hull = new PolygonComponent();
+		hull.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
 		drawnObjects.add(hull);
 		hull.addObserver(this);
 		hull.setColor(Color.RED);
@@ -188,14 +197,6 @@ public class ViewModel implements CGObservable, CGObserver {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
-	}
-
-	@Override
-	public void setColor(Color c) {
-	}
-
-	@Override
 	public void addObserver(CGObserver o) {
 		observers.add(o);
 	}
@@ -234,9 +235,18 @@ public class ViewModel implements CGObservable, CGObserver {
 		this.delay = delay;
 	}
 
-	@Override
-	public Color getColor() {
-		return null;
+	public void setLarge() {
+		if (!isLarge) {
+			for (CGObservable d : drawnObjects) {
+				((Drawable) d).setSize(LARGESIZE);
+			}
+			isLarge = true;
+		} else {
+			for (CGObservable d : drawnObjects) {
+				((Drawable) d).setSize(SMALLSIZE);
+			}
+			isLarge = false;
+		}
+		notifyObservers(0);
 	}
-
 }

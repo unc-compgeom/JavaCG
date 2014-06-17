@@ -6,7 +6,6 @@ import java.util.ListIterator;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import cg.Polygon;
-import cg.PolygonComponent;
 import cg.Vertex;
 import cg.VertexSet;
 
@@ -77,9 +76,8 @@ public class BentleyFaustPreparata {
 		}
 		// modification of Monotone Chain
 		// lower
-		Polygon lower = new PolygonComponent();
-		lower.addObservers(hull.getObservers());
-		lower.setColor(Color.green);
+		Polygon lower = hull.cloneEmpty();
+		lower.setColor(Color.MAGENTA);
 		lower.add(minMin);
 		for (int i = 1; i < buckets.length; i++) {
 			if (buckets[i] == null) {
@@ -97,9 +95,8 @@ public class BentleyFaustPreparata {
 			lower.addLast(buckets[i].getMin());
 		}
 		// upper
-		Polygon upper = new PolygonComponent();
-		upper.addObservers(hull.getObservers());
-		upper.setColor(Color.blue);
+		Polygon upper = hull.cloneEmpty();
+		upper.setColor(Color.BLUE);
 		upper.add(maxMax);
 		for (int i = buckets.length - 2; i >= 0; i--) {
 			if (buckets[i] == null) {

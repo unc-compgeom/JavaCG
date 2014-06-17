@@ -13,6 +13,7 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	public VertexComponent(int x, int y, HalfEdge incident) {
+		super();
 		this.x = x;
 		this.y = y;
 		this.incident = incident;
@@ -53,9 +54,10 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(super.getColor());
-		g.fillOval(x - 1, y - 1, 3, 3);
-		g.setColor(Color.BLACK);
-		g.drawOval(x - 1, y - 1, 3, 3);
+		g.fillOval(x - getSize(), y - getSize(), 2 * getSize(), 2 * getSize());
+		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.DARK_GRAY
+				: Color.BLACK);
+		g.drawOval(x - getSize(), y - getSize(), 2 * getSize(), 2 * getSize());
 	}
 
 	@Override

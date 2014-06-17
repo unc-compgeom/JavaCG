@@ -4,9 +4,7 @@ import java.awt.Color;
 
 import util.CG;
 import cg.Polygon;
-import cg.PolygonComponent;
 import cg.VertexSet;
-import cg.VertexSetComponent;
 
 public class Chan {
 
@@ -17,9 +15,9 @@ public class Chan {
 			Polygon[] hulls = new Polygon[m];
 			for (int ps = 0; ps < hulls.length; ps++) {
 				Color c = CG.randomColor();
-				divided[ps] = new VertexSetComponent();
+				divided[ps] = points.cloneEmpty();
 				divided[ps].setColor(c);
-				hulls[ps] = new PolygonComponent();
+				hulls[ps] = hull.cloneEmpty();
 				hulls[ps].setColor(c);
 				for (int i = 0; i < m && i + ps * m < points.size(); i++) {
 					divided[ps].addFirst(points.get(i + ps * m));

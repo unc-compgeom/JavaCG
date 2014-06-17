@@ -1,8 +1,7 @@
 package cg;
 
-import util.CGObservable;
 
-public interface Vertex extends Comparable<Vertex>, Cloneable, CGObservable {
+public interface Vertex extends Comparable<Vertex>, Cloneable, Drawable {
 
 	public void setX(int x);
 
