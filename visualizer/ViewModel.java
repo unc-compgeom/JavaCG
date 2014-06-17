@@ -20,6 +20,9 @@ import algorithms.JarvisMarch;
 import algorithms.Melkman;
 import algorithms.MonotoneChain;
 import algorithms.QuickHull;
+import algorithms.SmallestEnclosingCircle;
+import cg.Circle;
+import cg.CircleComponent;
 import cg.Drawable;
 import cg.Polygon;
 import cg.PolygonComponent;
@@ -35,7 +38,7 @@ public class ViewModel implements CGObservable, CGObserver {
 	private VertexSet pointSet;
 	private boolean isPolygonActive; // either draw polygon or point set
 	private final List<CGObserver> observers;
-	private List<VertexSet> drawnObjects;
+	private List<Drawable> drawnObjects;
 	private int delay = 250; // animation delay in ms.
 	private boolean isLarge;
 
@@ -46,7 +49,7 @@ public class ViewModel implements CGObservable, CGObserver {
 		polygon = new PolygonComponent();
 		pointSet.addObserver(this);
 		polygon.addObserver(this);
-		drawnObjects = new LinkedList<VertexSet>();
+		drawnObjects = new LinkedList<Drawable>();
 		drawnObjects.add(pointSet);
 		drawnObjects.add(polygon);
 		observers = new Vector<CGObserver>();
@@ -83,12 +86,11 @@ public class ViewModel implements CGObservable, CGObserver {
 	}
 
 	public void reset() {
-		for (VertexSet o : drawnObjects) {
+		for (Drawable o : drawnObjects) {
 			o.removeAllObservers();
-			o.removeAll(o);
 		}
 		drawnObjects = null;
-		drawnObjects = new LinkedList<VertexSet>();
+		drawnObjects = new LinkedList<Drawable>();
 		pointSet = null;
 		pointSet = new VertexSetComponent();
 		polygon = null;
@@ -141,6 +143,13 @@ public class ViewModel implements CGObservable, CGObserver {
 						break;
 					case QUICKHULL:
 						QuickHull.findConvexHull(points, hull);
+						break;
+					case SMALLEST_ENCLOSING_CIRCLE:
+						Circle c = new CircleComponent(1, 1, 1);
+						c.addObservers(hull.getObservers());
+						drawnObjects.add(c);
+						SmallestEnclosingCircle.findSmallestEnclosingCircle(
+								points, c);
 						break;
 					default:
 						System.out

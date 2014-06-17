@@ -72,12 +72,11 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		elements.put("reset", reset);
 		add(reset, gc);
 
-		// delay field
-		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 1000, 250);
-		speed.setMajorTickSpacing(250);
-		speed.setMinorTickSpacing(50);
+		// speed slider
+		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, 15);
+		speed.setMajorTickSpacing(5);
+		speed.setMinorTickSpacing(1);
 		speed.setPaintTicks(true);
-		speed.setPaintLabels(true);
 		speed.addChangeListener(this);
 		speed.setMinimumSize(new Dimension(160, 40));
 		gc.gridx++;
