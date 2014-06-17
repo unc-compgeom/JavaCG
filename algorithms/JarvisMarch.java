@@ -8,7 +8,7 @@ import cg.VertexSet;
 import cg.Polygon;
 
 public class JarvisMarch {
-	public static void doJarvisMarch(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		Vertex min = CG.findSmallestYX(points);
 		Vertex p, q = min;
 		int i = 0;

@@ -8,7 +8,7 @@ import cg.Vertex;
 import cg.VertexSet;
 
 public class QuickHull {
-	public static void doQuickHull(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		Vertex[] minMax = findMinMaxX(points);
 		hull.add(minMax[0]);
 		hull.add(minMax[1]);

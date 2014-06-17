@@ -7,7 +7,7 @@ import cg.VertexSet;
 
 public class Melkman {
 
-	public static void doMelkman(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		Vertex p0 = points.get(0);
 		Vertex p1 = points.get(1);
 		hull.addFirst(p0);

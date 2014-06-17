@@ -1,5 +1,6 @@
 package predicates;
 
+import cg.Circle;
 import cg.HalfEdge;
 import cg.Vertex;
 
@@ -62,5 +63,10 @@ public class Predicate {
 
 	public static boolean isPointLeftOfLine(Vertex p, Vertex q, Vertex r) {
 		return findOrientation(p, q, r) == Orientation.COUNTERCLOCKWISE;
+	}
+
+	public static boolean isPointInCircle(Vertex s, Circle c) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

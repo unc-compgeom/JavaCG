@@ -10,7 +10,7 @@ import cg.Vertex;
 import cg.VertexSet;
 
 public class BentleyFaustPreparata {
-	public static void doBentleyFaustPreparata(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		ListIterator<Vertex> it = points.listIterator();
 		Vertex v = it.next();
 		int minX = v.getX(), maxX = v.getX();

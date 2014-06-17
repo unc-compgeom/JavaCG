@@ -8,7 +8,7 @@ import cg.VertexSet;
 
 public class Chan {
 
-	public static void doChan(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		for (int t = 1; t < points.size(); t++) {
 			int m = (int) Math.pow(2, Math.pow(2, t));
 			VertexSet[] divided = new VertexSet[m];
@@ -23,7 +23,7 @@ public class Chan {
 					divided[ps].addFirst(points.get(i + ps * m));
 				}
 				hulls[ps].addObservers(hull.getObservers());
-				GrahmScan.doGrahmScan(divided[ps], hulls[ps]);
+				GrahmScan.findConvexHull(divided[ps], hulls[ps]);
 			}
 			int[] minHullPt = getMinHullPoint(hulls);
 			hull.addFirst(hulls[minHullPt[0]].get(minHullPt[1]));

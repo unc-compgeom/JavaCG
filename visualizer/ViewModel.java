@@ -44,6 +44,8 @@ public class ViewModel implements CGObservable, CGObserver {
 		isLarge = false;
 		pointSet = new VertexSetComponent();
 		polygon = new PolygonComponent();
+		pointSet.addObserver(this);
+		polygon.addObserver(this);
 		drawnObjects = new LinkedList<VertexSet>();
 		drawnObjects.add(pointSet);
 		drawnObjects.add(polygon);
@@ -91,6 +93,8 @@ public class ViewModel implements CGObservable, CGObserver {
 		pointSet = new VertexSetComponent();
 		polygon = null;
 		polygon = new PolygonComponent();
+		pointSet.addObserver(this);
+		polygon.addObserver(this);
 		polygon.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
 		pointSet.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
 		drawnObjects.add(pointSet);
@@ -111,8 +115,7 @@ public class ViewModel implements CGObservable, CGObserver {
 				try {
 					switch (algorithm) {
 					case BENTLEY_FAUST_PREPARATA:
-						BentleyFaustPreparata.doBentleyFaustPreparata(points,
-								hull);
+						BentleyFaustPreparata.findConvexHull(points, hull);
 						break;
 					case CALIPERS:
 						Polygon diamline = new PolygonComponent();
@@ -122,22 +125,22 @@ public class ViewModel implements CGObservable, CGObserver {
 						Calipers.doCalipers(points, hull, diamline);
 						break;
 					case CHAN:
-						Chan.doChan(points, hull);
+						Chan.findConvexHull(points, hull);
 						break;
 					case GRAHM_SCAN:
-						GrahmScan.doGrahmScan(points, hull);
+						GrahmScan.findConvexHull(points, hull);
 						break;
 					case JARVIS_MARCH:
-						JarvisMarch.doJarvisMarch(points, hull);
+						JarvisMarch.findConvexHull(points, hull);
 						break;
 					case MELKMAN:
-						Melkman.doMelkman(points, hull);
+						Melkman.findConvexHull(points, hull);
 						break;
 					case MONOTONE_CHAIN:
-						MonotoneChain.doMonotoneChain(points, hull);
+						MonotoneChain.findConvexHull(points, hull);
 						break;
 					case QUICKHULL:
-						QuickHull.doQuickHull(points, hull);
+						QuickHull.findConvexHull(points, hull);
 						break;
 					default:
 						System.out
@@ -228,7 +231,11 @@ public class ViewModel implements CGObservable, CGObserver {
 
 	@Override
 	public void update(CGObservable o) {
-		notifyObservers(o, delay);
+		if (o.equals(pointSet) || o.equals(polygon)) {
+			notifyObservers(o, 0);
+		} else {
+			notifyObservers(o, delay);
+		}
 	}
 
 	public void setDelay(int delay) {

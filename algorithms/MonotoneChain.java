@@ -11,7 +11,7 @@ import cg.VertexSet;
 
 public class MonotoneChain {
 
-	public static void doMonotoneChain(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		VertexSet sorted = CG.lexicographicalSort(points);
 		// lower hull
 		Polygon lower = hull.cloneEmpty();
