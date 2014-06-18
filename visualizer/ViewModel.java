@@ -2,10 +2,8 @@ package visualizer;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 import javax.swing.SwingWorker;
 
@@ -20,15 +18,11 @@ import algorithms.JarvisMarch;
 import algorithms.Melkman;
 import algorithms.MonotoneChain;
 import algorithms.QuickHull;
-import algorithms.SmallestEnclosingCircle;
-import cg.Circle;
-import cg.CircleComponent;
-import cg.Drawable;
+import algorithms.Welzl;
+import cg.GeometryManager;
 import cg.Polygon;
-import cg.PolygonComponent;
-import cg.VertexComponent;
+import cg.Vertex;
 import cg.VertexSet;
-import cg.VertexSetComponent;
 
 public class ViewModel implements CGObservable, CGObserver {
 	private static final int LARGESIZE = 5;
@@ -37,22 +31,16 @@ public class ViewModel implements CGObservable, CGObserver {
 	private Polygon polygon;
 	private VertexSet pointSet;
 	private boolean isPolygonActive; // either draw polygon or point set
-	private final List<CGObserver> observers;
-	private List<Drawable> drawnObjects;
+
 	private int delay = 250; // animation delay in ms.
 	private boolean isLarge;
 
 	public ViewModel() {
+		GeometryManager.setSize(1);
 		isPolygonActive = false;
 		isLarge = false;
-		pointSet = new VertexSetComponent();
-		polygon = new PolygonComponent();
-		pointSet.addObserver(this);
-		polygon.addObserver(this);
-		drawnObjects = new LinkedList<Drawable>();
-		drawnObjects.add(pointSet);
-		drawnObjects.add(polygon);
-		observers = new Vector<CGObserver>();
+		pointSet = GeometryManager.getVertexSet();
+		polygon = GeometryManager.getPolygon();
 	}
 
 	public void makeRandomPoints() {
@@ -60,8 +48,8 @@ public class ViewModel implements CGObservable, CGObserver {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.add(new VertexComponent(Ayn.nextInt(width), Ayn
-					.nextInt(height)));
+			pointSet.add(GeometryManager.getVertex(Ayn.nextInt(width),
+					Ayn.nextInt(height)));
 		}
 		notifyObservers(0);
 	}
@@ -71,8 +59,8 @@ public class ViewModel implements CGObservable, CGObserver {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.add(new VertexComponent(Ayn.nextInt(width), Ayn
-					.nextInt(height)));
+			polygon.add(GeometryManager.getVertex(Ayn.nextInt(width),
+					Ayn.nextInt(height)));
 		}
 		notifyObservers(0);
 	}
@@ -86,29 +74,18 @@ public class ViewModel implements CGObservable, CGObserver {
 	}
 
 	public void reset() {
-		for (Drawable o : drawnObjects) {
-			o.removeAllObservers();
-		}
-		drawnObjects = null;
-		drawnObjects = new LinkedList<Drawable>();
+		GeometryManager.removeAllGeometry();
 		pointSet = null;
-		pointSet = new VertexSetComponent();
+		pointSet = GeometryManager.getVertexSet();
 		polygon = null;
-		polygon = new PolygonComponent();
-		pointSet.addObserver(this);
-		polygon.addObserver(this);
-		polygon.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
-		pointSet.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
-		drawnObjects.add(pointSet);
-		drawnObjects.add(polygon);
+		polygon = GeometryManager.getPolygon();
 		notifyObservers(0);
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
 		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
-		final Polygon hull = new PolygonComponent();
+		final Polygon hull = GeometryManager.getPolygon();
 		hull.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
-		drawnObjects.add(hull);
 		hull.addObserver(this);
 		hull.setColor(Color.RED);
 		(new SwingWorker<Void, Void>() {
@@ -120,9 +97,7 @@ public class ViewModel implements CGObservable, CGObserver {
 						BentleyFaustPreparata.findConvexHull(points, hull);
 						break;
 					case CALIPERS:
-						Polygon diamline = new PolygonComponent();
-						drawnObjects.add(diamline);
-						diamline.addObservers(hull.getObservers());
+						Polygon diamline = GeometryManager.getPolygon();
 						diamline.setColor(Color.GREEN);
 						Calipers.doCalipers(points, hull, diamline);
 						break;
@@ -144,12 +119,8 @@ public class ViewModel implements CGObservable, CGObserver {
 					case QUICKHULL:
 						QuickHull.findConvexHull(points, hull);
 						break;
-					case SMALLEST_ENCLOSING_CIRCLE:
-						Circle c = new CircleComponent(1, 1, 1);
-						c.addObservers(hull.getObservers());
-						drawnObjects.add(c);
-						SmallestEnclosingCircle.findSmallestEnclosingCircle(
-								points, c);
+					case Welzl:
+						Welzl.findSmallestEnclosingCircle(points, null);
 						break;
 					default:
 						System.out
@@ -165,15 +136,13 @@ public class ViewModel implements CGObservable, CGObserver {
 			}
 		}).execute();
 		if (isPolygonActive) {
-			polygon = new PolygonComponent();
-			drawnObjects.add(polygon);
+			polygon = GeometryManager.getPolygon();
 		} else {
-			pointSet = new VertexSetComponent();
-			drawnObjects.add(pointSet);
+			pointSet = GeometryManager.getVertexSet();
 		}
 	}
 
-	public void addPoint(VertexComponent p) {
+	public void addPoint(Vertex p) {
 		if (isPolygonActive) {
 			polygon.add(p);
 		} else {
@@ -191,7 +160,7 @@ public class ViewModel implements CGObservable, CGObserver {
 	}
 
 	private void notifyObservers(CGObservable d, int delay) {
-		for (CGObserver o : observers) {
+		for (CGObserver o : GeometryManager.getObservers()) {
 			o.update(d, delay);
 		}
 		try {
@@ -210,27 +179,29 @@ public class ViewModel implements CGObservable, CGObserver {
 
 	@Override
 	public void addObserver(CGObserver o) {
-		observers.add(o);
+		GeometryManager.addObserver(o);
 	}
 
 	@Override
 	public void addObservers(List<CGObserver> observers) {
-		this.observers.addAll(observers);
+		for (CGObserver o : observers) {
+			GeometryManager.addObserver(o);
+		}
 	}
 
 	@Override
 	public void removeObserver(CGObserver o) {
-		observers.remove(o);
+		GeometryManager.removeObserver(o);
 	}
 
 	@Override
 	public void removeAllObservers() {
-		observers.removeAll(observers);
+		GeometryManager.removeAllObservers();
 	}
 
 	@Override
 	public List<CGObserver> getObservers() {
-		return observers;
+		return GeometryManager.getObservers();
 	}
 
 	@Override
@@ -253,14 +224,10 @@ public class ViewModel implements CGObservable, CGObserver {
 
 	public void setLarge() {
 		if (!isLarge) {
-			for (CGObservable d : drawnObjects) {
-				((Drawable) d).setSize(LARGESIZE);
-			}
+			GeometryManager.setSize(LARGESIZE);
 			isLarge = true;
 		} else {
-			for (CGObservable d : drawnObjects) {
-				((Drawable) d).setSize(SMALLSIZE);
-			}
+			GeometryManager.setSize(SMALLSIZE);
 			isLarge = false;
 		}
 		notifyObservers(0);

@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import algorithms.Algorithm;
-import cg.VertexComponent;
+import cg.GeometryManager;
 
 public class Controller implements ActionListener {
 	private final ViewModel model;
@@ -39,7 +39,7 @@ public class Controller implements ActionListener {
 			break;
 		case "viewAddPoint":
 			java.awt.Point p = (java.awt.Point) e.getSource();
-			model.addPoint(new VertexComponent(p.x, p.y));
+			model.addPoint(GeometryManager.getVertex(p.x, p.y));
 			break;
 		case "viewEnablePolygon":
 			model.enablePolygon();

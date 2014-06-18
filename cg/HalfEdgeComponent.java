@@ -9,38 +9,11 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 	private HalfEdge twin, next, previous;
 	private Face incidentFace;
 
-	public HalfEdgeComponent(Vertex origin, HalfEdge twin, HalfEdge next,
-			HalfEdge previous, Face incidentFace) {
-		super();
-		this.origin = origin;
-		this.twin = twin;
-		this.next = next;
-		this.previous = previous;
-		this.incidentFace = incidentFace;
-	}
-
 	/**
-	 * Constructs an edge and it's twin edge from the <code>origin</code> and
-	 * <code>destination</code> vertices.
-	 * 
-	 * @param origin
-	 * @param destination
-	 * @param next
-	 * @param previous
-	 * @param indicentFace
+	 * Constructs an empty HalfEdge. This component must be manually initialized
+	 * after construction.
 	 */
-	public HalfEdgeComponent(Vertex origin, Vertex destination, HalfEdge next,
-			HalfEdge previous, Face indicentFace) {
-		super();
-		this.origin = origin;
-		this.twin = new HalfEdgeComponent(destination, this,
-				previous.getTwin(), next.getTwin(), incidentFace);
-		this.next = next;
-		this.previous = previous;
-		this.incidentFace = indicentFace;
-	}
-
-	public HalfEdgeComponent() {
+	protected HalfEdgeComponent() {
 		super();
 		this.origin = null;
 		this.twin = null;

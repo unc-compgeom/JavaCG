@@ -5,9 +5,9 @@ import java.awt.Color;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.GeometryManager;
 import cg.Polygon;
 import cg.Vertex;
-import cg.VertexComponent;
 import cg.VertexSet;
 
 public class Calipers {
@@ -21,8 +21,8 @@ public class Calipers {
 
 	public static void doCalipers(VertexSet Vertexs, Polygon hull,
 			Polygon diamline) {
-		Polygon support1 = hull.cloneEmpty();
-		Polygon support2 = hull.cloneEmpty();
+		Polygon support1 = GeometryManager.getPolygon();
+		Polygon support2 = GeometryManager.getPolygon();
 		support1.setColor(Color.BLUE);
 		support2.setColor(Color.BLUE);
 		hull = getConvexHull(Vertexs, hull);
@@ -56,14 +56,14 @@ public class Calipers {
 				diamline.add(pi);
 				diamline.add(pj);
 				Vertex vector = perpendicular(i, j, hull);
-				support1.add(new VertexComponent(pi.getX() + vector.getX(), pi
-						.getY() + vector.getY()));
-				support1.add(new VertexComponent(pi.getX() - vector.getX(), pi
-						.getY() - vector.getY()));
-				support2.add(new VertexComponent(pj.getX() + vector.getX(), pj
-						.getY() + vector.getY()));
-				support2.add(new VertexComponent(pj.getX() - vector.getX(), pj
-						.getY() - vector.getY()));
+				support1.add(GeometryManager.getVertex(
+						pi.getX() + vector.getX(), pi.getY() + vector.getY()));
+				support1.add(GeometryManager.getVertex(
+						pi.getX() - vector.getX(), pi.getY() - vector.getY()));
+				support2.add(GeometryManager.getVertex(
+						pj.getX() + vector.getX(), pj.getY() + vector.getY()));
+				support2.add(GeometryManager.getVertex(
+						pj.getX() - vector.getX(), pj.getY() - vector.getY()));
 			}
 			if (cwIntersection(i + 1, j, hull)) {
 				j = (j + 1) % hull.size();
@@ -115,11 +115,12 @@ public class Calipers {
 
 	private static boolean cwIntersection(int i, int j, Polygon hull) {
 		int tempi = i == 0 ? hull.size() - 1 : i - 1;
-		Vertex Pa = new VertexComponent(hull.get(tempi).getX(), hull.get(tempi)
+		Vertex Pa = GeometryManager.getVertex(hull.get(tempi).getX(),
+				hull.get(tempi).getY());
+		Vertex Pb = GeometryManager.getVertex(hull.get(i).getX(), hull.get(i)
 				.getY());
-		Vertex Pb = new VertexComponent(hull.get(i).getX(), hull.get(i).getY());
-		Vertex Pd = new VertexComponent(hull.get((j + 1) % hull.size()).getX(),
-				hull.get((j + 1) % hull.size()).getY());
+		Vertex Pd = GeometryManager.getVertex(hull.get((j + 1) % hull.size())
+				.getX(), hull.get((j + 1) % hull.size()).getY());
 		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
@@ -166,7 +167,7 @@ public class Calipers {
 				}
 			}
 		}
-		return new VertexComponent((int) (result1[0][0] * 90),
+		return GeometryManager.getVertex((int) (result1[0][0] * 90),
 				(int) (result1[1][0] * 90));
 	}
 

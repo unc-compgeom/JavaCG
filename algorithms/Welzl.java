@@ -4,16 +4,16 @@ import java.awt.Color;
 
 import predicates.Predicate;
 import cg.Circle;
-import cg.CircleComponent;
+import cg.GeometryManager;
 import cg.Vertex;
 import cg.VertexSet;
 
-public class SmallestEnclosingCircle {
+public class Welzl {
 	public static void findSmallestEnclosingCircle(VertexSet vertices,
 			Circle result) {
 		VertexSet s = vertices.clone();
 		s.setColor(Color.ORANGE);
-		result = SEC(s, vertices.cloneEmpty());
+		result = SEC(s, GeometryManager.getVertexSet());
 	}
 
 	private static Circle SEC(VertexSet vertices, VertexSet set) {
@@ -22,7 +22,7 @@ public class SmallestEnclosingCircle {
 		VertexSet P = set.clone();
 		if (P.size() == 3 || S.size() == 0) {
 			// make circle from result;
-			c = new CircleComponent(P);
+			c = GeometryManager.getCircle(P);
 			c.addObservers(P.getObservers());
 			c.setSize(P.getSize());
 		} else {

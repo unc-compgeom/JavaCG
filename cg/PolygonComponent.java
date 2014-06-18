@@ -15,7 +15,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	private Face face;
 	private VertexSet vertices;
 
-	public PolygonComponent() {
+	protected PolygonComponent() {
 		vertices = new VertexSetComponent();
 		edges = new LinkedBlockingQueue<HalfEdge>();
 		face = null;

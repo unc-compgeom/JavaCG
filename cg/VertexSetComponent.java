@@ -2,7 +2,6 @@ package cg;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,18 +13,13 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 		VertexSet, CGObservable {
 	private static final long serialVersionUID = -1545417749354389726L;
 	private final List<CGObserver> observers;
-	private int size;
+	private Integer size;
 	private Color c;
 
-	public VertexSetComponent() {
+	protected VertexSetComponent() {
 		super();
 		this.size = 1;
 		this.observers = new LinkedList<CGObserver>();
-	}
-
-	public VertexSetComponent(Vertex[] pts) {
-		this();
-		Collections.addAll(this, pts);
 	}
 
 	// /////////////// // LinkedList OVERRIDES // /////////////// //
@@ -203,15 +197,15 @@ public class VertexSetComponent extends LinkedList<Vertex> implements
 	}
 
 	@Override
-	public void setSize(int size) {
+	public Integer getSize() {
+		return size;
+	}
+
+	@Override
+	public void setSize(Integer size) {
 		this.size = size;
 		for (Vertex v : this) {
 			v.setSize(size);
 		}
-	}
-
-	@Override
-	public int getSize() {
-		return size;
 	}
 }

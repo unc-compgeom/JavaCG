@@ -3,6 +3,7 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.GeometryManager;
 import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
@@ -19,7 +20,7 @@ public class QuickHull {
 
 	private static void findHull(VertexSet points, Polygon hull, Vertex a,
 			Vertex b) {
-		VertexSet sub = points.cloneEmpty();
+		VertexSet sub = GeometryManager.getVertexSet();
 		sub.setColor(CG.randomColor());
 
 		// get only points counterclockwise of segment ab

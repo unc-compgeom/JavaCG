@@ -10,7 +10,7 @@ import util.CGObserver;
 public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private final List<CGObserver> observers;
-	private int size;
+	private Integer size;
 
 	AbstractGeometry() {
 		this.c = Color.black;
@@ -34,7 +34,7 @@ public abstract class AbstractGeometry implements Drawable {
 	}
 
 	@Override
-	public int getSize() {
+	public Integer getSize() {
 		return size;
 	}
 
@@ -68,7 +68,7 @@ public abstract class AbstractGeometry implements Drawable {
 	}
 
 	@Override
-	public void setSize(int size) {
+	public void setSize(Integer size) {
 		this.size = size;
 		notifyObservers();
 	}

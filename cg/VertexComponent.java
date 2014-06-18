@@ -8,11 +8,11 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	private int y;
 	private HalfEdge incident;
 
-	public VertexComponent(int x, int y) {
+	protected VertexComponent(int x, int y) {
 		this(x, y, null);
 	}
 
-	public VertexComponent(int x, int y, HalfEdge incident) {
+	protected VertexComponent(int x, int y, HalfEdge incident) {
 		super();
 		this.x = x;
 		this.y = y;

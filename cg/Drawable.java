@@ -13,7 +13,7 @@ public interface Drawable extends CGObservable {
 
 	public void setColor(Color c);
 
-	public void setSize(int i);
+	public void setSize(Integer size);
 
-	int getSize();
+	Integer getSize();
 }
