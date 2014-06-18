@@ -37,6 +37,16 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
+	public Vertex div(double i) {
+		return new VertexComponent((int) (x / i), (int) (y / i));
+	}
+
+	@Override
+	public int dot(Vertex v) {
+		return x * v.getX() + y * v.getY();
+	}
+
+	@Override
 	public HalfEdge getIncident() {
 		return incident;
 	}
@@ -49,6 +59,11 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	@Override
 	public int getY() {
 		return y;
+	}
+
+	@Override
+	public Vertex mult(double i) {
+		return new VertexComponent((int) (x * i), (int) (y * i));
 	}
 
 	@Override

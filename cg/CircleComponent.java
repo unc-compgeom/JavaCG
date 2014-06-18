@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 
 public class CircleComponent extends AbstractGeometry implements Circle {
 	private Vertex origin;
-	private int radius;
+	private int radiusSquared;
 
-	public CircleComponent(int x, int y, int radius) {
+	public CircleComponent(int x, int y, int radiusSquared) {
 		this.origin = new VertexComponent(x, y);
-		this.radius = radius;
+		this.radiusSquared = radiusSquared;
 	}
 
 	/**
@@ -21,52 +21,66 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	 * 
 	 */
 	public CircleComponent(VertexSet vertices) {
-		origin = null;
-		radius = -1;
+		origin = new VertexComponent(0, 0);
+		radiusSquared = -1;
 		if (vertices.size() == 1) {
 			origin = vertices.get(0);
-			radius = 0;
+			radiusSquared = 0;
 		} else if (vertices.size() == 2) {
-
+			// we have a diameter
+			Vertex a = vertices.get(0);
+			Vertex b = vertices.get(1);
+			int dX = a.getX() - b.getX();
+			int dY = a.getY() - b.getY();
+			long dXSq = dX * dX;
+			long dYSq = dY * dY;
+			// radiusSquared = (sqrt(dx^2 + dy^2)/2)^2 = (dx^2 + dy^2)/4
+			radiusSquared = (int) (dXSq + dYSq) / 4;
+			origin = new VertexComponent(a.getX() - dX / 2, a.getY() - dY / 2);
 		} else if (vertices.size() > 2) {
-			Vertex a = vertices.get(0), b = vertices.get(1), c = vertices
+			Vertex p = vertices.get(0), q = vertices.get(1), r = vertices
 					.get(2);
-			long x1 = a.getX(), y1 = a.getY();
-			long x2 = b.getX(), y2 = b.getY();
-			long x3 = c.getX(), y3 = c.getY();
+			long px = p.getX(), py = p.getY();
+			long qx = q.getX(), qy = q.getY();
+			long rx = r.getX(), ry = r.getY();
 
-			// these three points satisfy the equation (x' - x)^2 + (y' - y)^2 -
-			// r^2 = 0 for this circle.
-
-			int x = (int) ((-x3 * x3 + x1 * x1 - y3 * y3 + y1 * y1
-					- (x2 * x2 + x1 * x1) / (y1 - y2) + (y2 * y2 - y1 * y1)
-					/ (y1 - y2)) / (2 * (x1 - x3) - 2 * (x1 - x2) / (y1 - y2)));
-			int y = (int) ((x2 * x2 + x1 * x1 - 2 * x * (x1 - x2) - y2 * y2 + y1
-					* y1) / (2 * (y1 - y2)));
+			int det = (int) ((px - qx) * (py - ry) - (py - qy) * (px - rx));
+			int x = (int) (p.add(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
+					* (p.add(r).div(2).dot(p.sub(r))))
+					/ det;
+			int y = (int) ((px - qx) * p.add(r).div(2).dot(p.sub(r)) - p.add(q)
+					.div(2).dot(p.sub(q))
+					* (px - rx))
+					/ det;
 			origin = new VertexComponent(x, y);
-			radius = (int) Math.sqrt((x1 - x) * (x1 - x) + (y1 - y) * (y1 - y));
+			radiusSquared = (p.sub(origin).dot(p.sub(origin)));
 		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(getColor());
-		int radius = getRadius();
+		int radius = (int) Math.sqrt(getRadiusSquared());
 		int x = getOrigin().getX();
 		int y = getOrigin().getY();
 		Graphics2D g2D = (Graphics2D) g;
 		g2D.setStroke(new BasicStroke(getSize()));
-		g2D.drawOval(x - radius / 2, y - radius / 2, radius, radius);
+		g2D.drawOval(x - radius, y - radius, radius * 2, radius * 2);
 		g2D.setStroke(new BasicStroke());
 	}
 
 	@Override
-	public int getRadius() {
-		return radius;
+	public int getRadiusSquared() {
+		return radiusSquared;
 	}
 
 	@Override
 	public Vertex getOrigin() {
 		return origin;
+	}
+
+	@Override
+	public String toString() {
+		return "Circle: o = " + origin + " r^2 = " + radiusSquared;
 	}
 }

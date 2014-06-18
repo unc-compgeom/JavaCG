@@ -1,7 +1,7 @@
 package cg;
 
 public interface Circle extends Drawable {
-	public int getRadius();
+	public int getRadiusSquared();
 
 	public Vertex getOrigin();
 

@@ -1,6 +1,5 @@
 package cg;
 
-
 public interface Vertex extends Comparable<Vertex>, Cloneable, Drawable {
 
 	public void setX(int x);
@@ -15,9 +14,15 @@ public interface Vertex extends Comparable<Vertex>, Cloneable, Drawable {
 
 	public void setIncident(HalfEdge incident);
 
-	public Vertex add(Vertex p1);
+	public Vertex add(Vertex v);
 
-	public Vertex sub(Vertex p1);
+	public Vertex sub(Vertex v);
+
+	public Vertex div(double i);
+
+	public Vertex mult(double i);
+
+	public int dot(Vertex v);
 
 	public Vertex clone();
 

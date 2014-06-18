@@ -70,5 +70,6 @@ public abstract class AbstractGeometry implements Drawable {
 	@Override
 	public void setSize(int size) {
 		this.size = size;
+		notifyObservers();
 	}
 }

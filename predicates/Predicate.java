@@ -1,5 +1,6 @@
 package predicates;
 
+import util.CG;
 import cg.Circle;
 import cg.HalfEdge;
 import cg.Vertex;
@@ -69,7 +70,7 @@ public class Predicate {
 		return findOrientation(p, q, r) == Orientation.COUNTERCLOCKWISE;
 	}
 
-	public static boolean isVertexInCircle(Vertex s, Circle c) {
+	public static boolean isVertexInCircleByPoints(Vertex s, Circle c) {
 		// find three points, a, b, c, in the circle
 		// find the determinant of the matrix:
 		// [[a_x, a_y, a_x^2 + a_y^2, 1]
@@ -82,7 +83,7 @@ public class Predicate {
 		// [c_x - s_x, c_y - s_y, (c_x - s_x)^2 + (c_y - s_y)^2]]
 		int x = c.getOrigin().getX();
 		int y = c.getOrigin().getY();
-		int radius = c.getRadius();
+		int radius = (int) Math.sqrt(c.getRadiusSquared());
 		int ax = x, ay = y + radius;
 		int bx = x, by = y - radius;
 		int cx = x + radius, cy = y;
@@ -95,5 +96,15 @@ public class Predicate {
 				+ ((cx - sx) * (cx - sx) + (cy - sy) * (cy - sy))
 				* ((ax - sx) * (by - sy) - (ay - sy) * (bx - sx));
 		return (result < 0) ? false : true;
+	}
+
+	public static boolean isVertexInCircle(Vertex s, Circle c) {
+		// correctly handles the case of the null circle (radiusSquared = -1)
+		// correctly handles the case of the one point circle (radiusSquared =
+		// 0);
+		if (c.getRadiusSquared() == -1) {
+			return false;
+		}
+		return CG.distSquared(s, c.getOrigin()) <= c.getRadiusSquared();
 	}
 }
