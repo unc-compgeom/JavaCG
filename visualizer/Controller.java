@@ -32,7 +32,8 @@ public class Controller implements ActionListener {
 			model.setLarge();
 			break;
 		case "speedSet":
-			model.setDelay((int) (Math.pow(10, e.getModifiers() / 10.0) - 1));
+			GeometryManager.setDelay((int) (Math.pow(10,
+					e.getModifiers() / 10.0) - 1));
 			break;
 		case "viewResized":
 			model.setSize((Dimension) e.getSource());

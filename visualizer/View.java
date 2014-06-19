@@ -29,7 +29,6 @@ public class View implements CGObserver {
 		try {
 			Image image = ImageIO.read(getClass().getResource("icon.gif"));
 			f.setIconImage(image);
-
 		} catch (IOException e) {
 			// use default image
 		}
@@ -76,11 +75,6 @@ public class View implements CGObserver {
 
 	public void reset() {
 		p.reset();
-	}
-
-	@Override
-	public void update(CGObservable arg, int delay) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

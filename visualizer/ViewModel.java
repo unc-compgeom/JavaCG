@@ -88,9 +88,7 @@ public class ViewModel {
 
 	public void runAlgorithm(final Algorithm algorithm) {
 		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
-		points.setDelay(delay);
 		final Polygon hull = GeometryManager.getPolygon();
-		hull.setDelay(delay);
 		hull.setColor(Color.RED);
 		(new SwingWorker<Void, Void>() {
 			@Override
@@ -162,40 +160,4 @@ public class ViewModel {
 	public void setDelay(int delay) {
 		this.delay.set(delay);
 	}
-
-	// private void notifyObservers(CGObservable d, int delay) {
-	// for (CGObserver o : GeometryManager.getObservers()) {
-	// o.update(d, delay);
-	// }
-	// try {
-	// Thread.sleep(delay);
-	// } catch (InterruptedException e) {
-	// }
-	// }
-	//
-	// private void notifyObservers(int delay) {
-	// if (isPolygonActive) {
-	// notifyObservers(polygon, delay);
-	// } else {
-	// notifyObservers(pointSet, delay);
-	// }
-	// }
-
-	// @Override
-	// public void update(CGObservable o, int delay) {
-	// notifyObservers(o, delay);
-	// }
-	//
-	// @Override
-	// public void update(CGObservable o) {
-	// if (o.equals(pointSet) || o.equals(polygon)) {
-	// notifyObservers(o, 0);
-	// } else {
-	// notifyObservers(o, delay);
-	// }
-	// }
-
-	// public void setDelay(int delay) {
-	// this.delay = delay;
-	// }
 }

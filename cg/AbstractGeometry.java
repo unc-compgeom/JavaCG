@@ -53,8 +53,6 @@ public abstract class AbstractGeometry implements Drawable {
 		try {
 			Thread.sleep(delay.get());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 

@@ -23,6 +23,7 @@ public class Welzl {
 		if (P.size() == 3 || S.size() == 0) {
 			// make circle from result;
 			c = GeometryManager.getCircle(P);
+			c.setColor(Color.RED);
 			c.addObservers(P.getObservers());
 			c.setSize(P.getDrawSize());
 		} else {
@@ -30,6 +31,8 @@ public class Welzl {
 			c = SEC(S, P);
 			if (!Predicate.isVertexInCircle(s, c)) {
 				P.add(s);
+				// GeometryManager.destroyGeometry(c);
+				c.setColor(new Color(200, 200, 200));
 				c = SEC(S, P);
 			}
 		}

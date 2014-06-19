@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import util.CGObserver;
+import visualizer.Delay;
 
 public class GeometryManager {
 	private static List<CGObserver> observers = Collections
@@ -12,6 +13,7 @@ public class GeometryManager {
 	private static List<Drawable> dispersedObjects = Collections
 			.synchronizedList(new LinkedList<Drawable>());
 	private static int size = 1;
+	private static Delay delay = new Delay(0);
 
 	public static void addObserver(CGObserver o) {
 		observers.add(o);
@@ -23,6 +25,7 @@ public class GeometryManager {
 	private static Drawable buildGeometry(Drawable d) {
 		d.addObservers(observers);
 		d.setSize(size);
+		d.setDelay(delay);
 		dispersedObjects.add(d);
 		return d;
 	}
@@ -194,6 +197,10 @@ public class GeometryManager {
 			d.removeObserver(o);
 		}
 		observers.remove(o);
+	}
+
+	public static void setDelay(int i) {
+		delay.set(i);
 	}
 
 	/**

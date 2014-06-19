@@ -86,11 +86,6 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	 * Observer methods
 	 */
 	@Override
-	public void update(CGObservable o, int delay) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void update(CGObservable o) {
 		SwingWorker<Void, Void> w = new SwingWorker<Void, Void>() {
 			@Override
