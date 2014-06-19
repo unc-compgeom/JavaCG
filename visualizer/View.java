@@ -80,7 +80,7 @@ public class View implements CGObserver {
 
 	@Override
 	public void update(CGObservable arg, int delay) {
-		p.update(arg, delay);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class Welzl {
 			// make circle from result;
 			c = GeometryManager.getCircle(P);
 			c.addObservers(P.getObservers());
-			c.setSize(P.getSize());
+			c.setSize(P.getDrawSize());
 		} else {
 			Vertex s = S.remove(0);
 			c = SEC(S, P);

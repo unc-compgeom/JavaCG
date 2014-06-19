@@ -7,6 +7,7 @@ import java.util.Random;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
+import cg.GeometryManager;
 import cg.Vertex;
 import cg.VertexSet;
 
@@ -49,7 +50,7 @@ public class CG {
 	public static VertexSet lexicographicalSort(VertexSet points) {
 		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>();
 		sorter.addAll(points);
-		VertexSet sorted = points.cloneEmpty();
+		VertexSet sorted = GeometryManager.getVertexSet();
 		Color c = sorted.getColor();
 		sorted.setColor(Color.cyan);
 		while (!sorter.isEmpty()) {
@@ -96,7 +97,7 @@ public class CG {
 
 				});
 		sorter.addAll(points);
-		VertexSet sorted = points.cloneEmpty();
+		VertexSet sorted = GeometryManager.getVertexSet();
 		Color c = sorted.getColor();
 		sorted.setColor(Color.cyan);
 		while (!sorter.isEmpty()) {

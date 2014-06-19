@@ -1,10 +1,11 @@
 package cg;
 
+import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 
 public interface VertexSet extends Drawable, List<Vertex>, Deque<Vertex>,
-		Cloneable, java.io.Serializable {
+		Collection<Vertex>, Cloneable, java.io.Serializable {
 
 	@Override
 	public void clear();

@@ -69,7 +69,7 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(super.getColor());
-		int size = (getSize() > 2) ? getSize() : 2;
+		int size = (getDrawSize() > 2) ? getDrawSize() : 2;
 		g.fillOval(x - size, y - size, 2 * size, 2 * size);
 		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.DARK_GRAY
 				: Color.BLACK);

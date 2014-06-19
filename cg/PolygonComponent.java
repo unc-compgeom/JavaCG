@@ -3,11 +3,12 @@ package cg;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class PolygonComponent extends AbstractGeometry implements Polygon {
 	private static final long serialVersionUID = -1523644503244611934L;
@@ -17,7 +18,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	protected PolygonComponent() {
 		vertices = new VertexSetComponent();
-		edges = new LinkedBlockingQueue<HalfEdge>();
+		edges = Collections.synchronizedList(new LinkedList<HalfEdge>());
 		face = null;
 		// TODO fix face
 	}
@@ -109,6 +110,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends Vertex> c) {
+
 		for (Iterator<? extends Vertex> iterator = c.iterator(); iterator
 				.hasNext();) {
 			Vertex vertex = iterator.next();
@@ -149,7 +151,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	public Polygon cloneEmpty() {
 		Polygon p = new PolygonComponent();
 		p.addObservers(getObservers());
-		p.setSize(getSize());
+		p.setSize(getDrawSize());
 		p.setColor(getColor());
 		return p;
 	}
@@ -267,11 +269,13 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		for (int i = 0; i < size(); i++) {
-			for (HalfEdge e : edges) {
-				e.setSize(getSize());
-				e.setColor(super.getColor());
-				e.paintComponent(g);
+		synchronized (edges) {
+			for (int i = 0; i < size(); i++) {
+				for (HalfEdge e : edges) {
+					e.setSize(getDrawSize());
+					e.setColor(super.getColor());
+					e.paintComponent(g);
+				}
 			}
 		}
 	}

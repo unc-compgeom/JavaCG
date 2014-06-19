@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import util.CGObservable;
+import visualizer.Delay;
 
 public interface Drawable extends CGObservable {
 
@@ -15,5 +16,7 @@ public interface Drawable extends CGObservable {
 
 	public void setSize(Integer size);
 
-	Integer getSize();
+	public int getDrawSize();
+
+	public void setDelay(Delay delay);
 }

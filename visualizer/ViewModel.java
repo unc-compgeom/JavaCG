@@ -2,13 +2,10 @@ package visualizer;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.SwingWorker;
 
-import util.CGObservable;
-import util.CGObserver;
 import algorithms.Algorithm;
 import algorithms.BentleyFaustPreparata;
 import algorithms.Calipers;
@@ -24,23 +21,43 @@ import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
 
-public class ViewModel implements CGObservable, CGObserver {
+public class ViewModel {
 	private static final int LARGESIZE = 5;
 	private static final int SMALLSIZE = 1;
 	private Dimension size;
 	private Polygon polygon;
 	private VertexSet pointSet;
 	private boolean isPolygonActive; // either draw polygon or point set
-
-	private int delay = 250; // animation delay in ms.
 	private boolean isLarge;
+	private final Delay delay;
 
 	public ViewModel() {
-		GeometryManager.setSize(1);
+		GeometryManager.setSize(SMALLSIZE);
+		this.delay = new Delay(0);
+		this.isPolygonActive = false;
+		this.isLarge = false;
+		this.pointSet = GeometryManager.getVertexSet();
+		this.polygon = GeometryManager.getPolygon();
+	}
+
+	public void addPoint(Vertex p) {
+		if (isPolygonActive) {
+			polygon.add(p);
+		} else {
+			pointSet.add(p);
+		}
+	}
+
+	public void enablePoints() {
 		isPolygonActive = false;
-		isLarge = false;
-		pointSet = GeometryManager.getVertexSet();
-		polygon = GeometryManager.getPolygon();
+	}
+
+	public void enablePolygon() {
+		isPolygonActive = true;
+	}
+
+	public Dimension getSize() {
+		return size;
 	}
 
 	public void makeRandomPoints() {
@@ -51,7 +68,6 @@ public class ViewModel implements CGObservable, CGObserver {
 			pointSet.add(GeometryManager.getVertex(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
-		notifyObservers(0);
 	}
 
 	public void makeRandomPolygon() {
@@ -62,31 +78,19 @@ public class ViewModel implements CGObservable, CGObserver {
 			polygon.add(GeometryManager.getVertex(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
-		notifyObservers(0);
-	}
-
-	public Dimension getSize() {
-		return size;
-	}
-
-	public void setSize(Dimension size) {
-		this.size = size;
 	}
 
 	public void reset() {
 		GeometryManager.removeAllGeometry();
-		pointSet = null;
 		pointSet = GeometryManager.getVertexSet();
-		polygon = null;
 		polygon = GeometryManager.getPolygon();
-		notifyObservers(0);
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
 		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
+		points.setDelay(delay);
 		final Polygon hull = GeometryManager.getPolygon();
-		hull.setSize((isLarge) ? LARGESIZE : SMALLSIZE);
-		hull.addObserver(this);
+		hull.setDelay(delay);
 		hull.setColor(Color.RED);
 		(new SwingWorker<Void, Void>() {
 			@Override
@@ -128,8 +132,7 @@ public class ViewModel implements CGObservable, CGObserver {
 						break;
 					}
 				} catch (Exception e) {
-					System.out.println("Exception while running algorithm "
-							+ algorithm);
+					System.out.println("Exception while running " + algorithm);
 					e.printStackTrace();
 				}
 				return null;
@@ -142,86 +145,6 @@ public class ViewModel implements CGObservable, CGObserver {
 		}
 	}
 
-	public void addPoint(Vertex p) {
-		if (isPolygonActive) {
-			polygon.add(p);
-		} else {
-			pointSet.add(p);
-		}
-		notifyObservers(0);
-	}
-
-	public void enablePolygon() {
-		isPolygonActive = true;
-	}
-
-	public void enablePoints() {
-		isPolygonActive = false;
-	}
-
-	private void notifyObservers(CGObservable d, int delay) {
-		for (CGObserver o : GeometryManager.getObservers()) {
-			o.update(d, delay);
-		}
-		try {
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-		}
-	}
-
-	private void notifyObservers(int delay) {
-		if (isPolygonActive) {
-			notifyObservers(polygon, delay);
-		} else {
-			notifyObservers(pointSet, delay);
-		}
-	}
-
-	@Override
-	public void addObserver(CGObserver o) {
-		GeometryManager.addObserver(o);
-	}
-
-	@Override
-	public void addObservers(List<CGObserver> observers) {
-		for (CGObserver o : observers) {
-			GeometryManager.addObserver(o);
-		}
-	}
-
-	@Override
-	public void removeObserver(CGObserver o) {
-		GeometryManager.removeObserver(o);
-	}
-
-	@Override
-	public void removeAllObservers() {
-		GeometryManager.removeAllObservers();
-	}
-
-	@Override
-	public List<CGObserver> getObservers() {
-		return GeometryManager.getObservers();
-	}
-
-	@Override
-	public void update(CGObservable o, int delay) {
-		notifyObservers(o, delay);
-	}
-
-	@Override
-	public void update(CGObservable o) {
-		if (o.equals(pointSet) || o.equals(polygon)) {
-			notifyObservers(o, 0);
-		} else {
-			notifyObservers(o, delay);
-		}
-	}
-
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-
 	public void setLarge() {
 		if (!isLarge) {
 			GeometryManager.setSize(LARGESIZE);
@@ -230,6 +153,49 @@ public class ViewModel implements CGObservable, CGObserver {
 			GeometryManager.setSize(SMALLSIZE);
 			isLarge = false;
 		}
-		notifyObservers(0);
 	}
+
+	public void setSize(Dimension size) {
+		this.size = size;
+	}
+
+	public void setDelay(int delay) {
+		this.delay.set(delay);
+	}
+
+	// private void notifyObservers(CGObservable d, int delay) {
+	// for (CGObserver o : GeometryManager.getObservers()) {
+	// o.update(d, delay);
+	// }
+	// try {
+	// Thread.sleep(delay);
+	// } catch (InterruptedException e) {
+	// }
+	// }
+	//
+	// private void notifyObservers(int delay) {
+	// if (isPolygonActive) {
+	// notifyObservers(polygon, delay);
+	// } else {
+	// notifyObservers(pointSet, delay);
+	// }
+	// }
+
+	// @Override
+	// public void update(CGObservable o, int delay) {
+	// notifyObservers(o, delay);
+	// }
+	//
+	// @Override
+	// public void update(CGObservable o) {
+	// if (o.equals(pointSet) || o.equals(polygon)) {
+	// notifyObservers(o, 0);
+	// } else {
+	// notifyObservers(o, delay);
+	// }
+	// }
+
+	// public void setDelay(int delay) {
+	// this.delay = delay;
+	// }
 }

@@ -6,15 +6,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import util.CGObserver;
+import visualizer.Delay;
 
 public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private final List<CGObserver> observers;
-	private Integer size;
+	private int size;
+	private Delay delay;
 
 	AbstractGeometry() {
 		this.c = Color.black;
 		this.size = 1;
+		delay = new Delay(0);
 		observers = new LinkedList<CGObserver>();
 	}
 
@@ -34,7 +37,7 @@ public abstract class AbstractGeometry implements Drawable {
 	}
 
 	@Override
-	public Integer getSize() {
+	public int getDrawSize() {
 		return size;
 	}
 
@@ -46,6 +49,12 @@ public abstract class AbstractGeometry implements Drawable {
 	protected void notifyObservers() {
 		for (CGObserver o : observers) {
 			o.update(this);
+		}
+		try {
+			Thread.sleep(delay.get());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -65,6 +74,11 @@ public abstract class AbstractGeometry implements Drawable {
 	@Override
 	public void setColor(Color c) {
 		this.c = c;
+	}
+
+	@Override
+	public void setDelay(Delay delay) {
+		this.delay = delay;
 	}
 
 	@Override

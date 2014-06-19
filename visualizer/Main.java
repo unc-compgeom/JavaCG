@@ -3,6 +3,8 @@ package visualizer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import cg.GeometryManager;
+
 public class Main {
 	public static void main(String[] args) {
 		try {
@@ -22,7 +24,7 @@ public class Main {
 		Controller c = new Controller(m);
 		View v = new View(c);
 		c.addView(v);
-		m.addObserver(v);
+		GeometryManager.addObserver(v);
 	}
 
 }

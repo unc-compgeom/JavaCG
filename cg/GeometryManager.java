@@ -15,48 +15,9 @@ public class GeometryManager {
 
 	public static void addObserver(CGObserver o) {
 		observers.add(o);
-	}
-
-	public static void setSize(int size) {
-		GeometryManager.size = size;
 		for (Drawable d : dispersedObjects) {
-			d.setSize(size);
+			d.addObserver(o);
 		}
-	}
-
-	public static Circle getCircle(VertexSet vertices) {
-		Circle c = new CircleComponent(vertices);
-		return (Circle) buildGeometry(c);
-	}
-
-	public static Circle getCircle(int x, int y, int radiusSquared) {
-		Circle c = new CircleComponent(x, y, radiusSquared);
-		return (Circle) buildGeometry(c);
-	}
-
-	public static HalfEdge getHalfEdge() {
-		HalfEdge he = new HalfEdgeComponent();
-		return (HalfEdge) buildGeometry(he);
-	}
-
-	public static Polygon getPolygon() {
-		Polygon p = new PolygonComponent();
-		return (Polygon) buildGeometry(p);
-	}
-
-	public static Vertex getVertex(int x, int y) {
-		Vertex v = new VertexComponent(x, y);
-		return (Vertex) buildGeometry(v);
-	}
-
-	public static Vertex getVertex(int x, int y, HalfEdge incident) {
-		Vertex v = new VertexComponent(x, y, incident);
-		return (Vertex) buildGeometry(v);
-	}
-
-	public static VertexSet getVertexSet() {
-		VertexSet vs = new VertexSetComponent();
-		return (VertexSet) buildGeometry(vs);
 	}
 
 	private static Drawable buildGeometry(Drawable d) {
@@ -66,33 +27,185 @@ public class GeometryManager {
 		return d;
 	}
 
+	/**
+	 * Remove one <tt>Drawable</tt> object from the set of drawn objects.
+	 * 
+	 * @param d
+	 *            The <tt>Drawable</tt> to remove.
+	 */
 	public static void destroyGeometry(Drawable d) {
 		d.removeAllObservers();
 		dispersedObjects.remove(d);
 		d = null;
 	}
 
+	/**
+	 * Get all <tt>Drawable</tt> objects currently managed by the
+	 * <tt>GeometryManager</tt>.
+	 * 
+	 * @return a <tt>List</tt> of <tt>Drawable</tt> geometry
+	 */
 	public static List<Drawable> getAllGeometry() {
 		return dispersedObjects;
 	}
 
+	/**
+	 * Creates a new <tt>Circle</tt> initialized with a center point and radius.
+	 * This factory constructor automatically registers observers with the
+	 * object and sets its draw size.
+	 * 
+	 * @param x
+	 *            Center x-coordinate
+	 * @param y
+	 *            Center y-coordinate
+	 * @param radiusSquared
+	 * @return <tt>Circle</tt> object
+	 */
+	public static Circle getCircle(int x, int y, int radiusSquared) {
+		Circle c = new CircleComponent(x, y, radiusSquared);
+		return (Circle) buildGeometry(c);
+	}
+
+	/**
+	 * Creates a new <tt>Circle</tt> initialized with the
+	 * <code>VertexSet vertices</code> that are on the circumference of the
+	 * circle. This factory constructor automatically registers observers with
+	 * the object and sets its draw size.
+	 * 
+	 * @param vertices
+	 *            Vertices on the circumference of the circle.
+	 * @return <tt>Circle</tt> object
+	 */
+	public static Circle getCircle(VertexSet vertices) {
+		Circle c = new CircleComponent(vertices);
+		return (Circle) buildGeometry(c);
+	}
+
+	/**
+	 * Creates a new <tt>HalfEdge</tt>. Parameters must be set manually after
+	 * calling this method. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
+	 * 
+	 * @return an uninitialized <tt>HalfEdge</tt> object
+	 */
+	public static HalfEdge getHalfEdge() {
+		HalfEdge he = new HalfEdgeComponent();
+		return (HalfEdge) buildGeometry(he);
+	}
+
+	/**
+	 * Get the <tt>CGObservers</tt> that are observing all instances of cg
+	 * objects.
+	 * 
+	 * @return a List of <tt>CGObservers</tt>
+	 */
 	public static List<CGObserver> getObservers() {
 		return observers;
 	}
 
-	public static void removeObserver(CGObserver o) {
-		observers.remove(o);
+	/**
+	 * Creates a new empty <tt>Polygon</tt>. This factory constructor
+	 * automatically registers observers with the object and sets its draw size.
+	 * 
+	 * @return an empty <tt>Polygon</tt> object
+	 */
+	public static Polygon getPolygon() {
+		Polygon p = new PolygonComponent();
+		return (Polygon) buildGeometry(p);
 	}
 
-	public static void removeAllObservers() {
-		observers.removeAll(observers);
+	/**
+	 * Creates a <tt>Vertex</tt> whose location is given by <code>x</code> and
+	 * <code>y</code>. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
+	 * 
+	 * @param x
+	 *            the x-coordinate of the vertex
+	 * @param y
+	 *            the y-coordinate of the vertex
+	 * @return a <tt>Vertex</tt> object
+	 */
+	public static Vertex getVertex(int x, int y) {
+		Vertex v = new VertexComponent(x, y);
+		return (Vertex) buildGeometry(v);
 	}
 
+	/**
+	 * Creates a <tt>Vertex</tt> whose location is given by <code>x</code> and
+	 * <code>y</code> and whose incident edge is given by <code>incident</code>.
+	 * This factory constructor automatically registers observers with the
+	 * object and sets its draw size.
+	 * 
+	 * @param x
+	 *            the x-coordinate of the vertex
+	 * @param y
+	 *            the y-coordinate of the vertex
+	 * @param incident
+	 *            the edge incident on this vertex
+	 * @return a <tt>Vertex</tt> object
+	 */
+	public static Vertex getVertex(int x, int y, HalfEdge incident) {
+		Vertex v = new VertexComponent(x, y, incident);
+		return (Vertex) buildGeometry(v);
+	}
+
+	/**
+	 * Creates an empty <tt>VertexSet</tt>. This factory constructor
+	 * automatically registers observers with the object and sets its draw size.
+	 * 
+	 * @return a <tt>VertexSet</tt> object
+	 */
+	public static VertexSet getVertexSet() {
+		VertexSet vs = new VertexSetComponent();
+		return (VertexSet) buildGeometry(vs);
+	}
+
+	/**
+	 * Remove all geometry from the GeometryManager's records. This operation
+	 * also removes all observers of all geometry objects.
+	 */
 	public static void removeAllGeometry() {
 		for (Drawable d : dispersedObjects) {
 			d.removeAllObservers();
 			d = null;
 		}
 		dispersedObjects.removeAll(dispersedObjects);
+	}
+
+	/**
+	 * Removes all observers from the geometry objects but keeps the geometry
+	 * objects intact.
+	 */
+	public static void removeAllObservers() {
+		for (Drawable d : dispersedObjects) {
+			d.removeAllObservers();
+		}
+		observers.removeAll(observers);
+	}
+
+	/**
+	 * Remove <tt>CGObserver o</tt> from all geometry objects.
+	 * 
+	 * @param o
+	 *            The <tt>CGObserver</tt> to remove
+	 */
+	public static void removeObserver(CGObserver o) {
+		for (Drawable d : dispersedObjects) {
+			d.removeObserver(o);
+		}
+		observers.remove(o);
+	}
+
+	/**
+	 * Set the draw size for all geometry objects.
+	 * 
+	 * @param size
+	 *            The width of the <tt>Graphics2D Stroke</tt>.
+	 */
+	public static void setSize(int size) {
+		GeometryManager.size = size;
+		for (Drawable d : dispersedObjects) {
+			d.setSize(size);
+		}
 	}
 }
