@@ -83,16 +83,14 @@ public class HalfEdgeComponent extends AbstractGeometry implements HalfEdge {
 		g.setColor(super.getColor());
 		// draw line
 		Graphics2D g2D = (Graphics2D) g;
-		g2D.setStroke(new BasicStroke(getDrawSize()));
+		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
 		g2D.drawLine(origin.getX(), origin.getY(), twin.getOrigin().getX(),
 				twin.getOrigin().getY());
 		g2D.setStroke(new BasicStroke());
 		// draw endpoints
-		origin.setSize(getDrawSize());
 		origin.setColor(super.getColor());
 		origin.paintComponent(g);
 		twin.setColor(super.getColor());
-		twin.getOrigin().setSize(getDrawSize());
 		twin.getOrigin().paintComponent(g);
 	}
 

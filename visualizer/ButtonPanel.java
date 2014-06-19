@@ -19,9 +19,7 @@ import javax.swing.event.ChangeListener;
 import algorithms.Algorithm;
 
 class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
-
 	private static final long serialVersionUID = 733262376848960367L;
-
 	private final ActionListener a;
 	private final Map<String, JComponent> elements;
 
@@ -73,7 +71,8 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		add(reset, gc);
 
 		// speed slider
-		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, 15);
+		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, 15); // TODO fix
+																	// initialization
 		speed.setMajorTickSpacing(5);
 		speed.setMinorTickSpacing(1);
 		speed.setPaintTicks(true);
@@ -128,9 +127,6 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource().equals(elements.get("speed"))) {
 			JSlider s = ((JSlider) e.getSource());
-			// if (s.getValueIsAdjusting()) {
-			// return;
-			// }
 			a.actionPerformed(new ActionEvent(this,
 					ActionEvent.ACTION_PERFORMED, "speedSet", s.getValue()));
 		}

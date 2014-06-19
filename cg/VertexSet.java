@@ -12,12 +12,12 @@ public interface VertexSet extends Drawable, List<Vertex>, Deque<Vertex>,
 
 	public VertexSet clone();
 
-	public VertexSet cloneEmpty();
-
 	public Vertex getSecond();
 
 	public Vertex getSecondToLast();
 
 	public void remove(Vertex pt);
+
+	public void addNoDelay(Vertex v);
 
 }

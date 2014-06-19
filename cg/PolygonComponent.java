@@ -25,75 +25,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public void add(int index, Vertex v) {
-		// manipulate all the pointers
-		// assume vertex v only contains x and y coordinates.
-		Vertex after;
-		Vertex before;
-		if (size() == 0) {
-			before = after = v;
-
-			HalfEdge left = new HalfEdgeComponent();
-			HalfEdge right = new HalfEdgeComponent();
-
-			after.setIncident(left);
-			before.setIncident(left);
-
-			left.setIncidentFace(face);
-			right.setIncidentFace(null);
-			left.setTwin(right);
-			right.setTwin(left);
-			left.setOrigin(v);
-			right.setOrigin(v);
-			left.setNext(left);
-			right.setNext(right);
-			left.setPrevious(left);
-			right.setPrevious(right);
-			vertices.add(index, v);
-			edges.add(left);
-			edges.add(right);
-			notifyObservers();
-			return;
-		}
-		after = get(index >= size() ? index - size() : index);
-		before = after.getIncident().getPrevious().getOrigin();
-
-		HalfEdge newLeft = new HalfEdgeComponent();
-		HalfEdge newRight = new HalfEdgeComponent();
-
-		HalfEdge beforeL = before.getIncident();
-		HalfEdge afterL = after.getIncident();
-		HalfEdge beforeR = after.getIncident().getTwin();
-		HalfEdge afterR = before.getIncident().getTwin();
-
-		newLeft.setIncidentFace(face);
-		newLeft.setNext(afterL);
-		newLeft.setPrevious(beforeL);
-		newLeft.setOrigin(v);
-		newLeft.setTwin(newRight);
-
-		newRight.setIncidentFace(null);
-		newRight.setNext(afterR);
-		newRight.setPrevious(beforeR);
-		newRight.setOrigin(afterL.getOrigin());
-		newRight.setTwin(newLeft);
-
-		// edge construction complete
-		edges.add(newLeft);
-		edges.add(newRight);
-		// vertex construction complete
-		v.setIncident(newLeft);
-		vertices.add(index, v);
-		// update other pointers
-		beforeL.setNext(newLeft);
-		afterL.setPrevious(newLeft);
-		beforeR.setNext(newRight);
-		afterR.setPrevious(newRight);
-		afterR.setOrigin(v);
-		if (size() == 1) {
-			beforeL.setPrevious(afterL);
-			beforeR.setPrevious(afterR);
-		}
-		// finish
+		addVertex(index, v);
 		notifyObservers();
 	}
 
@@ -132,6 +64,85 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	}
 
 	@Override
+	public void addNoDelay(Vertex v) {
+		addVertex(size(), v);
+		notifyObserversNoDelay();
+	};
+
+	private void addVertex(int index, Vertex v) {
+		synchronized (this) {
+			// manipulate all the pointers
+			// assume vertex v only contains x and y coordinates.
+			Vertex after;
+			Vertex before;
+			if (size() == 0) {
+				before = after = v;
+
+				HalfEdge left = new HalfEdgeComponent();
+				HalfEdge right = new HalfEdgeComponent();
+
+				after.setIncident(left);
+				before.setIncident(left);
+
+				left.setIncidentFace(face);
+				right.setIncidentFace(null);
+				left.setTwin(right);
+				right.setTwin(left);
+				left.setOrigin(v);
+				right.setOrigin(v);
+				left.setNext(left);
+				right.setNext(right);
+				left.setPrevious(left);
+				right.setPrevious(right);
+				vertices.add(index, v);
+				edges.add(left);
+				edges.add(right);
+				notifyObservers();
+				return;
+			}
+			after = get(index >= size() ? index - size() : index);
+			before = after.getIncident().getPrevious().getOrigin();
+
+			HalfEdge newLeft = new HalfEdgeComponent();
+			HalfEdge newRight = new HalfEdgeComponent();
+
+			HalfEdge beforeL = before.getIncident();
+			HalfEdge afterL = after.getIncident();
+			HalfEdge beforeR = after.getIncident().getTwin();
+			HalfEdge afterR = before.getIncident().getTwin();
+
+			newLeft.setIncidentFace(face);
+			newLeft.setNext(afterL);
+			newLeft.setPrevious(beforeL);
+			newLeft.setOrigin(v);
+			newLeft.setTwin(newRight);
+
+			newRight.setIncidentFace(null);
+			newRight.setNext(afterR);
+			newRight.setPrevious(beforeR);
+			newRight.setOrigin(afterL.getOrigin());
+			newRight.setTwin(newLeft);
+
+			// edge construction complete
+			edges.add(newLeft);
+			edges.add(newRight);
+			// vertex construction complete
+			v.setIncident(newLeft);
+			vertices.add(index, v);
+			// update other pointers
+			beforeL.setNext(newLeft);
+			afterL.setPrevious(newLeft);
+			beforeR.setNext(newRight);
+			afterR.setPrevious(newRight);
+			afterR.setOrigin(v);
+			if (size() == 1) {
+				beforeL.setPrevious(afterL);
+				beforeR.setPrevious(afterR);
+			}
+		}
+	}
+
+	@Override
 	public void clear() {
 		vertices.removeAllObservers();
 		vertices = new VertexSetComponent();
@@ -142,17 +153,10 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public Polygon clone() {
-		Polygon p = this.cloneEmpty();
-		p.addAll(vertices);
-		return p;
-	}
-
-	@Override
-	public Polygon cloneEmpty() {
 		Polygon p = new PolygonComponent();
 		p.addObservers(getObservers());
-		p.setSize(getDrawSize());
 		p.setColor(getColor());
+		p.addAll(vertices);
 		return p;
 	}
 
@@ -272,7 +276,6 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 		synchronized (edges) {
 			for (int i = 0; i < size(); i++) {
 				for (HalfEdge e : edges) {
-					e.setSize(getDrawSize());
 					e.setColor(super.getColor());
 					e.paintComponent(g);
 				}

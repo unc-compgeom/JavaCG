@@ -22,29 +22,22 @@ import cg.Vertex;
 import cg.VertexSet;
 
 public class ViewModel {
-	private static final int LARGESIZE = 5;
-	private static final int SMALLSIZE = 1;
-	private Dimension size;
-	private Polygon polygon;
-	private VertexSet pointSet;
 	private boolean isPolygonActive; // either draw polygon or point set
-	private boolean isLarge;
-	private final Delay delay;
+	private VertexSet pointSet;
+	private Polygon polygon;
+	private Dimension size;
 
 	public ViewModel() {
-		GeometryManager.setSize(SMALLSIZE);
-		this.delay = new Delay(0);
 		this.isPolygonActive = false;
-		this.isLarge = false;
 		this.pointSet = GeometryManager.getVertexSet();
 		this.polygon = GeometryManager.getPolygon();
 	}
 
-	public void addPoint(Vertex p) {
+	public void addPoint(Vertex v) {
 		if (isPolygonActive) {
-			polygon.add(p);
+			polygon.addNoDelay(v);
 		} else {
-			pointSet.add(p);
+			pointSet.addNoDelay(v);
 		}
 	}
 
@@ -65,7 +58,7 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.add(GeometryManager.getVertex(Ayn.nextInt(width),
+			pointSet.addNoDelay(GeometryManager.getVertex(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
@@ -75,7 +68,7 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.add(GeometryManager.getVertex(Ayn.nextInt(width),
+			polygon.addNoDelay(GeometryManager.getVertex(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
@@ -90,7 +83,7 @@ public class ViewModel {
 		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
 		final Polygon hull = GeometryManager.getPolygon();
 		hull.setColor(Color.RED);
-		(new SwingWorker<Void, Void>() {
+		SwingWorker<Void, Void> w = (new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
 				try {
@@ -135,7 +128,8 @@ public class ViewModel {
 				}
 				return null;
 			}
-		}).execute();
+		});
+		w.execute();
 		if (isPolygonActive) {
 			polygon = GeometryManager.getPolygon();
 		} else {
@@ -143,21 +137,7 @@ public class ViewModel {
 		}
 	}
 
-	public void setLarge() {
-		if (!isLarge) {
-			GeometryManager.setSize(LARGESIZE);
-			isLarge = true;
-		} else {
-			GeometryManager.setSize(SMALLSIZE);
-			isLarge = false;
-		}
-	}
-
 	public void setSize(Dimension size) {
 		this.size = size;
-	}
-
-	public void setDelay(int delay) {
-		this.delay.set(delay);
 	}
 }

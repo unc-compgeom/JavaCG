@@ -64,7 +64,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 		int x = getOrigin().getX();
 		int y = getOrigin().getY();
 		Graphics2D g2D = (Graphics2D) g;
-		g2D.setStroke(new BasicStroke(getDrawSize()));
+		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
 		g2D.drawOval(x - radius, y - radius, radius * 2, radius * 2);
 		g2D.setStroke(new BasicStroke());
 	}

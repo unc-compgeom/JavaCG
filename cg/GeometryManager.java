@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import util.CGObserver;
-import visualizer.Delay;
 
 public class GeometryManager {
 	private static List<CGObserver> observers = Collections
@@ -13,7 +12,9 @@ public class GeometryManager {
 	private static List<Drawable> dispersedObjects = Collections
 			.synchronizedList(new LinkedList<Drawable>());
 	private static int size = 1;
-	private static Delay delay = new Delay(0);
+	private static int delay = 250;
+	private static final int LARGESIZE = 5;
+	private static final int SMALLSIZE = 1;
 
 	public static void addObserver(CGObserver o) {
 		observers.add(o);
@@ -24,8 +25,6 @@ public class GeometryManager {
 
 	private static Drawable buildGeometry(Drawable d) {
 		d.addObservers(observers);
-		d.setSize(size);
-		d.setDelay(delay);
 		dispersedObjects.add(d);
 		return d;
 	}
@@ -173,6 +172,9 @@ public class GeometryManager {
 			d = null;
 		}
 		dispersedObjects.removeAll(dispersedObjects);
+		for (CGObserver o : observers) {
+			o.update(null);
+		}
 	}
 
 	/**
@@ -199,20 +201,41 @@ public class GeometryManager {
 		observers.remove(o);
 	}
 
+	/**
+	 * Set the one delay to rule them all. All geometry objects will animate at
+	 * this speed.
+	 * 
+	 * @param i
+	 *            The animation delay in nanoseconds
+	 */
 	public static void setDelay(int i) {
-		delay.set(i);
+		delay = i;
 	}
 
 	/**
-	 * Set the draw size for all geometry objects.
-	 * 
-	 * @param size
-	 *            The width of the <tt>Graphics2D Stroke</tt>.
+	 * Set the draw size for all geometry objects. If the current draw size is
+	 * small, it becomes large. If the current draw size is large, it becomes
+	 * small.
 	 */
-	public static void setSize(int size) {
-		GeometryManager.size = size;
-		for (Drawable d : dispersedObjects) {
-			d.setSize(size);
+	public static void setSmallLarge() {
+		if (size == SMALLSIZE) {
+			size = LARGESIZE;
+		} else {
+			size = SMALLSIZE;
 		}
+	}
+
+	public static int getSize() {
+		return size;
+	}
+
+	/**
+	 * Get the delay object that regulates the speed at which geometry is
+	 * animated.
+	 * 
+	 * @return a <tt>Delay</tt> object.
+	 */
+	public static int getDelay() {
+		return delay;
 	}
 }

@@ -9,7 +9,6 @@ import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 
 import util.CGObservable;
 import util.CGObserver;
@@ -87,13 +86,6 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	 */
 	@Override
 	public void update(CGObservable o) {
-		SwingWorker<Void, Void> w = new SwingWorker<Void, Void>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				repaint();
-				return null;
-			}
-		};
-		w.execute();
+		repaint();
 	}
 }

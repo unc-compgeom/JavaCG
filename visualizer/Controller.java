@@ -29,7 +29,7 @@ public class Controller implements ActionListener {
 			view.reset();
 			break;
 		case "setLarge":
-			model.setLarge();
+			GeometryManager.setSmallLarge();
 			break;
 		case "speedSet":
 			GeometryManager.setDelay((int) (Math.pow(10,

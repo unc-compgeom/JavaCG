@@ -33,7 +33,6 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 	@Override
 	public boolean add(Vertex v) {
 		synchronized (this) {
-			v.setSize(getDrawSize());
 			boolean tf = vertices.add(v);
 			notifyObservers();
 			return tf;
@@ -71,6 +70,14 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 	}
 
 	@Override
+	public void addNoDelay(Vertex v) {
+		synchronized (this) {
+			vertices.addLast(v);
+			notifyObserversNoDelay();
+		}
+	}
+
+	@Override
 	public void clear() {
 		synchronized (this) {
 			vertices.clear();
@@ -80,17 +87,10 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 
 	@Override
 	public VertexSet clone() {
-		VertexSet v = this.cloneEmpty();
-		v.addAll(this);
-		return v;
-	}
-
-	@Override
-	public VertexSet cloneEmpty() {
 		VertexSet v = new VertexSetComponent();
 		v.addObservers(getObservers());
 		v.setColor(getColor());
-		v.setSize(getDrawSize());
+		v.addAll(this);
 		return v;
 	}
 
