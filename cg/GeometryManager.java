@@ -12,7 +12,7 @@ public class GeometryManager {
 	private static List<Drawable> dispersedObjects = Collections
 			.synchronizedList(new LinkedList<Drawable>());
 	private static int size = 1;
-	private static int delay = 250;
+	private static int delay = 25;
 	private static final int LARGESIZE = 5;
 	private static final int SMALLSIZE = 1;
 
@@ -39,6 +39,9 @@ public class GeometryManager {
 		d.removeAllObservers();
 		dispersedObjects.remove(d);
 		d = null;
+		for (CGObserver o : observers) {
+			o.update(null);
+		}
 	}
 
 	/**
@@ -159,6 +162,24 @@ public class GeometryManager {
 	 */
 	public static VertexSet getVertexSet() {
 		VertexSet vs = new VertexSetComponent();
+		return (VertexSet) buildGeometry(vs);
+	}
+
+	/**
+	 * Creates a <tt>VertexSet</tt> populated with <tt>vertices</tt>. This
+	 * factory constructor automatically registers observers with the object and
+	 * sets its draw size.
+	 * 
+	 * @param vertices
+	 *            A <tt>VertexSet</tt> to clone and insert into the new
+	 *            </tt>VertexSet</tt>
+	 * @return A clone of the <tt>vertices</tt>
+	 */
+	public static VertexSet getVertexSet(VertexSet vertices) {
+		VertexSet vs = new VertexSetComponent();
+		for (Vertex vertex : vertices) {
+			vs.add(vertex.clone());
+		}
 		return (VertexSet) buildGeometry(vs);
 	}
 

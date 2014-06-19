@@ -1,6 +1,7 @@
 package cg;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -82,5 +83,11 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	@Override
 	public String toString() {
 		return "Circle: o = " + origin + " r^2 = " + radiusSquared;
+	}
+
+	@Override
+	public void setColor(Color c) {
+		super.setColor(c);
+		notifyObservers();
 	}
 }

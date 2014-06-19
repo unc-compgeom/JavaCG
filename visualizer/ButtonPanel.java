@@ -17,6 +17,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import algorithms.Algorithm;
+import cg.GeometryManager;
 
 class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 	private static final long serialVersionUID = 733262376848960367L;
@@ -71,8 +72,8 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		add(reset, gc);
 
 		// speed slider
-		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, 15); // TODO fix
-																	// initialization
+		int initialValue = (int) ((Math.log10(GeometryManager.getDelay()) + 1) * 10);
+		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, initialValue);
 		speed.setMajorTickSpacing(5);
 		speed.setMinorTickSpacing(1);
 		speed.setPaintTicks(true);

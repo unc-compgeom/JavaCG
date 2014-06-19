@@ -11,7 +11,7 @@ import cg.VertexSet;
 public class Welzl {
 	public static void findSmallestEnclosingCircle(VertexSet vertices,
 			Circle result) {
-		VertexSet s = vertices.clone();
+		VertexSet s = GeometryManager.getVertexSet(vertices);
 		s.setColor(Color.ORANGE);
 		result = SEC(s, GeometryManager.getVertexSet());
 	}
@@ -29,9 +29,10 @@ public class Welzl {
 			c = SEC(S, P);
 			if (!Predicate.isVertexInCircle(s, c)) {
 				P.add(s);
-				// GeometryManager.destroyGeometry(c);
-				c.setColor(new Color(200, 200, 200));
+				c.setColor(new Color(220, 220, 220));
+				Circle tmp = c;
 				c = SEC(S, P);
+				GeometryManager.destroyGeometry(tmp);
 			}
 		}
 		return c;
