@@ -3,9 +3,9 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
-import cg.Polygon;
 
 public class JarvisMarch {
 	public static void findConvexHull(VertexSet points, Polygon hull) {
@@ -22,8 +22,7 @@ public class JarvisMarch {
 
 	private static Vertex nextHullPoint(VertexSet points, Vertex p) {
 		Vertex q = p;
-		for (int i = 0; i < points.size(); i++) {
-			Vertex r = points.get(i);
+		for (Vertex r : points) {
 			Orientation o = Predicate.findOrientation(p, q, r);
 			if (o == Orientation.COUNTERCLOCKWISE
 					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG

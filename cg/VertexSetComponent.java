@@ -33,23 +33,27 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 	@Override
 	public boolean add(Vertex v) {
 		synchronized (this) {
-			boolean tf = vertices.add(v);
+			boolean b = vertices.add(v);
 			notifyObservers();
-			return tf;
+			return b;
 		}
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends Vertex> c) {
 		synchronized (this) {
-			return vertices.addAll(c);
+			boolean b = vertices.addAll(c);
+			notifyObservers();
+			return b;
 		}
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends Vertex> c) {
 		synchronized (this) {
-			return vertices.addAll(index, c);
+			boolean b = vertices.addAll(index, c);
+			notifyObservers();
+			return b;
 		}
 	}
 

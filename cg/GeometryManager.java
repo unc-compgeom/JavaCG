@@ -6,6 +6,8 @@ import java.util.List;
 
 import util.CGObserver;
 
+// TODO  the entire GeometryManager might be unavailable while it is iterating over something in one of its submethods.... 
+
 public class GeometryManager {
 	private static List<CGObserver> observers = Collections
 			.synchronizedList(new LinkedList<CGObserver>());
@@ -246,6 +248,12 @@ public class GeometryManager {
 		}
 	}
 
+	/**
+	 * Gets the draw size for all geometry objects (to be used in the
+	 * <tt>paintComponent()</tt> method).
+	 * 
+	 * @return the draw size
+	 */
 	public static int getSize() {
 		return size;
 	}

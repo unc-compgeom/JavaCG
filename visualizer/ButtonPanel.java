@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -127,9 +128,15 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource().equals(elements.get("speed"))) {
-			JSlider s = ((JSlider) e.getSource());
-			a.actionPerformed(new ActionEvent(this,
-					ActionEvent.ACTION_PERFORMED, "speedSet", s.getValue()));
+			final int s = ((JSlider) e.getSource()).getValue();
+			(new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					a.actionPerformed(new ActionEvent(this,
+							ActionEvent.ACTION_PERFORMED, "speedSet", s));
+					return null;
+				}
+			}).execute();
 		}
 	}
 }
