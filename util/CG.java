@@ -50,7 +50,7 @@ public class CG {
 	public static PointSet lexicographicalSort(PointSet points) {
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
 		sorter.addAll(points);
-		PointSet sorted = GeometryManager.newVertexSet();
+		PointSet sorted = GeometryManager.newPointSet();
 		Color c = sorted.getColor();
 		sorted.setColor(Color.cyan);
 		while (!sorter.isEmpty()) {
@@ -97,7 +97,7 @@ public class CG {
 
 				});
 		sorter.addAll(points);
-		PointSet sorted = GeometryManager.newVertexSet();
+		PointSet sorted = GeometryManager.newPointSet();
 		Color c = sorted.getColor();
 		sorted.setColor(Color.cyan);
 		while (!sorter.isEmpty()) {

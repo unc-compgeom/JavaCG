@@ -29,11 +29,12 @@ public class ViewModel {
 
 	public ViewModel() {
 		this.isPolygonActive = false;
-		this.pointSet = GeometryManager.newVertexSet();
+		this.pointSet = GeometryManager.newPointSet();
 		this.polygon = GeometryManager.newPolygon();
 	}
 
 	public void addPoint(Point v) {
+		// TODO add points via coordinate only.
 		if (isPolygonActive) {
 			polygon.addNoDelay(v);
 		} else {
@@ -75,7 +76,7 @@ public class ViewModel {
 
 	public void reset() {
 		GeometryManager.removeAllGeometry();
-		pointSet = GeometryManager.newVertexSet();
+		pointSet = GeometryManager.newPointSet();
 		polygon = GeometryManager.newPolygon();
 	}
 
@@ -131,7 +132,7 @@ public class ViewModel {
 		if (isPolygonActive) {
 			polygon = GeometryManager.newPolygon();
 		} else {
-			pointSet = GeometryManager.newVertexSet();
+			pointSet = GeometryManager.newPointSet();
 		}
 	}
 

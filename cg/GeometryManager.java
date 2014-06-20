@@ -7,7 +7,7 @@ import java.util.List;
 import util.CGObserver;
 
 public class GeometryManager {
-	private static int delay = 25;
+	private static int delay = 150;
 	private static List<Drawable> dispersedObjects = Collections
 			.synchronizedList(new LinkedList<Drawable>());
 	private static final int LARGESIZE = 5;
@@ -116,6 +116,33 @@ public class GeometryManager {
 	}
 
 	/**
+	 * Creates a <tt>Point</tt> whose location is given by <code>x</code> and
+	 * <code>y</code>. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
+	 * 
+	 * @param x
+	 *            the x-coordinate of the point
+	 * @param y
+	 *            the y-coordinate of the point
+	 * @return a <tt>Point</tt> object
+	 */
+	public static Point newPoint(int x, int y) {
+		Point v = new PointComponent(x, y);
+		return (Point) buildGeometry(v);
+	}
+
+	/**
+	 * Creates an empty <tt>PointSet</tt>. This factory constructor
+	 * automatically registers observers with the object and sets its draw size.
+	 * 
+	 * @return a <tt>PointSet</tt> object
+	 */
+	public static PointSet newPointSet() {
+		PointSet vs = new PointSetComponent();
+		return (PointSet) buildGeometry(vs);
+	}
+
+	/**
 	 * Creates a <tt>PointSet</tt> populated with <tt>points</tt>. This factory
 	 * constructor automatically registers observers with the object and sets
 	 * its draw size.
@@ -126,11 +153,12 @@ public class GeometryManager {
 	 * @return A clone of the <tt>points</tt>
 	 */
 	public static PointSet newPointSet(PointSet points) {
-		PointSet vs = new PointSetComponent();
+		PointSet s = new PointSetComponent();
+		s.setColor(points.getColor());
 		for (Point point : points) {
-			vs.add(point.clone());
+			s.addNoDelay(point.clone());
 		}
-		return (PointSet) buildGeometry(vs);
+		return (PointSet) buildGeometry(s);
 	}
 
 	/**
@@ -142,22 +170,6 @@ public class GeometryManager {
 	public static Polygon newPolygon() {
 		Polygon p = new PolygonComponent();
 		return (Polygon) buildGeometry(p);
-	}
-
-	/**
-	 * Creates a new Segment from <tt>v1</tt> to <tt>v2</tt>. This factory
-	 * constructor automatically registers observers with the object and sets
-	 * its draw size.
-	 * 
-	 * @param p1
-	 *            The tail of the segment
-	 * @param p2
-	 *            The head of the segment
-	 * @return a <tt>Segment</tt> object
-	 */
-	public static Segment newSegment(Point p1, Point p2) {
-		Segment s = new SegmentComponent(p1, p2);
-		return (Segment) buildGeometry(s);
 	}
 
 	/**
@@ -181,30 +193,19 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a <tt>Point</tt> whose location is given by <code>x</code> and
-	 * <code>y</code>. This factory constructor automatically registers
-	 * observers with the object and sets its draw size.
+	 * Creates a new Segment from <tt>v1</tt> to <tt>v2</tt>. This factory
+	 * constructor automatically registers observers with the object and sets
+	 * its draw size.
 	 * 
-	 * @param x
-	 *            the x-coordinate of the point
-	 * @param y
-	 *            the y-coordinate of the point
-	 * @return a <tt>Point</tt> object
+	 * @param p1
+	 *            The tail of the segment
+	 * @param p2
+	 *            The head of the segment
+	 * @return a <tt>Segment</tt> object
 	 */
-	public static Point newPoint(int x, int y) {
-		Point v = new PointComponent(x, y);
-		return (Point) buildGeometry(v);
-	}
-
-	/**
-	 * Creates an empty <tt>PointSet</tt>. This factory constructor
-	 * automatically registers observers with the object and sets its draw size.
-	 * 
-	 * @return a <tt>PointSet</tt> object
-	 */
-	public static PointSet newVertexSet() {
-		PointSet vs = new PointSetComponent();
-		return (PointSet) buildGeometry(vs);
+	public static Segment newSegment(Point p1, Point p2) {
+		Segment s = new SegmentComponent(p1, p2);
+		return (Segment) buildGeometry(s);
 	}
 
 	private static void notifyAllObservers() {

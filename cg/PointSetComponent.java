@@ -1,5 +1,6 @@
 package cg;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collection;
 import java.util.Iterator;
@@ -9,26 +10,28 @@ import java.util.ListIterator;
 
 public class PointSetComponent extends AbstractGeometry implements PointSet {
 	private static final long serialVersionUID = -1545417749354389726L;
-	private final LinkedList<Point> vertices;
+	private final LinkedList<Point> points;
 
 	protected PointSetComponent() {
 		super();
-		vertices = new LinkedList<Point>();
+		points = new LinkedList<Point>();
 	}
 
 	@Override
-	public void add(int index, Point element) {
+	public void add(int index, Point p) {
+		p.setColor(getColor());
 		synchronized (this) {
-			vertices.add(index, element);
+			points.add(index, p);
 		}
 		notifyObservers();
 	}
 
 	@Override
-	public boolean add(Point v) {
+	public boolean add(Point p) {
+		p.setColor(getColor());
 		boolean b;
 		synchronized (this) {
-			b = vertices.add(v);
+			b = points.add(p);
 		}
 		notifyObservers();
 		return b;
@@ -36,9 +39,12 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean addAll(Collection<? extends Point> c) {
+		for (Point p : c) {
+			p.setColor(getColor());
+		}
 		boolean b;
 		synchronized (this) {
-			b = vertices.addAll(c);
+			b = points.addAll(c);
 		}
 		notifyObservers();
 		return b;
@@ -46,34 +52,40 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends Point> c) {
+		for (Point p : c) {
+			p.setColor(getColor());
+		}
 		boolean b;
 		synchronized (this) {
-			b = vertices.addAll(index, c);
+			b = points.addAll(index, c);
 		}
 		notifyObservers();
 		return b;
 	}
 
 	@Override
-	public void addFirst(Point v) {
+	public void addFirst(Point p) {
+		p.setColor(getColor());
 		synchronized (this) {
-			vertices.addFirst(v);
+			points.addFirst(p);
 		}
 		notifyObservers();
 	}
 
 	@Override
-	public void addLast(Point v) {
+	public void addLast(Point p) {
+		p.setColor(getColor());
 		synchronized (this) {
-			vertices.addLast(v);
+			points.addLast(p);
 		}
 		notifyObservers();
 	}
 
 	@Override
-	public void addNoDelay(Point v) {
+	public void addNoDelay(Point p) {
+		p.setColor(getColor());
 		synchronized (this) {
-			vertices.addLast(v);
+			points.addLast(p);
 		}
 		notifyObserversNoDelay();
 	}
@@ -81,53 +93,50 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public void clear() {
 		synchronized (this) {
-			vertices.clear();
+			points.clear();
 		}
 		notifyObservers();
 	}
 
 	@Override
 	public PointSet clone() {
-		PointSet v = new PointSetComponent();
+		PointSet v = GeometryManager.newPointSet(this);
 		v.setColor(getColor());
-		synchronized (this) {
-			v.addAll(this);
-		}
 		return v;
 	}
 
 	@Override
 	public boolean contains(Object o) {
 		synchronized (this) {
-			return vertices.contains(o);
+			return points.contains(o);
 		}
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
 		synchronized (this) {
-			return vertices.containsAll(c);
+			return points.containsAll(c);
 		}
 	}
 
 	@Override
 	public Iterator<Point> descendingIterator() {
 		synchronized (this) {
-			return vertices.descendingIterator();
+			return points.descendingIterator();
 		}
 	}
 
 	@Override
 	public Point element() {
 		synchronized (this) {
-			return vertices.element();
+			return points.element();
 		}
 	}
 
 	@Override
 	public Point get(int index) {
 		synchronized (this) {
-			return vertices.get(index);
+			return points.get(index);
 		}
 
 	}
@@ -135,98 +144,101 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public Point getFirst() {
 		synchronized (this) {
-			return vertices.getFirst();
+			return points.getFirst();
 		}
 	}
 
 	@Override
 	public Point getLast() {
 		synchronized (this) {
-			return vertices.getLast();
+			return points.getLast();
 		}
 	}
 
 	@Override
 	public Point getSecond() {
 		synchronized (this) {
-			return vertices.get(1);
+			return points.get(1);
 		}
 	}
 
 	@Override
 	public Point getSecondToLast() {
 		synchronized (this) {
-			return vertices.get(size() - 2);
+			return points.get(size() - 2);
 		}
 	}
 
 	@Override
 	public int indexOf(Object o) {
 		synchronized (this) {
-			return vertices.indexOf(o);
+			return points.indexOf(o);
 		}
 	}
 
 	@Override
 	public boolean isEmpty() {
 		synchronized (this) {
-			return vertices.isEmpty();
+			return points.isEmpty();
 		}
 	}
 
 	@Override
 	public Iterator<Point> iterator() {
 		synchronized (this) {
-			return vertices.iterator();
+			return points.iterator();
 		}
 	}
 
 	@Override
 	public int lastIndexOf(Object o) {
 		synchronized (this) {
-			return vertices.lastIndexOf(o);
+			return points.lastIndexOf(o);
 		}
 	}
 
 	@Override
 	public ListIterator<Point> listIterator() {
 		synchronized (this) {
-			return vertices.listIterator();
+			return points.listIterator();
 		}
 	}
 
 	@Override
 	public ListIterator<Point> listIterator(int index) {
 		synchronized (this) {
-			return vertices.listIterator(index);
+			return points.listIterator(index);
 		}
 	}
 
 	@Override
-	public boolean offer(Point e) {
+	public boolean offer(Point p) {
+		p.setColor(getColor());
 		boolean b;
 		synchronized (this) {
-			b = vertices.offer(e);
-		}
-		notifyObservers();
-		return b;
-	}
-
-	@Override
-	public boolean offerFirst(Point e) {
-		boolean b;
-		synchronized (this) {
-			b = vertices.offerFirst(e);
+			b = points.offer(p);
 		}
 		notifyObservers();
 		return b;
 	}
 
 	@Override
-	public boolean offerLast(Point e) {
+	public boolean offerFirst(Point p) {
+		p.setColor(getColor());
 		boolean b;
 		synchronized (this) {
-			b = vertices.offerLast(e);
+			b = points.offerFirst(p);
+		}
+		notifyObservers();
+		return b;
+	}
+
+	@Override
+	public boolean offerLast(Point p) {
+		p.setColor(getColor());
+		boolean b;
+		synchronized (this) {
+			b = points.offerLast(p);
 		}
 		notifyObservers();
 		return b;
@@ -234,13 +246,12 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		if (isInvisible())
+		if (isInvisible()) {
 			return;
+		}
 		synchronized (this) {
-			for (Iterator<Point> it = iterator(); it.hasNext();) {
-				Point v = it.next();
-				v.setColor(super.getColor());
-				v.paintComponent(g);
+			for (Point p : this) {
+				p.paintComponent(g);
 			}
 		}
 	}
@@ -248,21 +259,21 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public Point peek() {
 		synchronized (this) {
-			return vertices.peek();
+			return points.peek();
 		}
 	}
 
 	@Override
 	public Point peekFirst() {
 		synchronized (this) {
-			return vertices.peekFirst();
+			return points.peekFirst();
 		}
 	}
 
 	@Override
 	public Point peekLast() {
 		synchronized (this) {
-			return vertices.peekLast();
+			return points.peekLast();
 		}
 	}
 
@@ -270,7 +281,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point poll() {
 		Point v;
 		synchronized (this) {
-			v = vertices.poll();
+			v = points.poll();
 		}
 		notifyObservers();
 		return v;
@@ -280,7 +291,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point pollFirst() {
 		Point v;
 		synchronized (this) {
-			v = vertices.pollFirst();
+			v = points.pollFirst();
 		}
 		notifyObservers();
 		return v;
@@ -290,7 +301,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point pollLast() {
 		Point v;
 		synchronized (this) {
-			v = vertices.pollLast();
+			v = points.pollLast();
 		}
 		notifyObservers();
 		return v;
@@ -300,16 +311,17 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point pop() {
 		Point v;
 		synchronized (this) {
-			v = vertices.pop();
+			v = points.pop();
 		}
 		notifyObservers();
 		return v;
 	}
 
 	@Override
-	public void push(Point v) {
+	public void push(Point p) {
+		p.setColor(getColor());
 		synchronized (this) {
-			vertices.push(v);
+			points.push(p);
 		}
 		notifyObservers();
 	}
@@ -318,7 +330,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point remove() {
 		Point v;
 		synchronized (this) {
-			v = vertices.remove();
+			v = points.remove();
 		}
 		notifyObservers();
 		return v;
@@ -328,7 +340,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point remove(int i) {
 		Point v;
 		synchronized (this) {
-			v = vertices.remove(i);
+			v = points.remove(i);
 
 		}
 		notifyObservers();
@@ -339,7 +351,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public boolean remove(Object o) {
 		boolean b;
 		synchronized (this) {
-			b = vertices.remove(o);
+			b = points.remove(o);
 		}
 		notifyObservers();
 		return b;
@@ -348,7 +360,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public void remove(Point v) {
 		synchronized (this) {
-			vertices.remove(v);
+			points.remove(v);
 		}
 		notifyObservers();
 	}
@@ -357,7 +369,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public boolean removeAll(java.util.Collection<?> c) {
 		boolean b;
 		synchronized (this) {
-			b = vertices.removeAll(c);
+			b = points.removeAll(c);
 		}
 		notifyObservers();
 		return b;
@@ -367,7 +379,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point removeFirst() {
 		Point p;
 		synchronized (this) {
-			p = vertices.removeFirst();
+			p = points.removeFirst();
 		}
 		notifyObservers();
 		return p;
@@ -377,7 +389,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public boolean removeFirstOccurrence(Object o) {
 		boolean b;
 		synchronized (this) {
-			b = vertices.removeFirstOccurrence(o);
+			b = points.removeFirstOccurrence(o);
 		}
 		notifyObservers();
 		return b;
@@ -386,7 +398,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public Point removeLast() {
 		synchronized (this) {
-			Point p = vertices.removeLast();
+			Point p = points.removeLast();
 			notifyObservers();
 			return p;
 		}
@@ -395,52 +407,63 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public boolean removeLastOccurrence(Object o) {
 		synchronized (this) {
-			return vertices.removeLastOccurrence(o);
+			return points.removeLastOccurrence(o);
 		}
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
 		synchronized (this) {
-			return vertices.retainAll(c);
+			return points.retainAll(c);
 		}
 	}
 
 	@Override
-	public Point set(int index, Point element) {
-		Point v;
+	public Point set(int index, Point p) {
+		p.setColor(getColor());
+		Point pt;
 		synchronized (this) {
-			v = vertices.set(index, element);
+			pt = points.set(index, p);
 		}
 		notifyObservers();
-		return v;
+		return pt;
+	}
+
+	@Override
+	public void setColor(Color c) {
+		super.setColor(c);
+		synchronized (points) {
+			for (Point p : points) {
+				p.setColor(c);
+			}
+		}
 	}
 
 	@Override
 	public int size() {
 		synchronized (this) {
-			return vertices.size();
+			return points.size();
 		}
 	}
 
 	@Override
 	public List<Point> subList(int fromIndex, int toIndex) {
 		synchronized (this) {
-			return vertices.subList(fromIndex, toIndex);
+			return points.subList(fromIndex, toIndex);
 		}
 	}
 
 	@Override
 	public Object[] toArray() {
 		synchronized (this) {
-			return vertices.toArray();
+			return points.toArray();
 		}
 	}
 
 	@Override
 	public <T> T[] toArray(T[] a) {
 		synchronized (this) {
-			return vertices.toArray(a);
+			return points.toArray(a);
 		}
 	}
 }

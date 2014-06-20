@@ -16,7 +16,7 @@ public class Chan {
 			Polygon[] hulls = new Polygon[m];
 			for (int ps = 0; ps < hulls.length; ps++) {
 				Color c = CG.randomColor();
-				divided[ps] = GeometryManager.newVertexSet();
+				divided[ps] = GeometryManager.newPointSet();
 				divided[ps].setColor(c);
 				hulls[ps] = GeometryManager.newPolygon();
 				hulls[ps].setColor(c);

@@ -22,7 +22,7 @@ public class QuickHull {
 
 	private static void findHull(PointSet points, Polygon hull, Point a,
 			Point b) {
-		PointSet sub = GeometryManager.newVertexSet();
+		PointSet sub = GeometryManager.newPointSet();
 		sub.setColor(CG.randomColor());
 
 		// get only points counterclockwise of segment ab

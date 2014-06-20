@@ -75,6 +75,7 @@ public class Calipers {
 			q = nextHullPoint(points, p);
 			i++;
 		} while (!q.equals(min));
+		hull.addLast(hull.getFirst());
 		return hull;
 	}
 
