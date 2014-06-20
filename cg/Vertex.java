@@ -25,5 +25,7 @@ public interface Vertex extends Comparable<Vertex>, Cloneable, Drawable {
 	public int dot(Vertex v);
 
 	public Vertex clone();
+	
+	public double distanceSquared(Vertex v);
 
 }

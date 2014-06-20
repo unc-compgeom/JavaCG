@@ -18,6 +18,10 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 		this.y = y;
 		this.incident = incident;
 	}
+	
+	public VertexComponent(Vertex v){
+		this(v.getX(),v.getY(),v.getIncident());
+	}
 
 	@Override
 	public Vertex add(Vertex p1) {
@@ -100,5 +104,12 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ")";
+	}
+
+	@Override
+	public double distanceSquared(Vertex v) {
+		double x = Math.pow(this.x - v.getX(), 2);
+		double y = Math.pow(this.y - v.getY(), 2);
+		return x+y;
 	}
 }

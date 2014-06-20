@@ -92,9 +92,7 @@ public class ViewModel {
 						BentleyFaustPreparata.findConvexHull(points, hull);
 						break;
 					case CALIPERS:
-						Polygon diamline = GeometryManager.getPolygon();
-						diamline.setColor(Color.GREEN);
-						Calipers.doCalipers(points, hull, diamline);
+						Calipers.doCalipers(points, hull);
 						break;
 					case CHAN:
 						Chan.findConvexHull(points, hull);
