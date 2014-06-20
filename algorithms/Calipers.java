@@ -39,7 +39,7 @@ public class Calipers {
 		diamline.setColor(Color.GREEN);
 		widthline.setColor(Color.ORANGE);
 
-		hull = getConvexHull(Vertices, hull);
+		hull = getConvexHull(points, hull);
 
 		// Initialization Step
 		while (cwIntersection(0, j, hull)) {
@@ -63,9 +63,9 @@ public class Calipers {
 	}
 
 	/* Jarvis march is used to compute the convex hull */
-	private static Polygon getConvexHull(VertexSet points, Polygon hull) {
-		Vertex min = CG.findSmallestYX(points);
-		Vertex p, q = min;
+	private static Polygon getConvexHull(PointSet points, Polygon hull) {
+		Point min = CG.findSmallestYX(points);
+		Point p, q = min;
 		int i = 0;
 		do {
 			hull.addLast(q);
@@ -76,10 +76,10 @@ public class Calipers {
 		return hull;
 	}
 
-	private static Vertex nextHullPoint(VertexSet points, Vertex p) {
-		Vertex q = p;
+	private static Point nextHullPoint(PointSet points, Point p) {
+		Point q = p;
 		for (int i = 0; i < points.size(); i++) {
-			Vertex r = points.get(i);
+			Point r = points.get(i);
 			Orientation o = Predicate.findOrientation(p, q, r);
 			if (o == Orientation.COUNTERCLOCKWISE
 					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
@@ -111,7 +111,7 @@ public class Calipers {
 	 * tangent to both i and j.
 	 */
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
-			Segment diamline, Segment support1, Segment support2) {
+			Segment diamline, Segment diamSupport1, Segment diamSupport2) {
 		Point pi = hull.get(i);
 		Point pj = hull.get(j);
 		double tempdiam = pi.distanceSquared(pj);
@@ -127,7 +127,7 @@ public class Calipers {
 				tan2 = i + 1;
 			}
 			//The support basis stores the direction that the support lines will point
-			//It is then translated to the vertex.  The head of the line as well as the
+			//It is then translated to the Point.  The head of the line as well as the
 			//head of its reflection about its tail are the endpoints for the support lines.
 			Segment supportBasis = GeometryManager.newSegment(hull.get(tan1),
 					hull.get(tan2));
@@ -179,7 +179,7 @@ public class Calipers {
 			width = tempwidth;
 			widthline.update(hull.get(r), intersection);
 			//The support basis stores the direction that the support lines will point
-			//It is then translated to the vertex.  The head of the line as well as the
+			//It is then translated to the Point.  The head of the line as well as the
 			//head of its reflection about its tail are the endpoints for the support lines.
 			Segment supportBasis = GeometryManager.newSegment(rrq.getTail(),
 					intersection);
