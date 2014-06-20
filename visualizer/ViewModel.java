@@ -18,12 +18,12 @@ import algorithms.QuickHull;
 import algorithms.Welzl;
 import cg.GeometryManager;
 import cg.Polygon;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class ViewModel {
 	private boolean isPolygonActive; // either draw polygon or point set
-	private VertexSet pointSet;
+	private PointSet pointSet;
 	private Polygon polygon;
 	private Dimension size;
 
@@ -33,7 +33,7 @@ public class ViewModel {
 		this.polygon = GeometryManager.newPolygon();
 	}
 
-	public void addPoint(Vertex v) {
+	public void addPoint(Point v) {
 		if (isPolygonActive) {
 			polygon.addNoDelay(v);
 		} else {
@@ -58,7 +58,7 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.addNoDelay(GeometryManager.newVertex(Ayn.nextInt(width),
+			pointSet.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
@@ -68,7 +68,7 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.addNoDelay(GeometryManager.newVertex(Ayn.nextInt(width),
+			polygon.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
@@ -80,7 +80,7 @@ public class ViewModel {
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
-		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
+		final PointSet points = (isPolygonActive) ? polygon : pointSet;
 		final Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(Color.RED);
 		SwingWorker<Void, Void> w = (new SwingWorker<Void, Void>() {

@@ -10,15 +10,15 @@ import java.awt.Graphics;
  */
 public class SegmentComponent extends AbstractGeometry implements Segment {
 
-	private Vertex head;
+	private Point head;
 	private final double[] homogeneous = { 0, 0, 0 };
-	private Vertex tail;
+	private Point tail;
 	int dX;
 	int dY;
 
 	protected SegmentComponent(int x1, int y1, int x2, int y2) {
-		tail = new VertexComponent(x1, y1);
-		head = new VertexComponent(x2, y2);
+		tail = new PointComponent(x1, y1);
+		head = new PointComponent(x2, y2);
 		dX = x2 - x1;
 		dY = y2 - y1;
 		homogeneous[0] = (x1 * y2) - (y1 * x2);
@@ -26,7 +26,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		homogeneous[2] = x2 - x1;
 	}
 
-	protected SegmentComponent(Vertex v1, Vertex v2) {
+	protected SegmentComponent(Point v1, Point v2) {
 		this(v1.getX(), v1.getY(), v2.getX(), v2.getY());
 	}
 
@@ -43,7 +43,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	// }
 
 	@Override
-	public Vertex getHead() {
+	public Point getHead() {
 		return head;
 	}
 
@@ -56,7 +56,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public Vertex getTail() {
+	public Point getTail() {
 		return tail;
 	}
 
@@ -71,14 +71,14 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public Vertex intersection(Segment v) {
+	public Point intersection(Segment v) {
 		double x0 = homogeneous[1] * v.getHomogeneous(2) - homogeneous[2]
 				* v.getHomogeneous(1);
 		double x1 = -homogeneous[0] * v.getHomogeneous(2) + homogeneous[2]
 				* v.getHomogeneous(0);
 		double x2 = homogeneous[0] * v.getHomogeneous(1) - homogeneous[1]
 				* v.getHomogeneous(0);
-		return new VertexComponent((int) (x1 / x0), (int) (x2 / x0));
+		return new PointComponent((int) (x1 / x0), (int) (x2 / x0));
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public void translate(Vertex v) {
+	public void translate(Point v) {
 		head.setX(head.getX() - tail.getX() + v.getX());
 		head.setY(head.getY() - tail.getY() + v.getY());
 		tail.setX(v.getX());
@@ -128,8 +128,8 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public void update(int x1, int y1, int x2, int y2) {
-		tail = new VertexComponent(x1, y1);
-		head = new VertexComponent(x2, y2);
+		tail = new PointComponent(x1, y1);
+		head = new PointComponent(x2, y2);
 		dX = x2 - x1;
 		dY = y2 - y1;
 		homogeneous[0] = (x1 * y2) - (y1 * x2);
@@ -139,7 +139,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public void update(Vertex v1, Vertex v2) {
+	public void update(Point v1, Point v2) {
 		update(v1.getX(), v1.getY(), v2.getX(), v2.getY());
 	}
 

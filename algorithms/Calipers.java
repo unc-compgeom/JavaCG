@@ -6,30 +6,30 @@ import predicates.Predicate;
 import cg.GeometryManager;
 import cg.Polygon;
 import cg.Segment;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class Calipers {
 
 	/*
 	 * 
-	 * Rotating caliper algorithm input Vertex set in 2D. Output is maximum
+	 * Rotating caliper algorithm input Point set in 2D. Output is maximum
 	 * diameter of the convex hull and the minimum width of the convex hull.
 	 */
 
-	public static void doCalipers(VertexSet points, Polygon hull) {
+	public static void doCalipers(PointSet points, Polygon hull) {
 		int i = 0;
 		int j = 1;
 		double diam = -1;
 		double width = Double.POSITIVE_INFINITY;
 
 		// Visualization Variables
-		Segment support1 = GeometryManager.newVector(-1, -1, -1, -1);
-		Segment support2 = GeometryManager.newVector(-1, -1, -1, -1);
-		Segment support3 = GeometryManager.newVector(-1, -1, -1, -1);
-		Segment support4 = GeometryManager.newVector(-1, -1, -1, -1);
-		Segment wdthline = GeometryManager.newVector(-1, -1, -1, -1);
-		Segment diamline = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment support1 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment support2 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment support3 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment support4 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment wdthline = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment diamline = GeometryManager.newSegment(-1, -1, -1, -1);
 		support1.setColor(Color.BLUE);
 		support2.setColor(Color.BLUE);
 		support3.setColor(Color.BLUE);
@@ -60,9 +60,9 @@ public class Calipers {
 	}
 
 	private static boolean cwIntersection(int i, int j, Polygon hull) {
-		Vertex Pa = hull.get(i - 1).clone();
-		Vertex Pb = hull.get(i).clone();
-		Vertex Pd = hull.get(j + 1).clone();
+		Point Pa = hull.get(i - 1).clone();
+		Point Pb = hull.get(i).clone();
+		Point Pd = hull.get(j + 1).clone();
 		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
@@ -70,8 +70,8 @@ public class Calipers {
 
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
 			Segment diamline, Segment support1, Segment support2) {
-		Vertex pi = hull.get(i);
-		Vertex pj = hull.get(j);
+		Point pi = hull.get(i);
+		Point pj = hull.get(j);
 		double tempdiam = pi.distanceSquared(pj);
 		if (tempdiam > diam) {
 			int tan1, tan2;
@@ -112,7 +112,7 @@ public class Calipers {
 		Segment pq = GeometryManager.newSegment(hull.get(p), hull.get(q));
 		Segment rrq = GeometryManager.newSegment(hull.get(p), hull.get(q));
 		rrq.translate(hull.get(r));
-		Vertex intersection = rrq.perpendicular().intersection(pq);
+		Point intersection = rrq.perpendicular().intersection(pq);
 		tempwidth = intersection.distanceSquared(hull.get(r));
 		if (tempwidth < width) {
 			width = tempwidth;

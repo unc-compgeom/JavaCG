@@ -102,17 +102,35 @@ public class GeometryManager {
 
 	/**
 	 * Creates a new <tt>Circle</tt> initialized with the
-	 * <code>VertexSet vertices</code> that are on the circumference of the
-	 * circle. This factory constructor automatically registers observers with
-	 * the object and sets its draw size.
+	 * <code>PointSet points</code> that are on the circumference of the circle.
+	 * This factory constructor automatically registers observers with the
+	 * object and sets its draw size.
 	 * 
-	 * @param vertices
-	 *            Vertices on the circumference of the circle.
+	 * @param points
+	 *            Points on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
-	public static Circle newCircle(VertexSet vertices) {
-		Circle c = new CircleComponent(vertices);
+	public static Circle newCircle(PointSet points) {
+		Circle c = new CircleComponent(points);
 		return (Circle) buildGeometry(c);
+	}
+
+	/**
+	 * Creates a <tt>PointSet</tt> populated with <tt>points</tt>. This factory
+	 * constructor automatically registers observers with the object and sets
+	 * its draw size.
+	 * 
+	 * @param points
+	 *            A <tt>PointSet</tt> to clone and insert into the new
+	 *            </tt>PointSet</tt>
+	 * @return A clone of the <tt>points</tt>
+	 */
+	public static PointSet newPointSet(PointSet points) {
+		PointSet vs = new PointSetComponent();
+		for (Point point : points) {
+			vs.add(point.clone());
+		}
+		return (PointSet) buildGeometry(vs);
 	}
 
 	/**
@@ -127,8 +145,24 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new Vector from <tt>Vertex(x1, y1)</tt> to
-	 * <tt>Vertex(x2, y2)</tt>. This factory constructor automatically registers
+	 * Creates a new Segment from <tt>v1</tt> to <tt>v2</tt>. This factory
+	 * constructor automatically registers observers with the object and sets
+	 * its draw size.
+	 * 
+	 * @param p1
+	 *            The tail of the segment
+	 * @param p2
+	 *            The head of the segment
+	 * @return a <tt>Segment</tt> object
+	 */
+	public static Segment newSegment(Point p1, Point p2) {
+		Segment s = new SegmentComponent(p1, p2);
+		return (Segment) buildGeometry(s);
+	}
+
+	/**
+	 * Creates a new Segment from <tt>Point(x1, y1)</tt> to
+	 * <tt>Point(x2, y2)</tt>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 * 
 	 * @param x1
@@ -139,72 +173,38 @@ public class GeometryManager {
 	 *            X-coordinate of head
 	 * @param y2
 	 *            Y-coordinate of head
-	 * @return a <tt>Vertex</tt> object
+	 * @return a <tt>Point</tt> object
 	 */
-	public static Segment newVector(int x1, int y1, int x2, int y2) {
+	public static Segment newSegment(int x1, int y1, int x2, int y2) {
 		Segment v = new SegmentComponent(x1, y1, x2, y2);
 		return (Segment) buildGeometry(v);
 	}
 
 	/**
-	 * Creates a new Segment from <tt>v1</tt> to <tt>v2</tt>. This factory
-	 * constructor automatically registers observers with the object and sets
-	 * its draw size.
-	 * 
-	 * @param v1
-	 *            The tail of the segment
-	 * @param v2
-	 *            The head of the segment
-	 * @return a <tt>Segment</tt> object
-	 */
-	public static Segment newSegment(Vertex v1, Vertex v2) {
-		Segment s = new SegmentComponent(v1, v2);
-		return (Segment) buildGeometry(s);
-	}
-
-	/**
-	 * Creates a <tt>Vertex</tt> whose location is given by <code>x</code> and
+	 * Creates a <tt>Point</tt> whose location is given by <code>x</code> and
 	 * <code>y</code>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 * 
 	 * @param x
-	 *            the x-coordinate of the vertex
+	 *            the x-coordinate of the point
 	 * @param y
-	 *            the y-coordinate of the vertex
-	 * @return a <tt>Vertex</tt> object
+	 *            the y-coordinate of the point
+	 * @return a <tt>Point</tt> object
 	 */
-	public static Vertex newVertex(int x, int y) {
-		Vertex v = new VertexComponent(x, y);
-		return (Vertex) buildGeometry(v);
+	public static Point newPoint(int x, int y) {
+		Point v = new PointComponent(x, y);
+		return (Point) buildGeometry(v);
 	}
 
 	/**
-	 * Creates an empty <tt>VertexSet</tt>. This factory constructor
+	 * Creates an empty <tt>PointSet</tt>. This factory constructor
 	 * automatically registers observers with the object and sets its draw size.
 	 * 
-	 * @return a <tt>VertexSet</tt> object
+	 * @return a <tt>PointSet</tt> object
 	 */
-	public static VertexSet newVertexSet() {
-		VertexSet vs = new VertexSetComponent();
-		return (VertexSet) buildGeometry(vs);
-	}
-
-	/**
-	 * Creates a <tt>VertexSet</tt> populated with <tt>vertices</tt>. This
-	 * factory constructor automatically registers observers with the object and
-	 * sets its draw size.
-	 * 
-	 * @param vertices
-	 *            A <tt>VertexSet</tt> to clone and insert into the new
-	 *            </tt>VertexSet</tt>
-	 * @return A clone of the <tt>vertices</tt>
-	 */
-	public static VertexSet newVertexSet(VertexSet vertices) {
-		VertexSet vs = new VertexSetComponent();
-		for (Vertex vertex : vertices) {
-			vs.add(vertex.clone());
-		}
-		return (VertexSet) buildGeometry(vs);
+	public static PointSet newVertexSet() {
+		PointSet vs = new PointSetComponent();
+		return (PointSet) buildGeometry(vs);
 	}
 
 	private static void notifyAllObservers() {

@@ -7,17 +7,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class VertexSetComponent extends AbstractGeometry implements VertexSet {
+public class PointSetComponent extends AbstractGeometry implements PointSet {
 	private static final long serialVersionUID = -1545417749354389726L;
-	private final LinkedList<Vertex> vertices;
+	private final LinkedList<Point> vertices;
 
-	protected VertexSetComponent() {
+	protected PointSetComponent() {
 		super();
-		vertices = new LinkedList<Vertex>();
+		vertices = new LinkedList<Point>();
 	}
 
 	@Override
-	public void add(int index, Vertex element) {
+	public void add(int index, Point element) {
 		synchronized (this) {
 			vertices.add(index, element);
 		}
@@ -25,7 +25,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public boolean add(Vertex v) {
+	public boolean add(Point v) {
 		boolean b;
 		synchronized (this) {
 			b = vertices.add(v);
@@ -35,7 +35,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Vertex> c) {
+	public boolean addAll(Collection<? extends Point> c) {
 		boolean b;
 		synchronized (this) {
 			b = vertices.addAll(c);
@@ -45,7 +45,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends Vertex> c) {
+	public boolean addAll(int index, Collection<? extends Point> c) {
 		boolean b;
 		synchronized (this) {
 			b = vertices.addAll(index, c);
@@ -55,7 +55,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public void addFirst(Vertex v) {
+	public void addFirst(Point v) {
 		synchronized (this) {
 			vertices.addFirst(v);
 		}
@@ -63,7 +63,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public void addLast(Vertex v) {
+	public void addLast(Point v) {
 		synchronized (this) {
 			vertices.addLast(v);
 		}
@@ -71,7 +71,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public void addNoDelay(Vertex v) {
+	public void addNoDelay(Point v) {
 		synchronized (this) {
 			vertices.addLast(v);
 		}
@@ -87,8 +87,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public VertexSet clone() {
-		VertexSet v = new VertexSetComponent();
+	public PointSet clone() {
+		PointSet v = new PointSetComponent();
 		v.setColor(getColor());
 		synchronized (this) {
 			v.addAll(this);
@@ -111,21 +111,21 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Iterator<Vertex> descendingIterator() {
+	public Iterator<Point> descendingIterator() {
 		synchronized (this) {
 			return vertices.descendingIterator();
 		}
 	}
 
 	@Override
-	public Vertex element() {
+	public Point element() {
 		synchronized (this) {
 			return vertices.element();
 		}
 	}
 
 	@Override
-	public Vertex get(int index) {
+	public Point get(int index) {
 		synchronized (this) {
 			return vertices.get(index);
 		}
@@ -133,28 +133,28 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex getFirst() {
+	public Point getFirst() {
 		synchronized (this) {
 			return vertices.getFirst();
 		}
 	}
 
 	@Override
-	public Vertex getLast() {
+	public Point getLast() {
 		synchronized (this) {
 			return vertices.getLast();
 		}
 	}
 
 	@Override
-	public Vertex getSecond() {
+	public Point getSecond() {
 		synchronized (this) {
 			return vertices.get(1);
 		}
 	}
 
 	@Override
-	public Vertex getSecondToLast() {
+	public Point getSecondToLast() {
 		synchronized (this) {
 			return vertices.get(size() - 2);
 		}
@@ -175,7 +175,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Iterator<Vertex> iterator() {
+	public Iterator<Point> iterator() {
 		synchronized (this) {
 			return vertices.iterator();
 		}
@@ -189,21 +189,21 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public ListIterator<Vertex> listIterator() {
+	public ListIterator<Point> listIterator() {
 		synchronized (this) {
 			return vertices.listIterator();
 		}
 	}
 
 	@Override
-	public ListIterator<Vertex> listIterator(int index) {
+	public ListIterator<Point> listIterator(int index) {
 		synchronized (this) {
 			return vertices.listIterator(index);
 		}
 	}
 
 	@Override
-	public boolean offer(Vertex e) {
+	public boolean offer(Point e) {
 		boolean b;
 		synchronized (this) {
 			b = vertices.offer(e);
@@ -213,7 +213,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public boolean offerFirst(Vertex e) {
+	public boolean offerFirst(Point e) {
 		boolean b;
 		synchronized (this) {
 			b = vertices.offerFirst(e);
@@ -223,7 +223,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public boolean offerLast(Vertex e) {
+	public boolean offerLast(Point e) {
 		boolean b;
 		synchronized (this) {
 			b = vertices.offerLast(e);
@@ -235,8 +235,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	@Override
 	public void paintComponent(Graphics g) {
 		synchronized (this) {
-			for (Iterator<Vertex> it = iterator(); it.hasNext();) {
-				Vertex v = it.next();
+			for (Iterator<Point> it = iterator(); it.hasNext();) {
+				Point v = it.next();
 				v.setColor(super.getColor());
 				v.paintComponent(g);
 			}
@@ -244,29 +244,29 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex peek() {
+	public Point peek() {
 		synchronized (this) {
 			return vertices.peek();
 		}
 	}
 
 	@Override
-	public Vertex peekFirst() {
+	public Point peekFirst() {
 		synchronized (this) {
 			return vertices.peekFirst();
 		}
 	}
 
 	@Override
-	public Vertex peekLast() {
+	public Point peekLast() {
 		synchronized (this) {
 			return vertices.peekLast();
 		}
 	}
 
 	@Override
-	public Vertex poll() {
-		Vertex v;
+	public Point poll() {
+		Point v;
 		synchronized (this) {
 			v = vertices.poll();
 		}
@@ -275,8 +275,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex pollFirst() {
-		Vertex v;
+	public Point pollFirst() {
+		Point v;
 		synchronized (this) {
 			v = vertices.pollFirst();
 		}
@@ -285,8 +285,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex pollLast() {
-		Vertex v;
+	public Point pollLast() {
+		Point v;
 		synchronized (this) {
 			v = vertices.pollLast();
 		}
@@ -295,8 +295,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex pop() {
-		Vertex v;
+	public Point pop() {
+		Point v;
 		synchronized (this) {
 			v = vertices.pop();
 		}
@@ -305,7 +305,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public void push(Vertex v) {
+	public void push(Point v) {
 		synchronized (this) {
 			vertices.push(v);
 		}
@@ -313,8 +313,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex remove() {
-		Vertex v;
+	public Point remove() {
+		Point v;
 		synchronized (this) {
 			v = vertices.remove();
 		}
@@ -323,8 +323,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex remove(int i) {
-		Vertex v;
+	public Point remove(int i) {
+		Point v;
 		synchronized (this) {
 			v = vertices.remove(i);
 
@@ -344,7 +344,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public void remove(Vertex v) {
+	public void remove(Point v) {
 		synchronized (this) {
 			vertices.remove(v);
 		}
@@ -362,8 +362,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex removeFirst() {
-		Vertex p;
+	public Point removeFirst() {
+		Point p;
 		synchronized (this) {
 			p = vertices.removeFirst();
 		}
@@ -382,9 +382,9 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex removeLast() {
+	public Point removeLast() {
 		synchronized (this) {
-			Vertex p = vertices.removeLast();
+			Point p = vertices.removeLast();
 			notifyObservers();
 			return p;
 		}
@@ -405,8 +405,8 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public Vertex set(int index, Vertex element) {
-		Vertex v;
+	public Point set(int index, Point element) {
+		Point v;
 		synchronized (this) {
 			v = vertices.set(index, element);
 		}
@@ -422,7 +422,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	}
 
 	@Override
-	public List<Vertex> subList(int fromIndex, int toIndex) {
+	public List<Point> subList(int fromIndex, int toIndex) {
 		synchronized (this) {
 			return vertices.subList(fromIndex, toIndex);
 		}

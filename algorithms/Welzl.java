@@ -5,27 +5,27 @@ import java.awt.Color;
 import predicates.Predicate;
 import cg.Circle;
 import cg.GeometryManager;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class Welzl {
-	public static void findSmallestEnclosingCircle(VertexSet vertices,
+	public static void findSmallestEnclosingCircle(PointSet vertices,
 			Circle result) {
-		VertexSet s = GeometryManager.newVertexSet(vertices);
+		PointSet s = GeometryManager.newPointSet(vertices);
 		s.setColor(Color.ORANGE);
 		result = SEC(s, GeometryManager.newVertexSet());
 	}
 
-	private static Circle SEC(VertexSet vertices, VertexSet set) {
+	private static Circle SEC(PointSet vertices, PointSet set) {
 		Circle c;
-		VertexSet S = vertices.clone();
-		VertexSet P = set.clone();
+		PointSet S = vertices.clone();
+		PointSet P = set.clone();
 		if (P.size() == 3 || S.size() == 0) {
 			// make circle from result;
 			c = GeometryManager.newCircle(P);
 			c.setColor(Color.RED);
 		} else {
-			Vertex s = S.remove(0);
+			Point s = S.remove(0);
 			c = SEC(S, P);
 			if (!Predicate.isVertexInCircle(s, c)) {
 				P.add(s);
