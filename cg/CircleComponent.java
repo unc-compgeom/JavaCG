@@ -35,7 +35,6 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			int dY = a.getY() - b.getY();
 			long dXSq = dX * dX;
 			long dYSq = dY * dY;
-			// radiusSquared = (sqrt(dx^2 + dy^2)/2)^2 = (dx^2 + dy^2)/4
 			radiusSquared = (int) (dXSq + dYSq) / 4;
 			origin = new VertexComponent(a.getX() - dX / 2, a.getY() - dY / 2);
 		} else if (vertices.size() > 2) {
@@ -60,8 +59,8 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setColor(getColor());
-		int radius = (int) Math.sqrt(getRadiusSquared());
+		g.setColor(super.getColor());
+		int radius = (int) Math.sqrt(this.getRadiusSquared());
 		int x = getOrigin().getX();
 		int y = getOrigin().getY();
 		Graphics2D g2D = (Graphics2D) g;

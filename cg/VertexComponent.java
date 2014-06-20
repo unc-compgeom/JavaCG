@@ -101,4 +101,11 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
+
+	@Override
+	public double distanceSquared(Vertex v) {
+		double x = Math.pow(this.x - v.getX(), 2);
+		double y = Math.pow(this.y - v.getY(), 2);
+		return x + y;
+	}
 }

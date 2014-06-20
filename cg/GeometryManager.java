@@ -9,26 +9,26 @@ import util.CGObserver;
 // TODO  the entire GeometryManager might be unavailable while it is iterating over something in one of its submethods.... 
 
 public class GeometryManager {
-	private static List<CGObserver> observers = Collections
-			.synchronizedList(new LinkedList<CGObserver>());
+	private static int delay = 25;
 	private static List<Drawable> dispersedObjects = Collections
 			.synchronizedList(new LinkedList<Drawable>());
-	private static int size = 1;
-	private static int delay = 25;
 	private static final int LARGESIZE = 5;
+	private static List<CGObserver> observers = Collections
+			.synchronizedList(new LinkedList<CGObserver>());
+	private static int size = 1;
 	private static final int SMALLSIZE = 1;
 
 	public static void addObserver(CGObserver o) {
-		observers.add(o);
-		for (Drawable d : dispersedObjects) {
-			d.addObserver(o);
+		synchronized (observers) {
+			observers.add(o);
 		}
 	}
 
 	private static Drawable buildGeometry(Drawable d) {
-		d.addObservers(observers);
-		dispersedObjects.add(d);
-		return d;
+		synchronized (dispersedObjects) {
+			dispersedObjects.add(d);
+			return d;
+		}
 	}
 
 	/**
@@ -38,12 +38,11 @@ public class GeometryManager {
 	 *            The <tt>Drawable</tt> to remove.
 	 */
 	public static void destroyGeometry(Drawable d) {
-		d.removeAllObservers();
-		dispersedObjects.remove(d);
-		d = null;
-		for (CGObserver o : observers) {
-			o.update(null);
+		synchronized (dispersedObjects) {
+			dispersedObjects.remove(d);
 		}
+		d = null;
+		notifyAllObservers();
 	}
 
 	/**
@@ -89,6 +88,16 @@ public class GeometryManager {
 	}
 
 	/**
+	 * Get the delay object that regulates the speed at which geometry is
+	 * animated.
+	 * 
+	 * @return a <tt>Delay</tt> object.
+	 */
+	public static int getDelay() {
+		return delay;
+	}
+
+	/**
 	 * Creates a new <tt>HalfEdge</tt>. Parameters must be set manually after
 	 * calling this method. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
@@ -119,6 +128,52 @@ public class GeometryManager {
 	public static Polygon getPolygon() {
 		Polygon p = new PolygonComponent();
 		return (Polygon) buildGeometry(p);
+	}
+
+	/**
+	 * Gets the draw size for all geometry objects (to be used in the
+	 * <tt>paintComponent()</tt> method).
+	 * 
+	 * @return the draw size
+	 */
+	public static int getSize() {
+		return size;
+	}
+
+	/**
+	 * Creates a new Vector from <tt>Vertex(x1, y1)</tt> to
+	 * <tt>Vertex(x2, y2)</tt>. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
+	 * 
+	 * @param x1
+	 *            X-coordinate of tail
+	 * @param y1
+	 *            Y-coordinate of tail
+	 * @param x2
+	 *            X-coordinate of head
+	 * @param y2
+	 *            Y-coordinate of head
+	 * @return a <tt>Vertex</tt> object
+	 */
+	public static Vector getVector(int x1, int y1, int x2, int y2) {
+		Vector v = new VectorComponent(x1, y1, x2, y2);
+		return (Vector) buildGeometry(v);
+	}
+
+	/**
+	 * Creates a new Vector from <tt>v1</tt> to <tt>v2</tt>. This factory
+	 * constructor automatically registers observers with the object and sets
+	 * its draw size.
+	 * 
+	 * @param v1
+	 *            The tail of the vertex
+	 * @param v2
+	 *            The head of the vertex
+	 * @return a <tt>Vertex</tt> object
+	 */
+	public static Vector getVector(Vertex v1, Vertex v2) {
+		Vector v = new VectorComponent(v1, v2);
+		return (Vector) buildGeometry(v);
 	}
 
 	/**
@@ -185,19 +240,37 @@ public class GeometryManager {
 		return (VertexSet) buildGeometry(vs);
 	}
 
+	private static void notifyAllObservers() {
+		synchronized (observers) {
+			for (CGObserver o : observers) {
+				o.update(null);
+			}
+		}
+	}
+
+	protected static void notifyObservers() {
+		notifyAllObservers();
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	protected static void notifyObserversNoDelay() {
+		notifyAllObservers();
+	}
+
 	/**
 	 * Remove all geometry from the GeometryManager's records. This operation
 	 * also removes all observers of all geometry objects.
 	 */
 	public static void removeAllGeometry() {
-		for (Drawable d : dispersedObjects) {
-			d.removeAllObservers();
-			d = null;
+		synchronized (dispersedObjects) {
+			dispersedObjects.removeAll(dispersedObjects);
 		}
-		dispersedObjects.removeAll(dispersedObjects);
-		for (CGObserver o : observers) {
-			o.update(null);
-		}
+		notifyAllObservers();
 	}
 
 	/**
@@ -205,10 +278,9 @@ public class GeometryManager {
 	 * objects intact.
 	 */
 	public static void removeAllObservers() {
-		for (Drawable d : dispersedObjects) {
-			d.removeAllObservers();
+		synchronized (observers) {
+			observers.removeAll(observers);
 		}
-		observers.removeAll(observers);
 	}
 
 	/**
@@ -218,10 +290,9 @@ public class GeometryManager {
 	 *            The <tt>CGObserver</tt> to remove
 	 */
 	public static void removeObserver(CGObserver o) {
-		for (Drawable d : dispersedObjects) {
-			d.removeObserver(o);
+		synchronized (observers) {
+			observers.remove(o);
 		}
-		observers.remove(o);
 	}
 
 	/**
@@ -246,25 +317,6 @@ public class GeometryManager {
 		} else {
 			size = SMALLSIZE;
 		}
-	}
-
-	/**
-	 * Gets the draw size for all geometry objects (to be used in the
-	 * <tt>paintComponent()</tt> method).
-	 * 
-	 * @return the draw size
-	 */
-	public static int getSize() {
-		return size;
-	}
-
-	/**
-	 * Get the delay object that regulates the speed at which geometry is
-	 * animated.
-	 * 
-	 * @return a <tt>Delay</tt> object.
-	 */
-	public static int getDelay() {
-		return delay;
+		notifyAllObservers();
 	}
 }

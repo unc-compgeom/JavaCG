@@ -23,7 +23,6 @@ public class Chan {
 				for (int i = 0; i < m && i + ps * m < points.size(); i++) {
 					divided[ps].addFirst(points.get(i + ps * m));
 				}
-				hulls[ps].addObservers(hull.getObservers());
 				GrahmScan.findConvexHull(divided[ps], hulls[ps]);
 			}
 			int[] minHullPt = getMinHullPoint(hulls);

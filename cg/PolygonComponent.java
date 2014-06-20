@@ -144,7 +144,6 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public void clear() {
-		vertices.removeAllObservers();
 		vertices = new VertexSetComponent();
 		edges = new HashSet<HalfEdge>();
 		face = null;
@@ -154,7 +153,6 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public Polygon clone() {
 		Polygon p = new PolygonComponent();
-		p.addObservers(getObservers());
 		p.setColor(getColor());
 		p.addAll(vertices);
 		return p;
@@ -182,7 +180,10 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 
 	@Override
 	public Vertex get(int index) {
-		return vertices.get(index);
+		while (index < 0) {
+			index = index + this.size();
+		}
+		return vertices.get(index % this.size());
 	}
 
 	@Override
@@ -485,5 +486,10 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	@Override
 	public String toString() {
 		return vertices.toString();
+	}
+
+	@Override
+	public Vector getCCWEdge(int index) {
+		return new VectorComponent(this.get(index), this.get(index + 1));
 	}
 }

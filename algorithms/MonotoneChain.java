@@ -46,9 +46,7 @@ public class MonotoneChain {
 			hull.add(upper.get(i));
 		}
 		// clean up
-		upper.clear();
-		upper.removeAllObservers();
-		lower.clear();
-		lower.removeAllObservers();
+		GeometryManager.destroyGeometry(upper);
+		GeometryManager.destroyGeometry(lower);
 	}
 }

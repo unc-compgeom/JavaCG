@@ -1,6 +1,8 @@
 package util;
 
+import cg.Drawable;
+
 public interface CGObserver {
 
-	public void update(CGObservable o);
+	public void update(Drawable o);
 }

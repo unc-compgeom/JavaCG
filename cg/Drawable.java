@@ -3,9 +3,7 @@ package cg;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import util.CGObservable;
-
-public interface Drawable extends CGObservable {
+public interface Drawable {
 
 	public void paintComponent(Graphics g);
 

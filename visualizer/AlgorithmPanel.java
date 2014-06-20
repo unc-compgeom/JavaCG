@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import util.CGObservable;
 import util.CGObserver;
 import cg.Drawable;
 import cg.GeometryManager;
@@ -85,7 +84,7 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	 * Observer methods
 	 */
 	@Override
-	public void update(CGObservable o) {
+	public void update(Drawable o) {
 		repaint();
 	}
 }

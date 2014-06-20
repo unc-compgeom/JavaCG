@@ -33,6 +33,7 @@ public class QuickHull {
 		if (sub.isEmpty()) {
 			return;
 		}
+
 		// find farthest point from segment ab
 		Vertex c = sub.get(0);
 		long distance = 0;
@@ -48,8 +49,7 @@ public class QuickHull {
 		findHull(sub, hull, a, c);
 		findHull(sub, hull, c, b);
 		// clean up
-		sub.clear();
-		sub.removeAllObservers();
+		GeometryManager.destroyGeometry(sub);
 	}
 
 	private static long distance(Vertex A, Vertex B, Vertex C) {

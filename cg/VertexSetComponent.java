@@ -7,94 +7,92 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import util.CGObservable;
-import util.CGObserver;
-
-public class VertexSetComponent extends AbstractGeometry implements VertexSet,
-		CGObservable {
+public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	private static final long serialVersionUID = -1545417749354389726L;
-	private final List<CGObserver> observers;
 	private final LinkedList<Vertex> vertices;
 
 	protected VertexSetComponent() {
 		super();
 		vertices = new LinkedList<Vertex>();
-		this.observers = new LinkedList<CGObserver>();
 	}
 
 	@Override
 	public void add(int index, Vertex element) {
 		synchronized (this) {
 			vertices.add(index, element);
-			notifyObservers();
 		}
+		notifyObservers();
 	}
 
 	@Override
 	public boolean add(Vertex v) {
+		boolean b;
 		synchronized (this) {
-			boolean b = vertices.add(v);
-			notifyObservers();
-			return b;
+			b = vertices.add(v);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends Vertex> c) {
+		boolean b;
 		synchronized (this) {
-			boolean b = vertices.addAll(c);
-			notifyObservers();
-			return b;
+			b = vertices.addAll(c);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends Vertex> c) {
+		boolean b;
 		synchronized (this) {
-			boolean b = vertices.addAll(index, c);
-			notifyObservers();
-			return b;
+			b = vertices.addAll(index, c);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
 	public void addFirst(Vertex v) {
 		synchronized (this) {
 			vertices.addFirst(v);
-			notifyObservers();
 		}
+		notifyObservers();
 	}
 
 	@Override
 	public void addLast(Vertex v) {
 		synchronized (this) {
 			vertices.addLast(v);
-			notifyObservers();
 		}
+		notifyObservers();
 	}
 
 	@Override
 	public void addNoDelay(Vertex v) {
 		synchronized (this) {
 			vertices.addLast(v);
-			notifyObserversNoDelay();
 		}
+		notifyObserversNoDelay();
 	}
 
 	@Override
 	public void clear() {
 		synchronized (this) {
 			vertices.clear();
-			notifyObservers();
 		}
+		notifyObservers();
 	}
 
 	@Override
 	public VertexSet clone() {
 		VertexSet v = new VertexSetComponent();
-		v.addObservers(getObservers());
 		v.setColor(getColor());
-		v.addAll(this);
+		synchronized (this) {
+			v.addAll(this);
+		}
 		return v;
 	}
 
@@ -129,11 +127,7 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 	@Override
 	public Vertex get(int index) {
 		synchronized (this) {
-			try {
-				return vertices.get(index);
-			} catch (IndexOutOfBoundsException e) {
-				return null;
-			}
+			return vertices.get(index);
 		}
 
 	}
@@ -210,23 +204,32 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 
 	@Override
 	public boolean offer(Vertex e) {
+		boolean b;
 		synchronized (this) {
-			return vertices.offer(e);
+			b = vertices.offer(e);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
 	public boolean offerFirst(Vertex e) {
+		boolean b;
 		synchronized (this) {
-			return vertices.offerFirst(e);
+			b = vertices.offerFirst(e);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
 	public boolean offerLast(Vertex e) {
+		boolean b;
 		synchronized (this) {
-			return vertices.offerLast(e);
+			b = vertices.offerLast(e);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
@@ -263,63 +266,81 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 
 	@Override
 	public Vertex poll() {
+		Vertex v;
 		synchronized (this) {
-			return vertices.poll();
+			v = vertices.poll();
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override
 	public Vertex pollFirst() {
+		Vertex v;
 		synchronized (this) {
-			return vertices.pollFirst();
+			v = vertices.pollFirst();
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override
 	public Vertex pollLast() {
+		Vertex v;
 		synchronized (this) {
-			return vertices.pollLast();
+			v = vertices.pollLast();
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override
 	public Vertex pop() {
+		Vertex v;
 		synchronized (this) {
-			Vertex p = vertices.pop();
-			notifyObservers();
-			return p;
+			v = vertices.pop();
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override
 	public void push(Vertex v) {
 		synchronized (this) {
 			vertices.push(v);
-			notifyObservers();
 		}
+		notifyObservers();
 	}
 
 	@Override
 	public Vertex remove() {
+		Vertex v;
 		synchronized (this) {
-			return vertices.remove();
+			v = vertices.remove();
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override
 	public Vertex remove(int i) {
+		Vertex v;
 		synchronized (this) {
-			Vertex removed = vertices.remove(i);
-			notifyObservers();
-			return removed;
+			v = vertices.remove(i);
+
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override
 	public boolean remove(Object o) {
+		boolean b;
 		synchronized (this) {
-			return vertices.remove(o);
+			b = vertices.remove(o);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
@@ -332,34 +353,32 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 
 	@Override
 	public boolean removeAll(java.util.Collection<?> c) {
+		boolean b;
 		synchronized (this) {
-			boolean b = vertices.removeAll(c);
-			notifyObservers();
-			return b;
+			b = vertices.removeAll(c);
 		}
-	}
-
-	@Override
-	public void removeAllObservers() {
-		synchronized (this) {
-			observers.removeAll(observers);
-		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
 	public Vertex removeFirst() {
+		Vertex p;
 		synchronized (this) {
-			Vertex p = vertices.removeFirst();
-			notifyObservers();
-			return p;
+			p = vertices.removeFirst();
 		}
+		notifyObservers();
+		return p;
 	}
 
 	@Override
 	public boolean removeFirstOccurrence(Object o) {
+		boolean b;
 		synchronized (this) {
-			return vertices.removeFirstOccurrence(o);
+			b = vertices.removeFirstOccurrence(o);
 		}
+		notifyObservers();
+		return b;
 	}
 
 	@Override
@@ -387,9 +406,12 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 
 	@Override
 	public Vertex set(int index, Vertex element) {
+		Vertex v;
 		synchronized (this) {
-			return vertices.set(index, element);
+			v = vertices.set(index, element);
 		}
+		notifyObservers();
+		return v;
 	}
 
 	@Override

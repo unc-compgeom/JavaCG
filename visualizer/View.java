@@ -16,8 +16,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
-import util.CGObservable;
 import util.CGObserver;
+import cg.Drawable;
 
 public class View implements CGObserver {
 	private final JFrame f;
@@ -78,7 +78,7 @@ public class View implements CGObserver {
 	}
 
 	@Override
-	public void update(CGObservable o) {
+	public void update(Drawable o) {
 		p.update(o);
 	}
 }
