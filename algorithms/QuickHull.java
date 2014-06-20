@@ -48,8 +48,7 @@ public class QuickHull {
 		findHull(sub, hull, a, c);
 		findHull(sub, hull, c, b);
 		// clean up
-		sub.clear();
-		sub.removeAllObservers();
+		GeometryManager.destroyGeometry(sub);
 	}
 
 	private static long distance(Vertex A, Vertex B, Vertex C) {
