@@ -33,6 +33,14 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 			super.paintComponent(g);
 		}
 	}
+	
+	@Override
+	public Point get(int i){
+		while(i<0){
+			i=i+this.size();
+		}
+		return super.get(i%this.size());
+	}
 
 	@Override
 	public Segment getCCWEdge(int index) {
