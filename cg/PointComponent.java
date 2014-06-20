@@ -20,7 +20,6 @@ public class PointComponent extends AbstractGeometry implements Point {
 
 	@Override
 	public Point clone() {
-		// TODO Auto-generated method stub
 		return new PointComponent(x, y);
 	}
 
@@ -28,6 +27,13 @@ public class PointComponent extends AbstractGeometry implements Point {
 	public int compareTo(Point p) {
 		return (x < p.getX()) ? -1 : (x > p.getX()) ? 1 : (y < p.getY()) ? -1
 				: (y > p.getY()) ? 1 : 0;
+	}
+
+	@Override
+	public double distanceSquared(Point v) {
+		double x = Math.pow(this.x - v.getX(), 2);
+		double y = Math.pow(this.y - v.getY(), 2);
+		return x + y;
 	}
 
 	@Override
@@ -61,7 +67,7 @@ public class PointComponent extends AbstractGeometry implements Point {
 		int size = (GeometryManager.getSize() > 2) ? GeometryManager.getSize()
 				: 2;
 		g.fillOval(x - size, y - size, 2 * size, 2 * size);
-		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.DARK_GRAY
+		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.LIGHT_GRAY
 				: Color.BLACK);
 		g.drawOval(x - size, y - size, 2 * size, 2 * size);
 	}
@@ -84,12 +90,5 @@ public class PointComponent extends AbstractGeometry implements Point {
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ")";
-	}
-
-	@Override
-	public double distanceSquared(Point v) {
-		double x = Math.pow(this.x - v.getX(), 2);
-		double y = Math.pow(this.y - v.getY(), 2);
-		return x + y;
 	}
 }

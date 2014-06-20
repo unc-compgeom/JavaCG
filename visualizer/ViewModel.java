@@ -17,9 +17,9 @@ import algorithms.MonotoneChain;
 import algorithms.QuickHull;
 import algorithms.Welzl;
 import cg.GeometryManager;
-import cg.Polygon;
 import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class ViewModel {
 	private boolean isPolygonActive; // either draw polygon or point set
