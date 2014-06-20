@@ -21,5 +21,7 @@ public interface Vertex extends Comparable<Vertex>, Cloneable, CGObservable {
 	public Vertex sub(Vertex p1);
 
 	public Vertex clone();
+	
+	public double distanceSquared(Vertex v);
 
 }

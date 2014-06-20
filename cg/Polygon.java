@@ -7,4 +7,6 @@ import util.CGObservable;
 public interface Polygon extends CGObservable, Deque<Vertex>, VertexSet {
 	//public HalfEdge getHalfEdge(int lineNum);
 
+	public Vector getCCWEdge(int index);
+	
 }

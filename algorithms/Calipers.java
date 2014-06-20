@@ -6,7 +6,8 @@ import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
 import cg.Polygon;
-import cg.PolygonComponent;
+import cg.Vector;
+import cg.VectorComponent;
 import cg.Vertex;
 import cg.VertexComponent;
 import cg.VertexSet;
@@ -14,59 +15,51 @@ import cg.VertexSet;
 public class Calipers {
 	
 	/*
-	 * Support lines still intersect convex hull if not final answer
 	 * 
 	 * Rotating caliper algorithm input Vertex set in 2D.  Output is maximum diameter of the convex hull
 	 * and the minimum width of the convex hull.
 	 * 
 	 */
 	
-	public static void doCalipers(VertexSet Vertexs, Polygon hull, Polygon diamline) {
-		Polygon support1 = new PolygonComponent();
-		Polygon support2 = new PolygonComponent();
-		support1.addObservers(hull.getObservers());
-		support1.setColor(Color.BLUE);
-		support2.addObservers(hull.getObservers());
-		support2.setColor(Color.BLUE);
-		hull = getConvexHull(Vertexs, hull);
+	public static void doCalipers(VertexSet Vertices, Polygon hull) {
 		int i=0;
 		int j=1;
 		double diam = -1;
-		//double width = Double.POSITIVE_INFINITY;
-		double tempdiam;
+		double width = Double.POSITIVE_INFINITY;
+		
+		//Visualization Variables
+		Vector support1 = new VectorComponent(-1,-1,-1,-1);
+		Vector support2 = new VectorComponent(-1,-1,-1,-1);
+		Vector support3 = new VectorComponent(-1,-1,-1,-1);
+		Vector support4 = new VectorComponent(-1,-1,-1,-1);
+		Vector widthline = new VectorComponent(-1,-1,-1,-1);
+		Vector diamline = new VectorComponent(-1,-1,-1,-1);
+		setObservable(support1,Color.BLUE,hull);
+		setObservable(support2,Color.BLUE,hull);
+		setObservable(support3,Color.BLUE,hull);
+		setObservable(support4,Color.BLUE,hull);
+		setObservable(widthline,Color.ORANGE,hull);
+		setObservable(diamline,Color.GREEN,hull);
+		
+		hull = getConvexHull(Vertices, hull);
+		
+		//Initialization Step
 		while(cwIntersection(0,j,hull)){
 			j++;
 		}
-		while(j!=0){
-			Vertex pi = hull.get(i);
-			Vertex pj = hull.get(j);
-			tempdiam = Math.pow((pi.getX()-pj.getX()), 2) + Math.pow((pi.getY()-pj.getY()), 2);
-			if(tempdiam>diam){
-				diam=tempdiam;
-				if(!diamline.isEmpty()){
-					diamline.remove();
-					diamline.remove();
-				}
-				if(!support1.isEmpty()){
-					support1.remove();
-					support1.remove();
-				}
-				if(!support2.isEmpty()){
-					support2.remove();
-					support2.remove();
-				}
-				diamline.add(pi);
-				diamline.add(pj);
-				Vertex vector = perpendicular(i,j,hull);
-				support1.add(new VertexComponent(pi.getX()+vector.getX(),pi.getY()+vector.getY()));
-				support1.add(new VertexComponent(pi.getX()-vector.getX(),pi.getY()-vector.getY()));
-				support2.add(new VertexComponent(pj.getX()+vector.getX(),pj.getY()+vector.getY()));
-				support2.add(new VertexComponent(pj.getX()-vector.getX(),pj.getY()-vector.getY()));
-			}
+		
+		//Rotation Step
+		while(j<hull.size()){
+			diam = checkDiameter(diam, i, j, hull, diamline, support1, support2);
+			width = checkWidth(width, i, j, hull, widthline, support3, support4);
 			if(cwIntersection(i+1,j,hull)){
-				j=(j+1)%hull.size();
+				j++;
+			}
+			else if(cwIntersection(j+1,i,hull)){
+				i++;
 			}
 			else{
+				j++;
 				i++;
 			}
 		}
@@ -74,19 +67,6 @@ public class Calipers {
 	
 	/** Uses Jarvis march to compute convex hull */
 	private static Polygon getConvexHull(VertexSet points, Polygon hull){
-		/*
-		Vertex min = leftmost(pl);
-		do {
-			hull.add(min);
-			min = pl.get(min != pl.get(0) ? 0 : 1);
-			for (int i = 1; i < pl.size(); i++) {
-				if (Predicate.isPointLeftOfLine(hull.getLast(), min,pl.get(i))) {
-					min = pl.get(i);
-				}
-			}
-		} while (!min.equals(hull.get(0)));
-		return hull;
-		*/
 		Vertex min = CG.findSmallestYX(points);
 		Vertex p, q = min;
 		int i = 0;
@@ -112,63 +92,74 @@ public class Calipers {
 		}
 		return q;
 	}
-	
-	/*
-	private static Vertex leftmost(VertexSet p) {
-		Vertex leftmost = p.get(0);
-		for (int i = 1; i < p.size(); i++) {
-			if (leftmost.getX() > p.get(i).getX()) {
-				leftmost = p.get(i);
-			}
-		}
-		return leftmost;
-	}
-	*/
 
 	private static boolean cwIntersection(int i, int j, Polygon hull){
-		int tempi = i==0 ? hull.size()-1 : i-1;
-		Vertex Pa = new VertexComponent(hull.get(tempi).getX(),hull.get(tempi).getY());
-		Vertex Pb = new VertexComponent(hull.get(i).getX(),hull.get(i).getY());
-		Vertex Pd = new VertexComponent(hull.get((j+1)%hull.size()).getX(),hull.get((j+1)%hull.size()).getY());
+		Vertex Pa = new VertexComponent(hull.get(i-1));
+		Vertex Pb = new VertexComponent(hull.get(i));
+		Vertex Pd = new VertexComponent(hull.get(j+1));
 		Pd.setX(Pd.getX()-hull.get(j).getX()+Pb.getX());
 		Pd.setY(Pd.getY()-hull.get(j).getY()+Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd)==Predicate.Orientation.CLOCKWISE;
 	}
 	
-	private static Vertex perpendicular(int i, int j, Polygon hull){
-		double [][]  perp1 = {{0.0,-1.0},{1.0,0.0}};
-		double [][]  vector1 = {{0},{0}};
-		double [][]  vector2 = {{0},{0}};
-		double [][]  vector3 = {{0},{0}};
-		double [][]  result1 = {{0},{0}};
-		if(cwIntersection(i+1,j,hull)){
-			i = i==0 ? hull.size()-1 : i-1;
-		}
-		else{
-			j = j==0 ? hull.size()-1 : j-1;
-		}
-		vector1[0][0] = hull.get((i+1)%hull.size()).getX()-hull.get(i).getX();
-		vector1[1][0] = hull.get((i+1)%hull.size()).getY()-hull.get(i).getY();
-		double dist = Math.sqrt(Math.pow((hull.get((i+1)%hull.size()).getX()-hull.get(i).getX()), 2) + Math.pow((hull.get((i+1)%hull.size()).getY()-hull.get(i).getY()), 2));
-		vector1[0][0] = vector1[0][0]/dist;
-		vector1[1][0] = vector1[1][0]/dist;
-		vector2[0][0] = hull.get((j+1)%hull.size()).getX()-hull.get(j).getX();
-		vector2[1][0] = hull.get((j+1)%hull.size()).getY()-hull.get(j).getY();
-		dist = Math.sqrt(Math.pow((hull.get((j+1)%hull.size()).getX()-hull.get(j).getX()), 2) + Math.pow((hull.get((j+1)%hull.size()).getY()-hull.get(j).getY()), 2));
-		vector2[0][0] = vector2[0][0]/dist;
-		vector2[1][0] = vector2[1][0]/dist;
-		vector3[0][0]=(vector1[0][0]+vector2[0][0])/2;
-		vector3[1][0]=(vector1[1][0]+vector2[1][0])/2;
-		for (int a = 0; a < 2; a++) {
-            for (int b = 0; b < 1; b++) {
-                for (int c = 0; c < 2; c++) {
-                    result1[a][b] += perp1[a][c] * vector3[c][b];
-                }
-            }
-        }
-		return new VertexComponent((int)(result1[0][0]*90),(int)(result1[1][0]*90));
+	public static void setObservable(Vector component, Color color, Polygon hull){
+		component.addObservers(hull.getObservers());
+		component.setColor(color);
 	}
 	
+	public static double checkDiameter(double diam, int i, int j, Polygon hull, Vector diamline, Vector support1, Vector support2){
+		Vertex pi = hull.get(i);
+		Vertex pj = hull.get(j);
+		double tempdiam = pi.distanceSquared(pj);
+		if(tempdiam>diam){
+			int tan1,tan2;
+			diam=tempdiam;
+			diamline.update(pi,pj);
+			if(cwIntersection(i+1,j,hull)){
+				tan1=j;
+				tan2=j+1;
+			}
+			else{
+				tan1=i;
+				tan2=i+1;
+			}
+			Vector supportBasis = new VectorComponent(hull.get(tan1),hull.get(tan2));
+			supportBasis.translate(pi);
+			support1.update(supportBasis.getHead(), supportBasis.originReflection().getHead());
+			supportBasis.translate(pj);
+			support2.update(supportBasis.getHead(), supportBasis.originReflection().getHead());
+		}
+		return diam;
+	}
 	
-	
+	public static double checkWidth(double width, int i, int j, Polygon hull, Vector widthline, Vector support3, Vector support4){
+		int r,p,q;
+		double tempwidth;
+		if(cwIntersection(i+1,j,hull)){
+			r=i;
+			p=j;
+			q=j+1;
+		}
+		else{
+			r=j;
+			p=i;
+			q=i+1;
+		}
+		Vector pq = new VectorComponent(hull.get(p),hull.get(q));
+		Vector rrq = new VectorComponent(hull.get(p),hull.get(q));
+		rrq.translate(hull.get(r));
+		Vertex intersection = rrq.perpendicular().intersection(pq);
+		tempwidth = intersection.distanceSquared(hull.get(r));
+		if(tempwidth<width){
+			width = tempwidth;
+			widthline.update(hull.get(r), intersection);
+			Vector supportBasis = new VectorComponent(rrq.getTail(),intersection);
+			supportBasis = supportBasis.perpendicular();
+			supportBasis.translate(rrq.getTail());
+			support3.update(supportBasis.getHead(), supportBasis.originReflection().getHead());
+			supportBasis.translate(intersection);
+			support4.update(supportBasis.getHead(), supportBasis.originReflection().getHead());
+		}
+		return width;
+	}
 }

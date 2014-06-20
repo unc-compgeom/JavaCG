@@ -106,11 +106,7 @@ public class ViewModel implements CGObservable, CGObserver {
 								hull);
 						break;
 					case CALIPERS:
-						Polygon diamline = new PolygonComponent();
-						drawnObjects.add(diamline);
-						diamline.addObservers(hull.getObservers());
-						diamline.setColor(Color.GREEN);
-						Calipers.doCalipers(points, hull, diamline);
+						Calipers.doCalipers(points, hull);
 						break;
 					case CHAN:
 						Chan.doChan(points, hull);
