@@ -8,16 +8,18 @@ import util.CG;
 import cg.GeometryManager;
 import cg.Polygon;
 import cg.Segment;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class Calipers {
 
-	/* 
-	 * Rotating caliper algorithm input Vertex set in 2D. Output is maximum
+	/*
+	 * 
+	 * Rotating caliper algorithm input Point set in 2D. Output is maximum
 	 * diameter of the convex hull and the minimum width of the convex hull.
 	 */
-	public static void doCalipers(VertexSet Vertices, Polygon hull) {
+
+	public static void doCalipers(PointSet points, Polygon hull) {
 		int i = 0;
 		int j = 1;
 		double diam = -1;
@@ -94,9 +96,9 @@ public class Calipers {
 	 *then true is returned.  Otherwise false is returned.
 	 */
 	private static boolean cwIntersection(int i, int j, Polygon hull) {
-		Vertex Pa = hull.get(i - 1).clone();
-		Vertex Pb = hull.get(i).clone();
-		Vertex Pd = hull.get(j + 1).clone();
+		Point Pa = hull.get(i - 1).clone();
+		Point Pb = hull.get(i).clone();
+		Point Pd = hull.get(j + 1).clone();
 		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
@@ -109,9 +111,9 @@ public class Calipers {
 	 * tangent to both i and j.
 	 */
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
-			Segment diamline, Segment diamSupport1, Segment diamSupport2) {
-		Vertex pi = hull.get(i);
-		Vertex pj = hull.get(j);
+			Segment diamline, Segment support1, Segment support2) {
+		Point pi = hull.get(i);
+		Point pj = hull.get(j);
 		double tempdiam = pi.distanceSquared(pj);
 		if (tempdiam > diam) {
 			int tan1, tan2;
@@ -170,7 +172,7 @@ public class Calipers {
 		rrq = rrq.setVisible(false);
 		rrq.translate(hull.get(r));
 		//intersection of line pq with the line perpendicular to rrq
-		Vertex intersection = rrq.perpendicular().intersection(pq);
+		Point intersection = rrq.perpendicular().intersection(pq);
 		//distance from r to the intersection point is a candidate width
 		tempwidth = intersection.distanceSquared(hull.get(r));
 		if (tempwidth < width) {

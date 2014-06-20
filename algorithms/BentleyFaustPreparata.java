@@ -7,15 +7,15 @@ import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import cg.GeometryManager;
 import cg.Polygon;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class BentleyFaustPreparata {
-	public static void findConvexHull(VertexSet points, Polygon hull) {
-		ListIterator<Vertex> it = points.listIterator();
-		Vertex v = it.next();
+	public static void findConvexHull(PointSet points, Polygon hull) {
+		ListIterator<Point> it = points.listIterator();
+		Point v = it.next();
 		int minX = v.getX(), maxX = v.getX();
-		Vertex minMin = v, minMax = v, maxMin = v, maxMax = v;
+		Point minMin = v, minMax = v, maxMin = v, maxMax = v;
 		// find min/max vertices
 		while (it.hasNext()) {
 			v = it.next();
@@ -84,7 +84,7 @@ public class BentleyFaustPreparata {
 			if (buckets[i] == null) {
 				continue;
 			}
-			Vertex p = buckets[i].getMin();
+			Point p = buckets[i].getMin();
 			if (p == null) {
 				continue;
 			}
@@ -103,7 +103,7 @@ public class BentleyFaustPreparata {
 			if (buckets[i] == null) {
 				continue;
 			}
-			Vertex p = buckets[i].getMax();
+			Point p = buckets[i].getMax();
 			if (p == null) {
 				continue;
 			}
@@ -115,10 +115,10 @@ public class BentleyFaustPreparata {
 			upper.addLast(buckets[i].getMax());
 		}
 		// join
-		for (Vertex vt : lower) {
+		for (Point vt : lower) {
 			hull.add(vt);
 		}
-		for (Vertex vt : upper) {
+		for (Point vt : upper) {
 			hull.add(vt);
 		}
 		// clean up
@@ -128,22 +128,22 @@ public class BentleyFaustPreparata {
 }
 
 class VertexHolder {
-	private Vertex min;
-	private Vertex max;
+	private Point min;
+	private Point max;
 
-	public Vertex getMin() {
+	public Point getMin() {
 		return this.min;
 	}
 
-	public void setMin(Vertex min) {
+	public void setMin(Point min) {
 		this.min = min;
 	}
 
-	public Vertex getMax() {
+	public Point getMax() {
 		return this.max;
 	}
 
-	public void setMax(Vertex max) {
+	public void setMax(Point max) {
 		this.max = max;
 	}
 }

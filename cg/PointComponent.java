@@ -3,40 +3,40 @@ package cg;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class VertexComponent extends AbstractGeometry implements Vertex {
+public class PointComponent extends AbstractGeometry implements Point {
 	private int x;
 	private int y;
 
-	protected VertexComponent(int x, int y) {
+	protected PointComponent(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
 	}
 
 	@Override
-	public Vertex add(Vertex p1) {
-		return new VertexComponent(x + p1.getX(), y + p1.getY());
+	public Point add(Point p1) {
+		return new PointComponent(x + p1.getX(), y + p1.getY());
 	}
 
 	@Override
-	public Vertex clone() {
+	public Point clone() {
 		// TODO Auto-generated method stub
-		return new VertexComponent(x, y);
+		return new PointComponent(x, y);
 	}
 
 	@Override
-	public int compareTo(Vertex p) {
+	public int compareTo(Point p) {
 		return (x < p.getX()) ? -1 : (x > p.getX()) ? 1 : (y < p.getY()) ? -1
 				: (y > p.getY()) ? 1 : 0;
 	}
 
 	@Override
-	public Vertex div(double i) {
-		return new VertexComponent((int) (x / i), (int) (y / i));
+	public Point div(double i) {
+		return new PointComponent((int) (x / i), (int) (y / i));
 	}
 
 	@Override
-	public int dot(Vertex v) {
+	public int dot(Point v) {
 		return x * v.getX() + y * v.getY();
 	}
 
@@ -51,8 +51,8 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
-	public Vertex mult(double i) {
-		return new VertexComponent((int) (x * i), (int) (y * i));
+	public Point mult(double i) {
+		return new PointComponent((int) (x * i), (int) (y * i));
 	}
 
 	@Override
@@ -77,8 +77,8 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
-	public Vertex sub(Vertex p1) {
-		return new VertexComponent(x - p1.getX(), y - p1.getY());
+	public Point sub(Point p1) {
+		return new PointComponent(x - p1.getX(), y - p1.getY());
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
-	public double distanceSquared(Vertex v) {
+	public double distanceSquared(Point v) {
 		double x = Math.pow(this.x - v.getX(), 2);
 		double y = Math.pow(this.y - v.getY(), 2);
 		return x + y;

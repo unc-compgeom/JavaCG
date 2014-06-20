@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Iterator;
 
-public class PolygonComponent extends VertexSetComponent implements Polygon {
+public class PolygonComponent extends PointSetComponent implements Polygon {
 	private static final long serialVersionUID = -1523644503244611934L;
 
 	protected PolygonComponent() {
@@ -16,8 +16,8 @@ public class PolygonComponent extends VertexSetComponent implements Polygon {
 	public void paintComponent(Graphics g) {
 		// draw edges, then points
 		synchronized (this) {
-			Iterator<Vertex> it = super.iterator();
-			Vertex p, q;
+			Iterator<Point> it = super.iterator();
+			Point p, q;
 			if (super.size() > 1) {
 				p = it.next();
 				Graphics2D g2D = (Graphics2D) g;

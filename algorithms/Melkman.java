@@ -2,14 +2,14 @@ package algorithms;
 
 import predicates.Predicate;
 import cg.Polygon;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class Melkman {
 
-	public static void findConvexHull(VertexSet points, Polygon hull) {
-		Vertex p0 = points.get(0);
-		Vertex p1 = points.get(1);
+	public static void findConvexHull(PointSet points, Polygon hull) {
+		Point p0 = points.get(0);
+		Point p1 = points.get(1);
 		hull.addFirst(p0);
 		hull.addFirst(p1);
 		hull.addLast(p1.clone());

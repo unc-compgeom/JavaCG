@@ -2,14 +2,14 @@ package predicates;
 
 import util.CG;
 import cg.Circle;
-import cg.Vertex;
+import cg.Point;
 
 public class Predicate {
 	public enum Orientation {
 		COUNTERCLOCKWISE, CLOCKWISE, COLINEAR
 	};
 
-	public static boolean isLeftOrInside(Vertex p, Vertex q, Vertex r) {
+	public static boolean isLeftOrInside(Point p, Point q, Point r) {
 		/* test = (qx-px)*(ry-py) - (qy-py)*(rx-px); */
 		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
@@ -20,7 +20,7 @@ public class Predicate {
 		return det >= 0;
 	}
 
-	public static Orientation findOrientation(Vertex p, Vertex q, Vertex r) {
+	public static Orientation findOrientation(Point p, Point q, Point r) {
 		// find the determinant of the matrix
 		// [[px, py, 1]
 		// [qx, qy, 1]
@@ -48,23 +48,23 @@ public class Predicate {
 	 * @param r
 	 * @return T/F: Point p is left of or on segment qr.
 	 */
-	public static boolean isPointLeftOrOnSegment(Vertex p, Vertex q, Vertex r) {
+	public static boolean isPointLeftOrOnSegment(Point p, Point q, Point r) {
 		Orientation o = findOrientation(p, q, r);
 		if (o == Orientation.COUNTERCLOCKWISE) {
 			return true;
 		} else {
-			Vertex a = q.sub(p), b = r.sub(p);
+			Point a = q.sub(p), b = r.sub(p);
 			return o == Orientation.COLINEAR
 					&& Math.abs(a.getX() - b.getX()) > 0
 					&& Math.abs(a.getY() - b.getY()) > 0;
 		}
 	}
 
-	public static boolean isPointLeftOfLine(Vertex p, Vertex q, Vertex r) {
+	public static boolean isPointLeftOfLine(Point p, Point q, Point r) {
 		return findOrientation(p, q, r) == Orientation.COUNTERCLOCKWISE;
 	}
 
-	public static boolean isVertexInCircleByPoints(Vertex s, Circle c) {
+	public static boolean isVertexInCircleByPoints(Point s, Circle c) {
 		// find three points, a, b, c, in the circle
 		// find the determinant of the matrix:
 		// [[a_x, a_y, a_x^2 + a_y^2, 1]
@@ -92,7 +92,7 @@ public class Predicate {
 		return (result < 0) ? false : true;
 	}
 
-	public static boolean isVertexInCircle(Vertex s, Circle c) {
+	public static boolean isVertexInCircle(Point s, Circle c) {
 		// correctly handles the case of the null circle (radiusSquared = -1)
 		// correctly handles the case of the one point circle (radiusSquared =
 		// 0);
