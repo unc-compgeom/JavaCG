@@ -122,6 +122,42 @@ public class GeometryManager {
 	}
 
 	/**
+	 * Creates a new Vector from <tt>v1</tt> to <tt>v2</tt>. This factory
+	 * constructor automatically registers observers with the object and sets
+	 * its draw size.
+	 * 
+	 * @param v1
+	 *            The tail of the vertex
+	 * @param v2
+	 *            The head of the vertex
+	 * @return a <tt>Vertex</tt> object
+	 */
+	public static Vector getVector(Vertex v1, Vertex v2) {
+		Vector v = new VectorComponent(v1, v2);
+		return (Vector) buildGeometry(v);
+	}
+
+	/**
+	 * Creates a new Vector from <tt>Vertex(x1, y1)</tt> to
+	 * <tt>Vertex(x2, y2)</tt>. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
+	 * 
+	 * @param x1
+	 *            X-coordinate of tail
+	 * @param y1
+	 *            Y-coordinate of tail
+	 * @param x2
+	 *            X-coordinate of head
+	 * @param y2
+	 *            Y-coordinate of head
+	 * @return a <tt>Vertex</tt> object
+	 */
+	public static Vector getVector(int x1, int y1, int x2, int y2) {
+		Vector v = new VectorComponent(x1, y1, x2, y2);
+		return (Vector) buildGeometry(v);
+	}
+
+	/**
 	 * Creates a <tt>Vertex</tt> whose location is given by <code>x</code> and
 	 * <code>y</code>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.

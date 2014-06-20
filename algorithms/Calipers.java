@@ -5,9 +5,9 @@ import java.awt.Color;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.GeometryManager;
 import cg.Polygon;
 import cg.Vector;
-import cg.VectorComponent;
 import cg.Vertex;
 import cg.VertexSet;
 
@@ -26,12 +26,12 @@ public class Calipers {
 		double width = Double.POSITIVE_INFINITY;
 
 		// Visualization Variables
-		Vector support1 = new VectorComponent(-1, -1, -1, -1);
-		Vector support2 = new VectorComponent(-1, -1, -1, -1);
-		Vector support3 = new VectorComponent(-1, -1, -1, -1);
-		Vector support4 = new VectorComponent(-1, -1, -1, -1);
-		Vector widthline = new VectorComponent(-1, -1, -1, -1);
-		Vector diamline = new VectorComponent(-1, -1, -1, -1);
+		Vector support1 = GeometryManager.getVector(-1, -1, -1, -1);
+		Vector support2 = GeometryManager.getVector(-1, -1, -1, -1);
+		Vector support3 = GeometryManager.getVector(-1, -1, -1, -1);
+		Vector support4 = GeometryManager.getVector(-1, -1, -1, -1);
+		Vector widthline = GeometryManager.getVector(-1, -1, -1, -1);
+		Vector diamline = GeometryManager.getVector(-1, -1, -1, -1);
 		setObservable(support1, Color.BLUE, hull);
 		setObservable(support2, Color.BLUE, hull);
 		setObservable(support3, Color.BLUE, hull);
@@ -120,7 +120,7 @@ public class Calipers {
 				tan1 = i;
 				tan2 = i + 1;
 			}
-			Vector supportBasis = new VectorComponent(hull.get(tan1),
+			Vector supportBasis = GeometryManager.getVector(hull.get(tan1),
 					hull.get(tan2));
 			supportBasis.translate(pi);
 			support1.update(supportBasis.getHead(), supportBasis
@@ -145,15 +145,15 @@ public class Calipers {
 			p = i;
 			q = i + 1;
 		}
-		Vector pq = new VectorComponent(hull.get(p), hull.get(q));
-		Vector rrq = new VectorComponent(hull.get(p), hull.get(q));
+		Vector pq = GeometryManager.getVector(hull.get(p), hull.get(q));
+		Vector rrq = GeometryManager.getVector(hull.get(p), hull.get(q));
 		rrq.translate(hull.get(r));
 		Vertex intersection = rrq.perpendicular().intersection(pq);
 		tempwidth = intersection.distanceSquared(hull.get(r));
 		if (tempwidth < width) {
 			width = tempwidth;
 			widthline.update(hull.get(r), intersection);
-			Vector supportBasis = new VectorComponent(rrq.getTail(),
+			Vector supportBasis = GeometryManager.getVector(rrq.getTail(),
 					intersection);
 			supportBasis = supportBasis.perpendicular();
 			supportBasis.translate(rrq.getTail());

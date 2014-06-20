@@ -1,38 +1,37 @@
 package cg;
 
-
 public interface Vector extends Drawable {
 
-	public Vertex getTail();
+	public Vector add(Vector v);
+
+	public double dot(Vector v);
 
 	public Vertex getHead();
+
+	public double getHomogeneous(int index);
+
+	public Vertex getTail();
 
 	public int getXdir();
 
 	public int getYdir();
 
-	public Vector add(Vector v);
-
-	public void translate(Vertex v);
+	public Vertex intersection(Vector v);
 
 	public double length();
 
 	public double lengthSquared();
 
-	public Vector unitVector();
-
-	public double dotProduct(Vector v);
-
-	public double getHomogeneous(int index);
-
-	public Vertex intersection(Vector v);
+	public Vector originReflection();
 
 	public Vector perpendicular();
 
-	public Vector originReflection();
+	public void translate(Vertex v);
 
-	public void update(Vertex v1, Vertex v2);
+	public Vector unitVector();
 
 	public void update(int x1, int y1, int x2, int y2);
+
+	public void update(Vertex v1, Vertex v2);
 
 }
