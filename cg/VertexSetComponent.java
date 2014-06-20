@@ -7,19 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import util.CGObservable;
-import util.CGObserver;
-
-public class VertexSetComponent extends AbstractGeometry implements VertexSet,
-		CGObservable {
+public class VertexSetComponent extends AbstractGeometry implements VertexSet {
 	private static final long serialVersionUID = -1545417749354389726L;
-	private final List<CGObserver> observers;
 	private final LinkedList<Vertex> vertices;
 
 	protected VertexSetComponent() {
 		super();
 		vertices = new LinkedList<Vertex>();
-		this.observers = new LinkedList<CGObserver>();
 	}
 
 	@Override
@@ -92,7 +86,6 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 	@Override
 	public VertexSet clone() {
 		VertexSet v = new VertexSetComponent();
-		v.addObservers(getObservers());
 		v.setColor(getColor());
 		v.addAll(this);
 		return v;
@@ -336,13 +329,6 @@ public class VertexSetComponent extends AbstractGeometry implements VertexSet,
 			boolean b = vertices.removeAll(c);
 			notifyObservers();
 			return b;
-		}
-	}
-
-	@Override
-	public void removeAllObservers() {
-		synchronized (this) {
-			observers.removeAll(observers);
 		}
 	}
 

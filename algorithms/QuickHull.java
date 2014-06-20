@@ -33,6 +33,7 @@ public class QuickHull {
 		if (sub.isEmpty()) {
 			return;
 		}
+
 		// find farthest point from segment ab
 		Vertex c = sub.get(0);
 		long distance = 0;

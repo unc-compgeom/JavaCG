@@ -22,17 +22,9 @@ public class GeometryManager {
 		synchronized (observers) {
 			observers.add(o);
 		}
-		synchronized (dispersedObjects) {
-			for (Drawable d : dispersedObjects) {
-				d.addObserver(o);
-			}
-		}
 	}
 
 	private static Drawable buildGeometry(Drawable d) {
-		synchronized (observers) {
-			d.addObservers(observers);
-		}
 		synchronized (dispersedObjects) {
 			dispersedObjects.add(d);
 			return d;
@@ -46,16 +38,11 @@ public class GeometryManager {
 	 *            The <tt>Drawable</tt> to remove.
 	 */
 	public static void destroyGeometry(Drawable d) {
-		d.removeAllObservers();
 		synchronized (dispersedObjects) {
 			dispersedObjects.remove(d);
 		}
 		d = null;
-		synchronized (observers) {
-			for (CGObserver o : observers) {
-				o.update(null);
-			}
-		}
+		notifyAllObservers();
 	}
 
 	/**
@@ -261,16 +248,26 @@ public class GeometryManager {
 		}
 	}
 
+	protected static void notifyObservers() {
+		notifyAllObservers();
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	protected static void notifyObserversNoDelay() {
+		notifyAllObservers();
+	}
+
 	/**
 	 * Remove all geometry from the GeometryManager's records. This operation
 	 * also removes all observers of all geometry objects.
 	 */
 	public static void removeAllGeometry() {
 		synchronized (dispersedObjects) {
-			for (Drawable d : dispersedObjects) {
-				d.removeAllObservers();
-				d = null;
-			}
 			dispersedObjects.removeAll(dispersedObjects);
 		}
 		notifyAllObservers();
@@ -281,11 +278,6 @@ public class GeometryManager {
 	 * objects intact.
 	 */
 	public static void removeAllObservers() {
-		synchronized (dispersedObjects) {
-			for (Drawable d : dispersedObjects) {
-				d.removeAllObservers();
-			}
-		}
 		synchronized (observers) {
 			observers.removeAll(observers);
 		}
@@ -298,11 +290,6 @@ public class GeometryManager {
 	 *            The <tt>CGObserver</tt> to remove
 	 */
 	public static void removeObserver(CGObserver o) {
-		synchronized (dispersedObjects) {
-			for (Drawable d : dispersedObjects) {
-				d.removeObserver(o);
-			}
-		}
 		synchronized (observers) {
 			observers.remove(o);
 		}

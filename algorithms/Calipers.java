@@ -32,12 +32,12 @@ public class Calipers {
 		Vector support4 = GeometryManager.getVector(-1, -1, -1, -1);
 		Vector widthline = GeometryManager.getVector(-1, -1, -1, -1);
 		Vector diamline = GeometryManager.getVector(-1, -1, -1, -1);
-		setObservable(support1, Color.BLUE, hull);
-		setObservable(support2, Color.BLUE, hull);
-		setObservable(support3, Color.BLUE, hull);
-		setObservable(support4, Color.BLUE, hull);
-		setObservable(widthline, Color.ORANGE, hull);
-		setObservable(diamline, Color.GREEN, hull);
+		support1.setColor(Color.BLUE);
+		support2.setColor(Color.BLUE);
+		support3.setColor(Color.BLUE);
+		support4.setColor(Color.BLUE);
+		widthline.setColor(Color.ORANGE);
+		diamline.setColor(Color.GREEN);
 
 		hull = getConvexHull(Vertices, hull);
 
@@ -97,11 +97,6 @@ public class Calipers {
 		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
-	}
-
-	public static void setObservable(Vector component, Color color, Polygon hull) {
-		component.addObservers(hull.getObservers());
-		component.setColor(color);
 	}
 
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
