@@ -92,7 +92,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public Segment originReflection() {
+	public Segment tailReflection() {
 		return new SegmentComponent(tail.getX(), tail.getY(), tail.getX() - dX,
 				tail.getY() - dY);
 	}
@@ -120,11 +120,11 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		notifyObservers();
 	}
 
-	@Override
-	public Segment unitVector() {
-		return new SegmentComponent(0, 0, (int) (dX / this.length()),
-				(int) (dY / this.length()));
-	}
+//	@Override
+//	public Segment unitVector() {
+//		return new SegmentComponent(0, 0, (int) (dX / this.length()),
+//				(int) (dY / this.length()));
+//	}
 
 	@Override
 	public void update(int x1, int y1, int x2, int y2) {
@@ -141,6 +141,17 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	@Override
 	public void update(Vertex v1, Vertex v2) {
 		update(v1.getX(), v1.getY(), v2.getX(), v2.getY());
+	}
+
+	@Override
+	public Segment setVisible(boolean visible) {
+		if(visible){
+			return GeometryManager.newSegment(this.head, this.tail);
+		}
+		else{
+			GeometryManager.destroyGeometry(this);
+			return this;
+		}
 	}
 
 }

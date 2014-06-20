@@ -127,7 +127,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new Vector from <tt>Vertex(x1, y1)</tt> to
+	 * Creates a new Segment from <tt>Vertex(x1, y1)</tt> to
 	 * <tt>Vertex(x2, y2)</tt>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 * 
@@ -141,7 +141,7 @@ public class GeometryManager {
 	 *            Y-coordinate of head
 	 * @return a <tt>Vertex</tt> object
 	 */
-	public static Segment newVector(int x1, int y1, int x2, int y2) {
+	public static Segment newSegment(int x1, int y1, int x2, int y2) {
 		Segment v = new SegmentComponent(x1, y1, x2, y2);
 		return (Segment) buildGeometry(v);
 	}
