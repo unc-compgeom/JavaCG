@@ -22,16 +22,18 @@ public interface Segment extends Drawable {
 
 	public double lengthSquared();
 
-	public Segment originReflection();
+	public Segment tailReflection();
 
 	public Segment perpendicular();
 
 	public void translate(Point v);
 
-	public Segment unitVector();
+//	public Segment unitVector();
 
 	public void update(int x1, int y1, int x2, int y2);
 
 	public void update(Point v1, Point v2);
+	
+	public Segment setVisible(boolean visible);
 
 }
