@@ -234,6 +234,8 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		if (isInvisible())
+			return;
 		synchronized (this) {
 			for (Iterator<Point> it = iterator(); it.hasNext();) {
 				Point v = it.next();

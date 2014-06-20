@@ -63,6 +63,8 @@ public class PointComponent extends AbstractGeometry implements Point {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		if (isInvisible())
+			return;
 		g.setColor(super.getColor());
 		int size = (GeometryManager.getSize() > 2) ? GeometryManager.getSize()
 				: 2;

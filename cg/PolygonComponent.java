@@ -14,6 +14,8 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		if (isInvisible())
+			return;
 		// draw edges, then points
 		synchronized (this) {
 			Iterator<Point> it = super.iterator();
@@ -33,13 +35,13 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 			super.paintComponent(g);
 		}
 	}
-	
+
 	@Override
-	public Point get(int i){
-		while(i<0){
-			i=i+this.size();
+	public Point get(int i) {
+		while (i < 0) {
+			i = i + this.size();
 		}
-		return super.get(i%this.size());
+		return super.get(i % this.size());
 	}
 
 	@Override
