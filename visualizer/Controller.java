@@ -45,7 +45,7 @@ public class Controller implements ActionListener {
 					break;
 				case "viewAddPoint":
 					java.awt.Point p = (java.awt.Point) e.getSource();
-					model.addPoint(GeometryManager.getVertex(p.x, p.y));
+					model.addPoint(GeometryManager.newVertex(p.x, p.y));
 					break;
 				case "viewEnablePolygon":
 					model.enablePolygon();

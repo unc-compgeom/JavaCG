@@ -6,8 +6,6 @@ import java.util.List;
 
 import util.CGObserver;
 
-// TODO  the entire GeometryManager might be unavailable while it is iterating over something in one of its submethods.... 
-
 public class GeometryManager {
 	private static int delay = 25;
 	private static List<Drawable> dispersedObjects = Collections
@@ -56,6 +54,36 @@ public class GeometryManager {
 	}
 
 	/**
+	 * Get the delay object that regulates the speed at which geometry is
+	 * animated.
+	 * 
+	 * @return a <tt>Delay</tt> object.
+	 */
+	public static int getDelay() {
+		return delay;
+	}
+
+	/**
+	 * Get the <tt>CGObservers</tt> that are observing all instances of cg
+	 * objects.
+	 * 
+	 * @return a List of <tt>CGObservers</tt>
+	 */
+	public static List<CGObserver> getObservers() {
+		return observers;
+	}
+
+	/**
+	 * Gets the draw size for all geometry objects (to be used in the
+	 * <tt>paintComponent()</tt> method).
+	 * 
+	 * @return the draw size
+	 */
+	public static int getSize() {
+		return size;
+	}
+
+	/**
 	 * Creates a new <tt>Circle</tt> initialized with a center point and radius.
 	 * This factory constructor automatically registers observers with the
 	 * object and sets its draw size.
@@ -67,7 +95,7 @@ public class GeometryManager {
 	 * @param radiusSquared
 	 * @return <tt>Circle</tt> object
 	 */
-	public static Circle getCircle(int x, int y, int radiusSquared) {
+	public static Circle newCircle(int x, int y, int radiusSquared) {
 		Circle c = new CircleComponent(x, y, radiusSquared);
 		return (Circle) buildGeometry(c);
 	}
@@ -82,19 +110,9 @@ public class GeometryManager {
 	 *            Vertices on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
-	public static Circle getCircle(VertexSet vertices) {
+	public static Circle newCircle(VertexSet vertices) {
 		Circle c = new CircleComponent(vertices);
 		return (Circle) buildGeometry(c);
-	}
-
-	/**
-	 * Get the delay object that regulates the speed at which geometry is
-	 * animated.
-	 * 
-	 * @return a <tt>Delay</tt> object.
-	 */
-	public static int getDelay() {
-		return delay;
 	}
 
 	/**
@@ -104,19 +122,9 @@ public class GeometryManager {
 	 * 
 	 * @return an uninitialized <tt>HalfEdge</tt> object
 	 */
-	public static HalfEdge getHalfEdge() {
+	public static HalfEdge newHalfEdge() {
 		HalfEdge he = new HalfEdgeComponent();
 		return (HalfEdge) buildGeometry(he);
-	}
-
-	/**
-	 * Get the <tt>CGObservers</tt> that are observing all instances of cg
-	 * objects.
-	 * 
-	 * @return a List of <tt>CGObservers</tt>
-	 */
-	public static List<CGObserver> getObservers() {
-		return observers;
 	}
 
 	/**
@@ -125,19 +133,9 @@ public class GeometryManager {
 	 * 
 	 * @return an empty <tt>Polygon</tt> object
 	 */
-	public static Polygon getPolygon() {
+	public static Polygon newPolygon() {
 		Polygon p = new PolygonComponent();
 		return (Polygon) buildGeometry(p);
-	}
-
-	/**
-	 * Gets the draw size for all geometry objects (to be used in the
-	 * <tt>paintComponent()</tt> method).
-	 * 
-	 * @return the draw size
-	 */
-	public static int getSize() {
-		return size;
 	}
 
 	/**
@@ -155,25 +153,25 @@ public class GeometryManager {
 	 *            Y-coordinate of head
 	 * @return a <tt>Vertex</tt> object
 	 */
-	public static Vector getVector(int x1, int y1, int x2, int y2) {
-		Vector v = new VectorComponent(x1, y1, x2, y2);
-		return (Vector) buildGeometry(v);
+	public static Segment newVector(int x1, int y1, int x2, int y2) {
+		Segment v = new SegmentComponent(x1, y1, x2, y2);
+		return (Segment) buildGeometry(v);
 	}
 
 	/**
-	 * Creates a new Vector from <tt>v1</tt> to <tt>v2</tt>. This factory
+	 * Creates a new Segment from <tt>v1</tt> to <tt>v2</tt>. This factory
 	 * constructor automatically registers observers with the object and sets
 	 * its draw size.
 	 * 
 	 * @param v1
-	 *            The tail of the vertex
+	 *            The tail of the segment
 	 * @param v2
-	 *            The head of the vertex
-	 * @return a <tt>Vertex</tt> object
+	 *            The head of the segment
+	 * @return a <tt>Segment</tt> object
 	 */
-	public static Vector getVector(Vertex v1, Vertex v2) {
-		Vector v = new VectorComponent(v1, v2);
-		return (Vector) buildGeometry(v);
+	public static Segment newSegment(Vertex v1, Vertex v2) {
+		Segment s = new SegmentComponent(v1, v2);
+		return (Segment) buildGeometry(s);
 	}
 
 	/**
@@ -187,7 +185,7 @@ public class GeometryManager {
 	 *            the y-coordinate of the vertex
 	 * @return a <tt>Vertex</tt> object
 	 */
-	public static Vertex getVertex(int x, int y) {
+	public static Vertex newVertex(int x, int y) {
 		Vertex v = new VertexComponent(x, y);
 		return (Vertex) buildGeometry(v);
 	}
@@ -206,7 +204,7 @@ public class GeometryManager {
 	 *            the edge incident on this vertex
 	 * @return a <tt>Vertex</tt> object
 	 */
-	public static Vertex getVertex(int x, int y, HalfEdge incident) {
+	public static Vertex newVertex(int x, int y, HalfEdge incident) {
 		Vertex v = new VertexComponent(x, y, incident);
 		return (Vertex) buildGeometry(v);
 	}
@@ -217,7 +215,7 @@ public class GeometryManager {
 	 * 
 	 * @return a <tt>VertexSet</tt> object
 	 */
-	public static VertexSet getVertexSet() {
+	public static VertexSet newVertexSet() {
 		VertexSet vs = new VertexSetComponent();
 		return (VertexSet) buildGeometry(vs);
 	}
@@ -232,7 +230,7 @@ public class GeometryManager {
 	 *            </tt>VertexSet</tt>
 	 * @return A clone of the <tt>vertices</tt>
 	 */
-	public static VertexSet getVertexSet(VertexSet vertices) {
+	public static VertexSet newVertexSet(VertexSet vertices) {
 		VertexSet vs = new VertexSetComponent();
 		for (Vertex vertex : vertices) {
 			vs.add(vertex.clone());

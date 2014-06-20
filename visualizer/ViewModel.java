@@ -29,8 +29,8 @@ public class ViewModel {
 
 	public ViewModel() {
 		this.isPolygonActive = false;
-		this.pointSet = GeometryManager.getVertexSet();
-		this.polygon = GeometryManager.getPolygon();
+		this.pointSet = GeometryManager.newVertexSet();
+		this.polygon = GeometryManager.newPolygon();
 	}
 
 	public void addPoint(Vertex v) {
@@ -58,7 +58,7 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.addNoDelay(GeometryManager.getVertex(Ayn.nextInt(width),
+			pointSet.addNoDelay(GeometryManager.newVertex(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
@@ -68,20 +68,20 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.addNoDelay(GeometryManager.getVertex(Ayn.nextInt(width),
+			polygon.addNoDelay(GeometryManager.newVertex(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
 
 	public void reset() {
 		GeometryManager.removeAllGeometry();
-		pointSet = GeometryManager.getVertexSet();
-		polygon = GeometryManager.getPolygon();
+		pointSet = GeometryManager.newVertexSet();
+		polygon = GeometryManager.newPolygon();
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
 		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
-		final Polygon hull = GeometryManager.getPolygon();
+		final Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(Color.RED);
 		SwingWorker<Void, Void> w = (new SwingWorker<Void, Void>() {
 			@Override
@@ -129,9 +129,9 @@ public class ViewModel {
 		});
 		w.execute();
 		if (isPolygonActive) {
-			polygon = GeometryManager.getPolygon();
+			polygon = GeometryManager.newPolygon();
 		} else {
-			pointSet = GeometryManager.getVertexSet();
+			pointSet = GeometryManager.newVertexSet();
 		}
 	}
 

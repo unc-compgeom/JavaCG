@@ -7,7 +7,7 @@ import predicates.Predicate.Orientation;
 import util.CG;
 import cg.GeometryManager;
 import cg.Polygon;
-import cg.Vector;
+import cg.Segment;
 import cg.Vertex;
 import cg.VertexSet;
 
@@ -26,12 +26,12 @@ public class Calipers {
 		double width = Double.POSITIVE_INFINITY;
 
 		// Visualization Variables
-		Vector support1 = GeometryManager.getVector(-1, -1, -1, -1);
-		Vector support2 = GeometryManager.getVector(-1, -1, -1, -1);
-		Vector support3 = GeometryManager.getVector(-1, -1, -1, -1);
-		Vector support4 = GeometryManager.getVector(-1, -1, -1, -1);
-		Vector widthline = GeometryManager.getVector(-1, -1, -1, -1);
-		Vector diamline = GeometryManager.getVector(-1, -1, -1, -1);
+		Segment support1 = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment support2 = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment support3 = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment support4 = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment widthline = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment diamline = GeometryManager.newVector(-1, -1, -1, -1);
 		support1.setColor(Color.BLUE);
 		support2.setColor(Color.BLUE);
 		support3.setColor(Color.BLUE);
@@ -100,7 +100,7 @@ public class Calipers {
 	}
 
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
-			Vector diamline, Vector support1, Vector support2) {
+			Segment diamline, Segment support1, Segment support2) {
 		Vertex pi = hull.get(i);
 		Vertex pj = hull.get(j);
 		double tempdiam = pi.distanceSquared(pj);
@@ -115,7 +115,7 @@ public class Calipers {
 				tan1 = i;
 				tan2 = i + 1;
 			}
-			Vector supportBasis = GeometryManager.getVector(hull.get(tan1),
+			Segment supportBasis = GeometryManager.newSegment(hull.get(tan1),
 					hull.get(tan2));
 			supportBasis.translate(pi);
 			support1.update(supportBasis.getHead(), supportBasis
@@ -128,7 +128,7 @@ public class Calipers {
 	}
 
 	public static double checkWidth(double width, int i, int j, Polygon hull,
-			Vector widthline, Vector support3, Vector support4) {
+			Segment widthline, Segment support3, Segment support4) {
 		int r, p, q;
 		double tempwidth;
 		if (cwIntersection(i + 1, j, hull)) {
@@ -140,15 +140,15 @@ public class Calipers {
 			p = i;
 			q = i + 1;
 		}
-		Vector pq = GeometryManager.getVector(hull.get(p), hull.get(q));
-		Vector rrq = GeometryManager.getVector(hull.get(p), hull.get(q));
+		Segment pq = GeometryManager.newSegment(hull.get(p), hull.get(q));
+		Segment rrq = GeometryManager.newSegment(hull.get(p), hull.get(q));
 		rrq.translate(hull.get(r));
 		Vertex intersection = rrq.perpendicular().intersection(pq);
 		tempwidth = intersection.distanceSquared(hull.get(r));
 		if (tempwidth < width) {
 			width = tempwidth;
 			widthline.update(hull.get(r), intersection);
-			Vector supportBasis = GeometryManager.getVector(rrq.getTail(),
+			Segment supportBasis = GeometryManager.newSegment(rrq.getTail(),
 					intersection);
 			supportBasis = supportBasis.perpendicular();
 			supportBasis.translate(rrq.getTail());

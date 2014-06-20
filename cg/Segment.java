@@ -1,10 +1,10 @@
 package cg;
 
-public interface Vector extends Drawable {
+public interface Segment extends Drawable {
 
-	public Vector add(Vector v);
+	public Segment add(Segment v);
 
-	public double dot(Vector v);
+	public double dot(Segment v);
 
 	public Vertex getHead();
 
@@ -16,19 +16,19 @@ public interface Vector extends Drawable {
 
 	public int getYdir();
 
-	public Vertex intersection(Vector v);
+	public Vertex intersection(Segment v);
 
 	public double length();
 
 	public double lengthSquared();
 
-	public Vector originReflection();
+	public Segment originReflection();
 
-	public Vector perpendicular();
+	public Segment perpendicular();
 
 	public void translate(Vertex v);
 
-	public Vector unitVector();
+	public Segment unitVector();
 
 	public void update(int x1, int y1, int x2, int y2);
 

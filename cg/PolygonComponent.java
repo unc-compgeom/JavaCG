@@ -489,7 +489,7 @@ public class PolygonComponent extends AbstractGeometry implements Polygon {
 	}
 
 	@Override
-	public Vector getCCWEdge(int index) {
-		return new VectorComponent(this.get(index), this.get(index + 1));
+	public Segment getCCWEdge(int index) {
+		return new SegmentComponent(this.get(index), this.get(index + 1));
 	}
 }

@@ -15,7 +15,7 @@ public class MonotoneChain {
 	public static void findConvexHull(VertexSet points, Polygon hull) {
 		VertexSet sorted = CG.lexicographicalSort(points);
 		// lower hull
-		Polygon lower = GeometryManager.getPolygon();
+		Polygon lower = GeometryManager.newPolygon();
 		lower.setColor(Color.green);
 		for (int i = 0; i < sorted.size(); i++) {
 			Vertex p = sorted.get(i);
@@ -27,7 +27,7 @@ public class MonotoneChain {
 			lower.addLast(sorted.get(i));
 		}
 		// upper hull
-		Polygon upper = GeometryManager.getPolygon();
+		Polygon upper = GeometryManager.newPolygon();
 		upper.setColor(Color.blue);
 		for (int i = sorted.size() - 1; i >= 0; i--) {
 			Vertex p = sorted.get(i);

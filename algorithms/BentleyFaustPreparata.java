@@ -77,7 +77,7 @@ public class BentleyFaustPreparata {
 		}
 		// modification of Monotone Chain
 		// lower
-		Polygon lower = GeometryManager.getPolygon();
+		Polygon lower = GeometryManager.newPolygon();
 		lower.setColor(Color.MAGENTA);
 		lower.add(minMin);
 		for (int i = 1; i < buckets.length; i++) {
@@ -96,7 +96,7 @@ public class BentleyFaustPreparata {
 			lower.addLast(buckets[i].getMin());
 		}
 		// upper
-		Polygon upper = GeometryManager.getPolygon();
+		Polygon upper = GeometryManager.newPolygon();
 		upper.setColor(Color.BLUE);
 		upper.add(maxMax);
 		for (int i = buckets.length - 2; i >= 0; i--) {
