@@ -25,5 +25,7 @@ public class GrahmScan {
 				hull.pop();
 			}
 		}
+		// close hull
+		hull.addFirst(hull.getLast());
 	}
 }

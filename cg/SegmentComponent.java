@@ -2,26 +2,25 @@ package cg;
 
 import java.awt.Graphics;
 
+/**
+ * The segment will have an origin indicating the location of the tail of the
+ * segment. The xdir and ydir give magnitudes in the x and y directions. The
+ * homogeneous array stores the homogeneous coordinates of the segment as
+ * <W,X,Y>.
+ */
 public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	private Vertex head;
 	private final double[] homogeneous = { 0, 0, 0 };
 	private Vertex tail;
-	int xdir;
-	int ydir;
-
-	/**
-	 * The vector will have an origin indicating the location of the tail of the
-	 * vector. The xdir and ydir give magnitudes in the x and y directions. The
-	 * homogeneous array stores the homogeneous coordinates of the vector as
-	 * <W,X,Y>.
-	 */
+	int dX;
+	int dY;
 
 	protected SegmentComponent(int x1, int y1, int x2, int y2) {
 		tail = new VertexComponent(x1, y1);
 		head = new VertexComponent(x2, y2);
-		xdir = x2 - x1;
-		ydir = y2 - y1;
+		dX = x2 - x1;
+		dY = y2 - y1;
 		homogeneous[0] = (x1 * y2) - (y1 * x2);
 		homogeneous[1] = y1 - y2;
 		homogeneous[2] = x2 - x1;
@@ -33,15 +32,15 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public Segment add(Segment v) {
-		int x = head.getX() + v.getXdir();
-		int y = head.getY() + v.getYdir();
+		int x = head.getX() + v.getDX();
+		int y = head.getY() + v.getDY();
 		return new SegmentComponent(tail.getX(), tail.getY(), x, y);
 	}
 
-	@Override
-	public double dot(Segment v) {
-		return (this.xdir * v.getYdir()) - (this.ydir * v.getXdir());
-	}
+	// @Override
+	// public double dot(Segment v) {
+	// return (this.dX * v.getDY()) - (this.dY * v.getDX());
+	// }
 
 	@Override
 	public Vertex getHead() {
@@ -62,13 +61,13 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public int getXdir() {
-		return xdir;
+	public int getDX() {
+		return dX;
 	}
 
 	@Override
-	public int getYdir() {
-		return ydir;
+	public int getDY() {
+		return dY;
 	}
 
 	@Override
@@ -84,18 +83,18 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public double length() {
-		return Math.hypot(xdir, ydir);
+		return Math.hypot(dX, dY);
 	}
 
 	@Override
 	public double lengthSquared() {
-		return Math.pow(xdir, 2) + Math.pow(ydir, 2);
+		return Math.pow(dX, 2) + Math.pow(dY, 2);
 	}
 
 	@Override
 	public Segment originReflection() {
-		return new SegmentComponent(tail.getX(), tail.getY(),
-				tail.getX() - xdir, tail.getY() - ydir);
+		return new SegmentComponent(tail.getX(), tail.getY(), tail.getX() - dX,
+				tail.getY() - dY);
 	}
 
 	@Override
@@ -106,8 +105,8 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public Segment perpendicular() {
-		return new SegmentComponent(tail.getX(), tail.getY(), -ydir
-				+ tail.getX(), xdir + tail.getY());
+		return new SegmentComponent(tail.getX(), tail.getY(),
+				-dY + tail.getX(), dX + tail.getY());
 	}
 
 	@Override
@@ -123,16 +122,16 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public Segment unitVector() {
-		return new SegmentComponent(0, 0, (int) (xdir / this.length()),
-				(int) (ydir / this.length()));
+		return new SegmentComponent(0, 0, (int) (dX / this.length()),
+				(int) (dY / this.length()));
 	}
 
 	@Override
 	public void update(int x1, int y1, int x2, int y2) {
 		tail = new VertexComponent(x1, y1);
 		head = new VertexComponent(x2, y2);
-		xdir = x2 - x1;
-		ydir = y2 - y1;
+		dX = x2 - x1;
+		dY = y2 - y1;
 		homogeneous[0] = (x1 * y2) - (y1 * x2);
 		homogeneous[1] = y1 - y2;
 		homogeneous[2] = x2 - x1;

@@ -132,6 +132,7 @@ public class CG {
 
 	public static Color randomColor() {
 		Random Ayn = new Random();
-		return new Color(Ayn.nextInt(256), Ayn.nextInt(256), Ayn.nextInt(256));
+		return new Color(100 + Ayn.nextInt(156), 100 + Ayn.nextInt(156),
+				100 + Ayn.nextInt(156));
 	}
 }

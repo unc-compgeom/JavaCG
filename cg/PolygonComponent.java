@@ -9,6 +9,7 @@ public class PolygonComponent extends VertexSetComponent implements Polygon {
 	private static final long serialVersionUID = -1523644503244611934L;
 
 	protected PolygonComponent() {
+		super();
 	}
 
 	@Override
@@ -35,6 +36,6 @@ public class PolygonComponent extends VertexSetComponent implements Polygon {
 
 	@Override
 	public Segment getCCWEdge(int index) {
-		return new SegmentComponent(this.get(index), this.get(index + 1));
+		return GeometryManager.newSegment(this.get(index), this.get(index + 1));
 	}
 }

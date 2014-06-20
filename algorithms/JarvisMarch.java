@@ -18,6 +18,8 @@ public class JarvisMarch {
 			q = nextHullPoint(points, p);
 			i++;
 		} while (!q.equals(min));
+		// close hull
+		hull.add(hull.getFirst());
 	}
 
 	private static Vertex nextHullPoint(VertexSet points, Vertex p) {

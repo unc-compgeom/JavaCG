@@ -3,8 +3,6 @@ package algorithms;
 import java.awt.Color;
 
 import predicates.Predicate;
-import predicates.Predicate.Orientation;
-import util.CG;
 import cg.GeometryManager;
 import cg.Polygon;
 import cg.Segment;
@@ -19,7 +17,7 @@ public class Calipers {
 	 * diameter of the convex hull and the minimum width of the convex hull.
 	 */
 
-	public static void doCalipers(VertexSet Vertices, Polygon hull) {
+	public static void doCalipers(VertexSet points, Polygon hull) {
 		int i = 0;
 		int j = 1;
 		double diam = -1;
@@ -30,16 +28,16 @@ public class Calipers {
 		Segment support2 = GeometryManager.newVector(-1, -1, -1, -1);
 		Segment support3 = GeometryManager.newVector(-1, -1, -1, -1);
 		Segment support4 = GeometryManager.newVector(-1, -1, -1, -1);
-		Segment widthline = GeometryManager.newVector(-1, -1, -1, -1);
+		Segment wdthline = GeometryManager.newVector(-1, -1, -1, -1);
 		Segment diamline = GeometryManager.newVector(-1, -1, -1, -1);
 		support1.setColor(Color.BLUE);
 		support2.setColor(Color.BLUE);
 		support3.setColor(Color.BLUE);
 		support4.setColor(Color.BLUE);
-		widthline.setColor(Color.ORANGE);
+		wdthline.setColor(Color.ORANGE);
 		diamline.setColor(Color.GREEN);
 
-		hull = getConvexHull(Vertices, hull);
+		JarvisMarch.findConvexHull(points, hull);
 
 		// Initialization Step
 		while (cwIntersection(0, j, hull)) {
@@ -49,7 +47,7 @@ public class Calipers {
 		// Rotation Step
 		while (j < hull.size()) {
 			diam = checkDiameter(diam, i, j, hull, diamline, support1, support2);
-			width = checkWidth(width, i, j, hull, widthline, support3, support4);
+			width = checkWidth(width, i, j, hull, wdthline, support3, support4);
 			if (cwIntersection(i + 1, j, hull)) {
 				j++;
 			} else if (cwIntersection(j + 1, i, hull)) {
@@ -59,35 +57,6 @@ public class Calipers {
 				i++;
 			}
 		}
-	}
-
-	/** Uses Jarvis march to compute convex hull */
-
-	private static Polygon getConvexHull(VertexSet points, Polygon hull) {
-		Vertex min = CG.findSmallestYX(points);
-		Vertex p, q = min;
-		int i = 0;
-		do {
-			hull.addLast(q);
-			p = hull.get(i);
-			q = nextHullPoint(points, p);
-			i++;
-		} while (!q.equals(min));
-		return hull;
-	}
-
-	private static Vertex nextHullPoint(VertexSet points, Vertex p) {
-		Vertex q = p;
-		for (int i = 0; i < points.size(); i++) {
-			Vertex r = points.get(i);
-			Orientation o = Predicate.findOrientation(p, q, r);
-			if (o == Orientation.COUNTERCLOCKWISE
-					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
-							.distSquared(p, q))) {
-				q = r;
-			}
-		}
-		return q;
 	}
 
 	private static boolean cwIntersection(int i, int j, Polygon hull) {

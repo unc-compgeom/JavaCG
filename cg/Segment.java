@@ -4,7 +4,7 @@ public interface Segment extends Drawable {
 
 	public Segment add(Segment v);
 
-	public double dot(Segment v);
+	// public double dot(Segment v);
 
 	public Vertex getHead();
 
@@ -12,9 +12,9 @@ public interface Segment extends Drawable {
 
 	public Vertex getTail();
 
-	public int getXdir();
+	public int getDX();
 
-	public int getYdir();
+	public int getDY();
 
 	public Vertex intersection(Segment v);
 

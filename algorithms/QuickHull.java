@@ -16,6 +16,8 @@ public class QuickHull {
 		// divide the point set
 		findHull(points, hull, minMax[0], minMax[1]);
 		findHull(points, hull, minMax[1], minMax[0]);
+		// close the hull
+		hull.add(hull.getFirst());
 	}
 
 	private static void findHull(VertexSet points, Polygon hull, Vertex a,
