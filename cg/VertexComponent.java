@@ -8,11 +8,12 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	private int y;
 	private HalfEdge incident;
 
-	public VertexComponent(int x, int y) {
+	protected VertexComponent(int x, int y) {
 		this(x, y, null);
 	}
 
-	public VertexComponent(int x, int y, HalfEdge incident) {
+	protected VertexComponent(int x, int y, HalfEdge incident) {
+		super();
 		this.x = x;
 		this.y = y;
 		this.incident = incident;
@@ -36,6 +37,16 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
+	public Vertex div(double i) {
+		return new VertexComponent((int) (x / i), (int) (y / i));
+	}
+
+	@Override
+	public int dot(Vertex v) {
+		return x * v.getX() + y * v.getY();
+	}
+
+	@Override
 	public HalfEdge getIncident() {
 		return incident;
 	}
@@ -51,11 +62,19 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	}
 
 	@Override
+	public Vertex mult(double i) {
+		return new VertexComponent((int) (x * i), (int) (y * i));
+	}
+
+	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(super.getColor());
-		g.fillOval(x - 1, y - 1, 3, 3);
-		g.setColor(Color.BLACK);
-		g.drawOval(x - 1, y - 1, 3, 3);
+		int size = (GeometryManager.getSize() > 2) ? GeometryManager.getSize()
+				: 2;
+		g.fillOval(x - size, y - size, 2 * size, 2 * size);
+		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.DARK_GRAY
+				: Color.BLACK);
+		g.drawOval(x - size, y - size, 2 * size, 2 * size);
 	}
 
 	@Override

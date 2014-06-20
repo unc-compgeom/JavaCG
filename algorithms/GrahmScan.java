@@ -9,7 +9,7 @@ import cg.VertexSet;
 
 public class GrahmScan {
 
-	public static void doGrahmScan(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		Vertex smallest = CG.findSmallestYX(points);
 		VertexSet sorted = CG.sortByAngle(points, smallest);
 		hull.push(sorted.get(0));

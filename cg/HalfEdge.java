@@ -1,8 +1,7 @@
 package cg;
 
-import util.CGObservable;
 
-public interface HalfEdge extends CGObservable, Comparable<HalfEdge> {
+public interface HalfEdge extends Drawable, Comparable<HalfEdge> {
 
 	public Vertex getOrigin();
 

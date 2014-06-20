@@ -7,9 +7,9 @@ import java.util.Random;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
+import cg.GeometryManager;
 import cg.Vertex;
 import cg.VertexSet;
-import cg.VertexSetComponent;
 
 public class CG {
 
@@ -50,10 +50,13 @@ public class CG {
 	public static VertexSet lexicographicalSort(VertexSet points) {
 		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>();
 		sorter.addAll(points);
-		VertexSet sorted = new VertexSetComponent();
+		VertexSet sorted = GeometryManager.getVertexSet();
+		Color c = sorted.getColor();
+		sorted.setColor(Color.cyan);
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
+		sorted.setColor(c);
 		return sorted;
 	}
 
@@ -68,8 +71,8 @@ public class CG {
 	 * @return A set of points sorted by angle
 	 */
 	public static VertexSet sortByAngle(VertexSet points, final Vertex compare) {
-		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>(
-				11, new Comparator<Vertex>() {
+		PriorityQueue<Vertex> sorter = new PriorityQueue<Vertex>(11,
+				new Comparator<Vertex>() {
 					@Override
 					public int compare(Vertex p, Vertex q) {
 						Orientation o = Predicate
@@ -94,10 +97,13 @@ public class CG {
 
 				});
 		sorter.addAll(points);
-		VertexSet sorted = new VertexSetComponent();
+		VertexSet sorted = GeometryManager.getVertexSet();
+		Color c = sorted.getColor();
+		sorted.setColor(Color.cyan);
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
+		sorted.setColor(c);
 		return sorted;
 	}
 

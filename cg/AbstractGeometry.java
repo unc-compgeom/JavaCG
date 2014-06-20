@@ -5,14 +5,14 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 
-import util.CGObservable;
 import util.CGObserver;
 
-public abstract class AbstractGeometry implements CGObservable {
+public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private final List<CGObserver> observers;
 
 	AbstractGeometry() {
+		this.c = Color.black;
 		observers = new LinkedList<CGObserver>();
 	}
 
@@ -36,9 +36,17 @@ public abstract class AbstractGeometry implements CGObservable {
 		return observers;
 	}
 
-	protected void notifyObservers() {
+	protected void notifyObserversNoDelay() {
 		for (CGObserver o : observers) {
 			o.update(this);
+		}
+	}
+
+	protected void notifyObservers() {
+		notifyObserversNoDelay();
+		try {
+			Thread.sleep(GeometryManager.getDelay());
+		} catch (InterruptedException e) {
 		}
 	}
 

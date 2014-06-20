@@ -2,9 +2,7 @@ package util;
 
 import java.util.List;
 
-import cg.Drawable;
-
-public interface CGObservable extends Drawable {
+public interface CGObservable {
 	public void addObserver(CGObserver o);
 
 	public void addObservers(List<CGObserver> observers);
@@ -12,6 +10,6 @@ public interface CGObservable extends Drawable {
 	public void removeObserver(CGObserver o);
 
 	public void removeAllObservers();
-	
+
 	public List<CGObserver> getObservers();
 }

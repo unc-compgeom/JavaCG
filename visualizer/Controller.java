@@ -4,13 +4,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import algorithms.Algorithm;
-import cg.VertexComponent;
+import cg.GeometryManager;
 
 public class Controller implements ActionListener {
-	private ViewModel model;
+	private final ViewModel model;
 	private View view;
 
 	public Controller(ViewModel model) {
@@ -18,50 +18,53 @@ public class Controller implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		switch (e.getActionCommand()) {
-		case "viewMakeRandomPoints":
-			model.makeRandomPoints();
-			break;
-		case "viewMakeRandomPolygon":
-			model.makeRandomPolygon();
-			break;
-		case "reset":
-			model.reset();
-			view.reset();
-			break;
-		case "delaySet":
-			try {
-				model.setDelay(Integer.parseInt(((JTextField) e.getSource())
-						.getText()));
-				((JTextField) e.getSource()).selectAll();
-			} catch (NumberFormatException exc) {
-				((JTextField) e.getSource()).setText("250");
-				((JTextField) e.getSource()).selectAll();
+	public void actionPerformed(final ActionEvent e) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				switch (e.getActionCommand()) {
+				case "viewMakeRandomPoints":
+					model.makeRandomPoints();
+					break;
+				case "viewMakeRandomPolygon":
+					model.makeRandomPolygon();
+					break;
+				case "reset":
+					model.reset();
+					view.reset();
+					break;
+				case "setLarge":
+					GeometryManager.setSmallLarge();
+					break;
+				case "speedSet":
+					GeometryManager.setDelay((int) (Math.pow(10,
+							e.getModifiers() / 10.0) - 1));
+					break;
+				case "viewResized":
+					model.setSize((Dimension) e.getSource());
+					break;
+				case "viewAddPoint":
+					java.awt.Point p = (java.awt.Point) e.getSource();
+					model.addPoint(GeometryManager.getVertex(p.x, p.y));
+					break;
+				case "viewEnablePolygon":
+					model.enablePolygon();
+					break;
+				case "viewEnablePoints":
+					model.enablePoints();
+					break;
+				default:
+					try {
+						model.runAlgorithm(Algorithm.fromString(e
+								.getActionCommand()));
+					} catch (IllegalArgumentException exc) {
+						System.out.println("Unhandled action in Controller: "
+								+ e.getActionCommand() + " " + e.getSource());
+					}
+					break;
+				}
 			}
-			break;
-		case "viewResized":
-			model.setSize((Dimension) e.getSource());
-			break;
-		case "viewAddPoint":
-			java.awt.Point p = (java.awt.Point) e.getSource();
-			model.addPoint(new VertexComponent(p.x, p.y));
-			break;
-		case "viewEnablePolygon":
-			model.enablePolygon();
-			break;
-		case "viewEnablePoints":
-			model.enablePoints();
-			break;
-		default:
-			try {
-				model.runAlgorithm(Algorithm.fromString(e.getActionCommand()));
-			} catch (IllegalArgumentException exc) {
-				System.out.println("Unhandled action in Controller: "
-						+ e.getActionCommand() + " " + e.getSource());
-			}
-			break;
-		}
+		});
 	}
 
 	public void addView(View v) {

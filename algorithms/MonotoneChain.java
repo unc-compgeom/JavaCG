@@ -5,18 +5,17 @@ import java.awt.Color;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import cg.GeometryManager;
+import cg.Polygon;
 import cg.Vertex;
 import cg.VertexSet;
-import cg.Polygon;
-import cg.PolygonComponent;
 
 public class MonotoneChain {
 
-	public static void doMonotoneChain(VertexSet points, Polygon hull) {
+	public static void findConvexHull(VertexSet points, Polygon hull) {
 		VertexSet sorted = CG.lexicographicalSort(points);
 		// lower hull
-		Polygon lower = new PolygonComponent();
-		lower.addObservers(hull.getObservers());
+		Polygon lower = GeometryManager.getPolygon();
 		lower.setColor(Color.green);
 		for (int i = 0; i < sorted.size(); i++) {
 			Vertex p = sorted.get(i);
@@ -28,8 +27,7 @@ public class MonotoneChain {
 			lower.addLast(sorted.get(i));
 		}
 		// upper hull
-		Polygon upper = new PolygonComponent();
-		upper.addObservers(hull.getObservers());
+		Polygon upper = GeometryManager.getPolygon();
 		upper.setColor(Color.blue);
 		for (int i = sorted.size() - 1; i >= 0; i--) {
 			Vertex p = sorted.get(i);
