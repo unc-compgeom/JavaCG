@@ -73,10 +73,6 @@ public class View implements CGObserver {
 		f.setVisible(true);
 	}
 
-	public void reset() {
-		p.reset();
-	}
-
 	@Override
 	public void update(Drawable o) {
 		p.update(o);

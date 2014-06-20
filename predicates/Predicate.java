@@ -2,7 +2,6 @@ package predicates;
 
 import util.CG;
 import cg.Circle;
-import cg.HalfEdge;
 import cg.Vertex;
 
 public class Predicate {
@@ -40,11 +39,6 @@ public class Predicate {
 			o = Orientation.COLINEAR;
 		}
 		return o;
-	}
-
-	public static boolean isPointOnLine(Vertex p, HalfEdge l) {
-		Vertex p1 = l.getOrigin(), p2 = l.getOrigin();
-		return findOrientation(p, p1, p2) == Orientation.COLINEAR;
 	}
 
 	/**

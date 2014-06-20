@@ -9,11 +9,10 @@ import javax.swing.SwingUtilities;
 import algorithms.Algorithm;
 import cg.GeometryManager;
 
-public class Controller implements ActionListener {
+public class ViewController implements ActionListener {
 	private final ViewModel model;
-	private View view;
 
-	public Controller(ViewModel model) {
+	public ViewController(ViewModel model) {
 		this.model = model;
 	}
 
@@ -31,7 +30,6 @@ public class Controller implements ActionListener {
 					break;
 				case "reset":
 					model.reset();
-					view.reset();
 					break;
 				case "setLarge":
 					GeometryManager.setSmallLarge();
@@ -65,10 +63,6 @@ public class Controller implements ActionListener {
 				}
 			}
 		});
-	}
-
-	public void addView(View v) {
-		this.view = v;
 	}
 
 }

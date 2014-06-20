@@ -116,18 +116,6 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new <tt>HalfEdge</tt>. Parameters must be set manually after
-	 * calling this method. This factory constructor automatically registers
-	 * observers with the object and sets its draw size.
-	 * 
-	 * @return an uninitialized <tt>HalfEdge</tt> object
-	 */
-	public static HalfEdge newHalfEdge() {
-		HalfEdge he = new HalfEdgeComponent();
-		return (HalfEdge) buildGeometry(he);
-	}
-
-	/**
 	 * Creates a new empty <tt>Polygon</tt>. This factory constructor
 	 * automatically registers observers with the object and sets its draw size.
 	 * 
@@ -187,25 +175,6 @@ public class GeometryManager {
 	 */
 	public static Vertex newVertex(int x, int y) {
 		Vertex v = new VertexComponent(x, y);
-		return (Vertex) buildGeometry(v);
-	}
-
-	/**
-	 * Creates a <tt>Vertex</tt> whose location is given by <code>x</code> and
-	 * <code>y</code> and whose incident edge is given by <code>incident</code>.
-	 * This factory constructor automatically registers observers with the
-	 * object and sets its draw size.
-	 * 
-	 * @param x
-	 *            the x-coordinate of the vertex
-	 * @param y
-	 *            the y-coordinate of the vertex
-	 * @param incident
-	 *            the edge incident on this vertex
-	 * @return a <tt>Vertex</tt> object
-	 */
-	public static Vertex newVertex(int x, int y, HalfEdge incident) {
-		Vertex v = new VertexComponent(x, y, incident);
 		return (Vertex) buildGeometry(v);
 	}
 

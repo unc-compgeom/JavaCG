@@ -6,17 +6,11 @@ import java.awt.Graphics;
 public class VertexComponent extends AbstractGeometry implements Vertex {
 	private int x;
 	private int y;
-	private HalfEdge incident;
 
 	protected VertexComponent(int x, int y) {
-		this(x, y, null);
-	}
-
-	protected VertexComponent(int x, int y, HalfEdge incident) {
 		super();
 		this.x = x;
 		this.y = y;
-		this.incident = incident;
 	}
 
 	@Override
@@ -27,7 +21,7 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	@Override
 	public Vertex clone() {
 		// TODO Auto-generated method stub
-		return new VertexComponent(x, y, null);
+		return new VertexComponent(x, y);
 	}
 
 	@Override
@@ -44,11 +38,6 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 	@Override
 	public int dot(Vertex v) {
 		return x * v.getX() + y * v.getY();
-	}
-
-	@Override
-	public HalfEdge getIncident() {
-		return incident;
 	}
 
 	@Override
@@ -75,11 +64,6 @@ public class VertexComponent extends AbstractGeometry implements Vertex {
 		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.DARK_GRAY
 				: Color.BLACK);
 		g.drawOval(x - size, y - size, 2 * size, 2 * size);
-	}
-
-	@Override
-	public void setIncident(HalfEdge incident) {
-		this.incident = incident;
 	}
 
 	@Override
