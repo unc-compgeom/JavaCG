@@ -22,7 +22,7 @@ import cg.PointSet;
 import cg.Polygon;
 import cg.Segment;
 
-public class ViewModel {
+class ViewModel {
 	private boolean isPolygonActive; // either draw polygon or point set
 	private PointSet pointSet;
 	private Polygon polygon;

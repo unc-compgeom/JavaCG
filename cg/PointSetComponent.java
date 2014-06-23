@@ -12,7 +12,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	private static final long serialVersionUID = -1545417749354389726L;
 	private final LinkedList<Point> points;
 
-	protected PointSetComponent() {
+	PointSetComponent() {
 		super();
 		points = new LinkedList<Point>();
 	}
@@ -96,13 +96,6 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 			points.clear();
 		}
 		notifyObservers();
-	}
-
-	@Override
-	public PointSet clone() {
-		PointSet v = GeometryManager.newPointSet(this);
-		v.setColor(getColor());
-		return v;
 	}
 
 	@Override

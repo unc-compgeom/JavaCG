@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
 import algorithms.Algorithm;
 import cg.GeometryManager;
 
-public class ViewController implements ActionListener {
+class ViewController implements ActionListener {
 	private final ViewModel model;
 
 	public ViewController(ViewModel model) {

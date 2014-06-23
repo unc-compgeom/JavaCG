@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class PolygonComponent extends PointSetComponent implements Polygon {
 	private static final long serialVersionUID = -1523644503244611934L;
 
-	protected PolygonComponent() {
+	PolygonComponent() {
 		super();
 	}
 

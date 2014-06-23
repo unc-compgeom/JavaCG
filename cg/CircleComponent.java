@@ -9,7 +9,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	private Point origin;
 	private int radiusSquared;
 
-	protected CircleComponent(int x, int y, int radiusSquared) {
+	CircleComponent(int x, int y, int radiusSquared) {
 		origin = new PointComponent(x, y);
 		this.radiusSquared = radiusSquared;
 	}
@@ -21,7 +21,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	 *            points that lie on the circle's circumference.
 	 * 
 	 */
-	protected CircleComponent(PointSet vertices) {
+	CircleComponent(PointSet vertices) {
 		origin = new PointComponent(0, 0);
 		radiusSquared = -1;
 		if (vertices.size() == 1) {

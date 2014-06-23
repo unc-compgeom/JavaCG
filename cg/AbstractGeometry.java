@@ -20,7 +20,7 @@ public abstract class AbstractGeometry implements Drawable {
 		GeometryManager.notifyObserversNoDelay();
 	}
 
-	protected void notifyObservers() {
+	void notifyObservers() {
 		GeometryManager.notifyObservers();
 	}
 
@@ -37,7 +37,7 @@ public abstract class AbstractGeometry implements Drawable {
 		this.invisible = invisible;
 	}
 
-	protected boolean isInvisible() {
+	boolean isInvisible() {
 		return invisible;
 	}
 }

@@ -18,7 +18,7 @@ public class CG {
 	 * smallest Y value. If there is a tie, it finds the point with the smallest
 	 * Y and X value.
 	 * 
-	 * @param points
+	 * @param points the set of points
 	 * @return the point with the lowest Y, X value.
 	 */
 	public static Point findSmallestYX(PointSet points) {
@@ -44,7 +44,7 @@ public class CG {
 	 * Sort the points of <code>points</code> by x-coordinate (in case of a tie,
 	 * sort by y-coordinate).
 	 * 
-	 * @param points
+	 * @param points the set of points
 	 * @return A PointSet of the sorted points
 	 */
 	public static PointSet lexicographicalSort(PointSet points) {
@@ -109,8 +109,8 @@ public class CG {
 
 	/**
 	 * 
-	 * @param p
-	 * @param q
+	 * @param p Point 1
+	 * @param q Point 2
 	 * @return distance squared between points p and q.
 	 */
 	public static long distSquared(Point p, Point q) {
@@ -120,9 +120,9 @@ public class CG {
 
 	/**
 	 * 
-	 * @param o
-	 * @param a
-	 * @param b
+	 * @param o Origin
+	 * @param a Endpoint 1
+	 * @param b Endpoint 2
 	 * @return the cross product of the two vectors oa, ob
 	 */
 	public static long cross(Point o, Point a, Point b) {

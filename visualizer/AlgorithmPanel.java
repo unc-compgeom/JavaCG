@@ -37,7 +37,7 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		List<Drawable> geometry = GeometryManager.getAllGeometry();
-		synchronized (geometry) {
+		synchronized(geometry) {
 			for (Drawable d : geometry) {
 				d.paintComponent(g);
 			}
@@ -49,7 +49,7 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		super.setBounds(x, y, width, height);
 		a.actionPerformed(new ActionEvent(getSize(),
 				ActionEvent.ACTION_PERFORMED, "viewResized"));
-	};
+	}
 
 	/**
 	 * Mouse listener methods

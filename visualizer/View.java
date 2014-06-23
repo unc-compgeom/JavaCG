@@ -9,23 +9,16 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import util.CGObserver;
 import cg.Drawable;
 
 public class View implements CGObserver {
-	private final JFrame f;
 	private final AlgorithmPanel p;
-	private final ButtonPanel b;
 
 	public View(ActionListener a) {
-		this.f = new JFrame("Algorithm Visualizer");
+		JFrame f = new JFrame("Algorithm Visualizer");
 		try {
 			Image image = ImageIO.read(getClass().getResource("icon.gif"));
 			f.setIconImage(image);
@@ -35,7 +28,7 @@ public class View implements CGObserver {
 		f.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
 
-		b = new ButtonPanel(a);
+		ButtonPanel b = new ButtonPanel(a);
 		gc.gridx = 0;
 		gc.gridy = 0;
 		gc.gridheight = 1;
@@ -69,7 +62,7 @@ public class View implements CGObserver {
 		f.setJMenuBar(menuBar);
 
 		f.pack();
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		f.setVisible(true);
 	}
 

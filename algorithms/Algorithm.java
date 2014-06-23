@@ -6,7 +6,7 @@ public enum Algorithm {
 			"Melkman"), MONOTONE_CHAIN("Monotone chain"), QUICKHULL("Quickhull"), Welzl(
 			"Welzl");
 
-	private String s;
+	private final String s;
 
 	private Algorithm(String s) {
 		this.s = s;

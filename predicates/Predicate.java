@@ -7,7 +7,7 @@ import cg.Point;
 public class Predicate {
 	public enum Orientation {
 		COUNTERCLOCKWISE, CLOCKWISE, COLINEAR
-	};
+	}
 
 	public static boolean isLeftOrInside(Point p, Point q, Point r) {
 		/* test = (qx-px)*(ry-py) - (qy-py)*(rx-px); */
@@ -43,9 +43,9 @@ public class Predicate {
 
 	/**
 	 * 
-	 * @param p
-	 * @param q
-	 * @param r
+	 * @param p Point p
+	 * @param q Line point 1
+	 * @param r Line point 2
 	 * @return T/F: Point p is left of or on segment qr.
 	 */
 	public static boolean isPointLeftOrOnSegment(Point p, Point q, Point r) {
@@ -89,16 +89,13 @@ public class Predicate {
 				* ((ax - sx) * (cy - sy) - (ay - sy) * (cx - sx))
 				+ ((cx - sx) * (cx - sx) + (cy - sy) * (cy - sy))
 				* ((ax - sx) * (by - sy) - (ay - sy) * (bx - sx));
-		return (result < 0) ? false : true;
+		return result>=0;
 	}
 
 	public static boolean isVertexInCircle(Point s, Circle c) {
 		// correctly handles the case of the null circle (radiusSquared = -1)
 		// correctly handles the case of the one point circle (radiusSquared =
 		// 0);
-		if (c.getRadiusSquared() == -1) {
-			return false;
-		}
-		return CG.distSquared(s, c.getOrigin()) <= c.getRadiusSquared();
+		return c.getRadiusSquared() != -1 && CG.distSquared(s, c.getOrigin()) <= c.getRadiusSquared();
 	}
 }

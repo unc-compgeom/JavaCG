@@ -5,12 +5,10 @@ import java.util.Deque;
 import java.util.List;
 
 public interface PointSet extends Drawable, List<Point>, Deque<Point>,
-		Collection<Point>, Cloneable, java.io.Serializable {
+		Collection<Point>, java.io.Serializable {
 
 	@Override
 	public void clear();
-
-	public PointSet clone();
 
 	public Point getSecond();
 

@@ -39,11 +39,11 @@ public class MonotoneChain {
 			upper.addLast(sorted.get(i));
 		}
 		// join
-		for (int i = 0; i < lower.size(); i++) {
-			hull.add(lower.get(i));
+		for (Point p : lower) {
+			hull.add(p);
 		}
-		for (int i = 0; i < upper.size(); i++) {
-			hull.add(upper.get(i));
+		for (Point p : upper) {
+			hull.add(p);
 		}
 		// clean up
 		GeometryManager.destroyGeometry(upper);

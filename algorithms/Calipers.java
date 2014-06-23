@@ -92,8 +92,8 @@ public class Calipers {
 	 * @param diamSupport2
 	 * @return
 	 */
-	public static double checkDiameter(double diam, int i, int j, Polygon hull,
-			Segment diamline, Segment diamSupport1, Segment diamSupport2) {
+	private static double checkDiameter(double diam, int i, int j, Polygon hull,
+	                                    Segment diamline, Segment diamSupport1, Segment diamSupport2) {
 		Point pi = hull.get(i);
 		Point pj = hull.get(j);
 		double tempdiam = pi.distanceSquared(pj);
@@ -143,8 +143,8 @@ public class Calipers {
 	 * @param widthSupport2
 	 * @return
 	 */
-	public static double checkWidth(double width, int i, int j, Polygon hull,
-			Segment widthline, Segment widthSupport1, Segment widthSupport2) {
+	private static double checkWidth(double width, int i, int j, Polygon hull,
+	                                 Segment widthline, Segment widthSupport1, Segment widthSupport2) {
 		int r, p, q;
 		double tempwidth;
 		// If the cwIntersection test returns true, then i has a tangent
@@ -209,9 +209,9 @@ public class Calipers {
 	 * @return
 	 */
 	private static boolean cwIntersection(int i, int j, Polygon hull) {
-		Point Pa = hull.get(i - 1).clone();
-		Point Pb = hull.get(i).clone();
-		Point Pd = hull.get(j + 1).clone();
+		Point Pa = GeometryManager.newPoint(hull.get(i - 1));
+		Point Pb = GeometryManager.newPoint(hull.get(i));
+		Point Pd = GeometryManager.newPoint(hull.get(j + 1));
 		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;

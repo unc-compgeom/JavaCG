@@ -1,6 +1,6 @@
 package cg;
 
-public interface Point extends Comparable<Point>, Cloneable, Drawable {
+public interface Point extends Comparable<Point>, Drawable {
 
 	public void setX(int x);
 
@@ -19,8 +19,6 @@ public interface Point extends Comparable<Point>, Cloneable, Drawable {
 	public Point mult(double i);
 
 	public int dot(Point v);
-
-	public Point clone();
 
 	public double distanceSquared(Point v);
 
