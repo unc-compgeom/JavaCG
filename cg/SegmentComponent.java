@@ -10,6 +10,14 @@ import java.awt.Graphics;
  */
 public class SegmentComponent extends AbstractGeometry implements Segment {
 
+	private static int getDx(Segment s) {
+		return s.getTail().getX() - s.getHead().getX();
+	}
+
+	private static int getDy(Segment s) {
+		return s.getTail().getY() - s.getHead().getY();
+	}
+
 	private static long[] getHomogeneous(Segment s) {
 		long[] homogeneous = new long[3];
 		int x1 = s.getTail().getX();
@@ -36,29 +44,9 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public Segment add(Segment v) {
-		int x = head.getX() + v.getDx();
-		int y = head.getY() + v.getDy();
+		int x = head.getX() + getDx(v);
+		int y = head.getY() + getDy(v);
 		return new SegmentComponent(tail.getX(), tail.getY(), x, y);
-	}
-
-	@Override
-	public int getDx() {
-		return tail.getX() - head.getX();
-	}
-
-	@Override
-	public int getDy() {
-		return tail.getY() - head.getY();
-	}
-
-	@Override
-	public Point getHead() {
-		return head;
-	}
-
-	@Override
-	public Point getTail() {
-		return tail;
 	}
 
 	@Override
@@ -75,13 +63,29 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
+	public Segment findPerpendicular() {
+		return new SegmentComponent(tail.getX(), tail.getY(), -getDy(this)
+				+ tail.getX(), getDx(this) + tail.getY());
+	}
+
+	@Override
+	public Point getHead() {
+		return head;
+	}
+
+	@Override
 	public double getLength() {
-		return Math.hypot(getDx(), getDy());
+		return Math.hypot(getDx(this), getDy(this));
 	}
 
 	@Override
 	public double getLengthSquared() {
-		return Math.pow(getDx(), 2) + Math.pow(getDy(), 2);
+		return Math.pow(getDx(this), 2) + Math.pow(getDy(this), 2);
+	}
+
+	@Override
+	public Point getTail() {
+		return tail;
 	}
 
 	@Override
@@ -91,12 +95,6 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		}
 		g.setColor(super.getColor());
 		g.drawLine(tail.getX(), tail.getY(), head.getX(), head.getY());
-	}
-
-	@Override
-	public Segment findPerpendicular() {
-		return new SegmentComponent(tail.getX(), tail.getY(), -getDy()
-				+ tail.getX(), getDx() + tail.getY());
 	}
 
 	@Override
@@ -122,7 +120,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	@Override
 	public Segment tailReflection() {
 		return new SegmentComponent(tail.getX(), tail.getY(), tail.getX()
-				- getDx(), tail.getY() - getDy());
+				- getDx(this), tail.getY() - getDy(this));
 	}
 
 	@Override

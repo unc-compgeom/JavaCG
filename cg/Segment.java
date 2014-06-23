@@ -8,10 +8,6 @@ public interface Segment extends Drawable {
 
 	public Segment findPerpendicular();
 
-	public int getDx();
-
-	public int getDy();
-
 	public Point getHead();
 
 	public double getLength();
