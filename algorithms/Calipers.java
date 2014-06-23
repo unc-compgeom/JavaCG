@@ -3,8 +3,6 @@ package algorithms;
 import java.awt.Color;
 
 import predicates.Predicate;
-import predicates.Predicate.Orientation;
-import util.CG;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
@@ -13,13 +11,24 @@ import cg.Segment;
 
 public class Calipers {
 
-	/*
+	/**
+	 * The rotating caliper algorithm calculates the maximum diameter of the
+	 * convex hull and minimum width of the convex hull given a point set.
 	 * 
-	 * Rotating caliper algorithm input Point set in 2D. Output is maximum
-	 * diameter of the convex hull and the minimum width of the convex hull.
+	 * @param points
+	 *            the point set
+	 * @param hull
+	 *            the convex hull to be drawn by the algorithm (initially empty)
+	 * @param widthLine
+	 *            the line segment to be calculated by the algorithm (initially
+	 *            empty);
+	 * 
+	 * @param diameterLine
+	 *            the line segment to be calculated by the algorithm (initially
+	 *            empty);
 	 */
-
-	public static void doCalipers(PointSet points, Polygon hull) {
+	public static void doCalipers(PointSet points, Polygon hull,
+			Segment widthLine, Segment diameterLine) {
 		int i = 0;
 		int j = 1;
 		double diam = -1;
@@ -30,16 +39,16 @@ public class Calipers {
 		Segment diamSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
 		Segment widthSupport1 = GeometryManager.newSegment(-1, -1, -1, -1);
 		Segment widthSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
-		Segment widthline = GeometryManager.newSegment(-1, -1, -1, -1);
-		Segment diamline = GeometryManager.newSegment(-1, -1, -1, -1);
+
 		diamSupport1.setColor(Color.BLUE);
 		diamSupport2.setColor(Color.BLUE);
 		widthSupport1.setColor(Color.BLUE);
 		widthSupport2.setColor(Color.BLUE);
-		diamline.setColor(Color.GREEN);
-		widthline.setColor(Color.ORANGE);
+		diameterLine.setColor(Color.GREEN);
+		widthLine.setColor(Color.ORANGE);
 
-		hull = getConvexHull(points, hull);
+		// Jarvis march is used to find the convex hull
+		JarvisMarch.findConvexHull(points, hull);
 
 		// Initialization Step
 		while (cwIntersection(0, j, hull)) {
@@ -49,9 +58,9 @@ public class Calipers {
 		// Rotation Step
 		while (j < hull.size()) {
 			// check if new max diameter or minimum width at points i and j
-			diam = checkDiameter(diam, i, j, hull, diamline, diamSupport1,
+			diam = checkDiameter(diam, i, j, hull, diameterLine, diamSupport1,
 					diamSupport2);
-			width = checkWidth(width, i, j, hull, widthline, widthSupport1,
+			width = checkWidth(width, i, j, hull, widthLine, widthSupport1,
 					widthSupport2);
 			if (cwIntersection(i + 1, j, hull)) {
 				j++;
@@ -62,57 +71,26 @@ public class Calipers {
 				i++;
 			}
 		}
+		GeometryManager.destroyGeometry(diamSupport1);
+		GeometryManager.destroyGeometry(diamSupport2);
+		GeometryManager.destroyGeometry(widthSupport1);
+		GeometryManager.destroyGeometry(widthSupport2);
 	}
 
-	/* Jarvis march is used to compute the convex hull */
-	private static Polygon getConvexHull(PointSet points, Polygon hull) {
-		Point min = CG.findSmallestYX(points);
-		Point p, q = min;
-		int i = 0;
-		do {
-			hull.addLast(q);
-			p = hull.get(i);
-			q = nextHullPoint(points, p);
-			i++;
-		} while (!q.equals(min));
-		hull.addLast(hull.getFirst());
-		return hull;
-	}
-
-	private static Point nextHullPoint(PointSet points, Point p) {
-		Point q = p;
-		for (int i = 0; i < points.size(); i++) {
-			Point r = points.get(i);
-			Orientation o = Predicate.findOrientation(p, q, r);
-			if (o == Orientation.COUNTERCLOCKWISE
-					|| (o == Orientation.COLINEAR && CG.distSquared(p, r) > CG
-							.distSquared(p, q))) {
-				q = r;
-			}
-		}
-		return q;
-	}
-
-	/*
-	 * Takes line segment j to j+1 and translates it so that the tail (point
-	 * originally at j)is now at point i. If the point translated(j+1) lies
-	 * clockwise to the line i-1 to i,then true is returned. Otherwise false is
-	 * returned.
-	 */
-	private static boolean cwIntersection(int i, int j, Polygon hull) {
-		Point Pa = hull.get(i - 1).clone();
-		Point Pb = hull.get(i).clone();
-		Point Pd = hull.get(j + 1).clone();
-		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
-		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
-		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
-	}
-
-	/*
-	 * Measures the squared distance between vertices i and j. If the squared
-	 * distance is less than the current squared distance, then the diamline is
-	 * updated to endpoints i and j. The parallel support lines are then updated
-	 * to be tangent to both i and j.
+	/**
+	 * This method measures the squared distance between vertices i and j. If
+	 * the squared distance is less than the current squared distance, then
+	 * <tt>diamline</tt>'s endpoints become i and j. The parallel support lines
+	 * are then updated to be tangent to both i and j.
+	 * 
+	 * @param diam
+	 * @param i
+	 * @param j
+	 * @param hull
+	 * @param diamline
+	 * @param diamSupport1
+	 * @param diamSupport2
+	 * @return
 	 */
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
 			Segment diamline, Segment diamSupport1, Segment diamSupport2) {
@@ -122,7 +100,8 @@ public class Calipers {
 		if (tempdiam > diam) {
 			int tan1, tan2;
 			diam = tempdiam;
-			diamline.update(pi, pj);
+			diamline.setTail(pi);
+			diamline.setHead(pj);
 			if (cwIntersection(i + 1, j, hull)) {
 				tan1 = j;
 				tan2 = j + 1;
@@ -140,20 +119,29 @@ public class Calipers {
 					hull.get(tan2));
 			supportBasis.setInvisible(true);
 			supportBasis.translate(pi);
-			diamSupport1.update(supportBasis.getHead(), supportBasis
-					.tailReflection().getHead());
+			diamSupport1.setTail(supportBasis.getHead());
+			diamSupport1.setHead(supportBasis.tailReflection().getHead());
 			supportBasis.translate(pj);
-			diamSupport2.update(supportBasis.getHead(), supportBasis
-					.tailReflection().getHead());
+			diamSupport2.setTail(supportBasis.getHead());
+			diamSupport2.setHead(supportBasis.tailReflection().getHead());
 		}
 		return diam;
 	}
 
-	/*
-	 * Finds the distance squared between parallel tangents where at least one
-	 * tangent lies on the edge of the convex hull. If the new distance squared
-	 * is less than the previous distance squared, then the width line is
-	 * updated as well as its supports.
+	/**
+	 * This method finds the distance squared between parallel tangents where at
+	 * least one tangent lies on the edge of the convex hull. If the new
+	 * distance squared is less than the previous distance squared, then the
+	 * width line is updated as well as its supports.
+	 * 
+	 * @param width
+	 * @param i
+	 * @param j
+	 * @param hull
+	 * @param widthline
+	 * @param widthSupport1
+	 * @param widthSupport2
+	 * @return
 	 */
 	public static double checkWidth(double width, int i, int j, Polygon hull,
 			Segment widthline, Segment widthSupport1, Segment widthSupport2) {
@@ -182,12 +170,13 @@ public class Calipers {
 		rrq.setInvisible(true);
 		rrq.translate(hull.get(r));
 		// intersection of line pq with the line perpendicular to rrq
-		Point intersection = rrq.perpendicular().intersection(pq);
+		Point intersection = rrq.findPerpendicular().findIntersection(pq);
 		// distance from r to the intersection point is a candidate width
 		tempwidth = intersection.distanceSquared(hull.get(r));
 		if (tempwidth < width) {
 			width = tempwidth;
-			widthline.update(hull.get(r), intersection);
+			widthline.setTail(hull.get(r));
+			widthline.setHead(intersection);
 			// The support basis stores the direction that the support lines
 			// will point
 			// It is then translated to the Point. The head of the line as well
@@ -197,14 +186,34 @@ public class Calipers {
 			Segment supportBasis = GeometryManager.newSegment(rrq.getTail(),
 					intersection);
 			supportBasis.setInvisible(true);
-			supportBasis = supportBasis.perpendicular();
+			supportBasis = supportBasis.findPerpendicular();
 			supportBasis.translate(rrq.getTail());
-			widthSupport1.update(supportBasis.getHead(), supportBasis
-					.tailReflection().getHead());
+			widthSupport1.setTail(supportBasis.getHead());
+			widthSupport1.setHead(supportBasis.tailReflection().getHead());
 			supportBasis.translate(intersection);
-			widthSupport2.update(supportBasis.getHead(), supportBasis
-					.tailReflection().getHead());
+			widthSupport2.setTail(supportBasis.getHead());
+			widthSupport2.setHead(supportBasis.tailReflection().getHead());
 		}
 		return width;
+	}
+
+	/**
+	 * This method takes line segment j to j+1 and translates it so that the
+	 * tail (point originally at j)is now at point i. If the point
+	 * translated(j+1) lies clockwise to the line i-1 to i,then true is
+	 * returned. Otherwise false is returned.
+	 * 
+	 * @param i
+	 * @param j
+	 * @param hull
+	 * @return
+	 */
+	private static boolean cwIntersection(int i, int j, Polygon hull) {
+		Point Pa = hull.get(i - 1).clone();
+		Point Pb = hull.get(i).clone();
+		Point Pd = hull.get(j + 1).clone();
+		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
+		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
+		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
 	}
 }

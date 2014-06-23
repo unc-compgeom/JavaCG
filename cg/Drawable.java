@@ -11,5 +11,5 @@ public interface Drawable {
 
 	public void setColor(Color c);
 
-	public void setInvisible(boolean visible);
+	public void setInvisible(boolean invisible);
 }

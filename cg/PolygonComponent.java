@@ -43,9 +43,4 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 		}
 		return super.get(i % this.size());
 	}
-
-	@Override
-	public Segment getCCWEdge(int index) {
-		return GeometryManager.newSegment(this.get(index), this.get(index + 1));
-	}
 }

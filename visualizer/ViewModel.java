@@ -20,6 +20,7 @@ import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import cg.Segment;
 
 public class ViewModel {
 	private boolean isPolygonActive; // either draw polygon or point set
@@ -93,7 +94,11 @@ public class ViewModel {
 						BentleyFaustPreparata.findConvexHull(points, hull);
 						break;
 					case CALIPERS:
-						Calipers.doCalipers(points, hull);
+						Segment width = GeometryManager.newSegment(-1, -1, -1,
+								-1);
+						Segment diameter = GeometryManager.newSegment(-1, -1,
+								-1, -1);
+						Calipers.doCalipers(points, hull, width, diameter);
 						break;
 					case CHAN:
 						Chan.findConvexHull(points, hull);
