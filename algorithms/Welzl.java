@@ -20,15 +20,15 @@ public class Welzl {
 		Circle c;
 		PointSet S = GeometryManager.newPointSet(points);
 		PointSet P = GeometryManager.newPointSet(set);
+		P.setColor(Color.PINK);
+
 		if (P.size() == 3 || S.size() == 0) {
 			// make circle from result;
 			c = GeometryManager.newCircle(P);
 			c.setColor(Color.RED);
 		} else {
 			Point s = S.remove(0);
-			s.setColor(Color.PINK);
 			c = SEC(S, P);
-			s.setColor(Color.ORANGE);
 			if (!Predicate.isVertexInCircle(s, c)) {
 				P.add(s);
 				c.setColor(new Color(220, 220, 220));
@@ -37,7 +37,9 @@ public class Welzl {
 				GeometryManager.destroyGeometry(tmp);
 			}
 		}
-		// TODO fix colors in animation
+
+		GeometryManager.destroyGeometry(S);
+		GeometryManager.destroyGeometry(P);
 		return c;
 	}
 }
