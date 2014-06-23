@@ -28,7 +28,7 @@ public class View implements CGObserver {
 
 		BorderPane borderPane = new BorderPane();
 		ToolBar tb = makeToolbar();
-		VBox sidebar = addSidebar();
+		VBox sidebar = makeSidebar();
 		//Node content = addDrawPane();
 		borderPane.setTop(tb);
 		borderPane.setLeft(sidebar);
@@ -116,13 +116,20 @@ public class View implements CGObserver {
 		return tb;
 	}
 
-	private VBox addSidebar() {
+	private VBox makeSidebar() {
 		VBox vb = new VBox();
 		ObservableList<Algorithm> content = FXCollections.observableArrayList(Algorithm.values());
 		ListView algorithms = new ListView<Algorithm>(content);
+		Button run = new Button("Run");
 		algorithms.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		algorithms.getSelectionModel().selectedItemProperty().addListener((event)->{
+			System.out.println(event);
+		});
+		run.setOnAction((event)->{
+			System.out.println(event);
+		});
 		vb.getChildren().add(algorithms);
-		vb.getChildren().add(new Button("Run"));
+		vb.getChildren().add(run);
 		return vb;
 	}
 
