@@ -1,23 +1,45 @@
 package visualizer;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
+import algorithms.Algorithm;
+import cg.Drawable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Orientation;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import util.CGObserver;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import util.CGObserver;
-import cg.Drawable;
-
 public class View implements CGObserver {
 	private final AlgorithmPanel p;
 
-	public View(ActionListener a) {
+	public View(Stage primaryStage, ActionListener a) {
+		primaryStage.setTitle("Algorithm Visualizer 2.0");
+
+		BorderPane borderPane = new BorderPane();
+		ToolBar tb = makeToolbar();
+		VBox sidebar = addSidebar();
+		//Node content = addDrawPane();
+		borderPane.setTop(tb);
+		borderPane.setLeft(sidebar);
+//		borderPane.setCenter(content);
+		//	VBox root = new VBox();
+		//primaryStage.setScene(new Scene(root, 600, 500));
+		Scene scene = new Scene(borderPane, 300, 300);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
+		////////////////////
 		JFrame f = new JFrame("Algorithm Visualizer");
 		try {
 			Image image = ImageIO.read(getClass().getResource("icon.gif"));
@@ -65,6 +87,51 @@ public class View implements CGObserver {
 		f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		f.setVisible(true);
 	}
+
+	private ToolBar makeToolbar() {
+		Button reset = new Button("Reset");
+		Button pointsPolygon = new Button("Draw Polygon");
+		Button random = new Button("Random Points");
+		Slider speed = new Slider(0, 10, 5);
+		reset.setOnAction((event) -> {
+			System.out.print("reset");
+		});
+		pointsPolygon.setOnAction((event) -> {
+			pointsPolygon.setText("Draw Points");
+			random.setText("Random Polygon");
+			System.out.println("pointsPolygon");
+		});
+		random.setOnAction((event) -> {
+			System.out.println("random");
+		});
+		speed.setShowTickLabels(true);
+		speed.setShowTickMarks(true);
+		speed.setMajorTickUnit(5);
+		speed.setMinorTickCount(5);
+		speed.valueProperty().addListener((event) -> {
+			System.out.println("Speed " + speed.getValue());
+		});
+		ToolBar tb = new ToolBar(reset, new Separator(Orientation.VERTICAL), pointsPolygon, random,
+				new Separator(Orientation.VERTICAL), speed);
+		return tb;
+	}
+
+	private VBox addSidebar() {
+		VBox vb = new VBox();
+		ObservableList<Algorithm> content = FXCollections.observableArrayList(Algorithm.values());
+		ListView algorithms = new ListView<Algorithm>(content);
+		algorithms.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		vb.getChildren().add(algorithms);
+		vb.getChildren().add(new Button("Run"));
+		return vb;
+	}
+
+//	private Node addDrawPane() {
+////		Group root = new Group();
+////		Canvas canvas = new Canvas(400, 300);
+////		root.getChildren().add(canvas);
+//		return root;
+//	}
 
 	@Override
 	public void update(Drawable o) {
