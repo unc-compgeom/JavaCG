@@ -73,7 +73,7 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		add(reset, gc);
 
 		// speed slider
-		int initialValue = (int) ((Math.log10(GeometryManager.getDelay()) + 1) * 10);
+		int initialValue = (int) (Math.log10(GeometryManager.getDelay() + 1) * 10);
 		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, initialValue);
 		speed.setMajorTickSpacing(5);
 		speed.setMinorTickSpacing(1);

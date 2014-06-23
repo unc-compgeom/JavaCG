@@ -21,9 +21,8 @@ public class Main {
 		}
 		// set up and start the view;
 		ViewModel m = new ViewModel();
-		Controller c = new Controller(m);
+		ViewController c = new ViewController(m);
 		View v = new View(c);
-		c.addView(v);
 		GeometryManager.addObserver(v);
 	}
 

@@ -17,23 +17,24 @@ import algorithms.MonotoneChain;
 import algorithms.QuickHull;
 import algorithms.Welzl;
 import cg.GeometryManager;
+import cg.Point;
+import cg.PointSet;
 import cg.Polygon;
-import cg.Vertex;
-import cg.VertexSet;
 
 public class ViewModel {
 	private boolean isPolygonActive; // either draw polygon or point set
-	private VertexSet pointSet;
+	private PointSet pointSet;
 	private Polygon polygon;
 	private Dimension size;
 
 	public ViewModel() {
 		this.isPolygonActive = false;
-		this.pointSet = GeometryManager.getVertexSet();
-		this.polygon = GeometryManager.getPolygon();
+		this.pointSet = GeometryManager.newPointSet();
+		this.polygon = GeometryManager.newPolygon();
 	}
 
-	public void addPoint(Vertex v) {
+	public void addPoint(Point v) {
+		// TODO add points via coordinate only.
 		if (isPolygonActive) {
 			polygon.addNoDelay(v);
 		} else {
@@ -58,7 +59,7 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			pointSet.addNoDelay(GeometryManager.getVertex(Ayn.nextInt(width),
+			pointSet.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
@@ -68,20 +69,20 @@ public class ViewModel {
 		int height = size.height;
 		Random Ayn = new Random();
 		for (int i = 0; i < 64; i++) {
-			polygon.addNoDelay(GeometryManager.getVertex(Ayn.nextInt(width),
+			polygon.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
 	}
 
 	public void reset() {
 		GeometryManager.removeAllGeometry();
-		pointSet = GeometryManager.getVertexSet();
-		polygon = GeometryManager.getPolygon();
+		pointSet = GeometryManager.newPointSet();
+		polygon = GeometryManager.newPolygon();
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
-		final VertexSet points = (isPolygonActive) ? polygon : pointSet;
-		final Polygon hull = GeometryManager.getPolygon();
+		final PointSet points = (isPolygonActive) ? polygon : pointSet;
+		final Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(Color.RED);
 		SwingWorker<Void, Void> w = (new SwingWorker<Void, Void>() {
 			@Override
@@ -129,9 +130,9 @@ public class ViewModel {
 		});
 		w.execute();
 		if (isPolygonActive) {
-			polygon = GeometryManager.getPolygon();
+			polygon = GeometryManager.newPolygon();
 		} else {
-			pointSet = GeometryManager.getVertexSet();
+			pointSet = GeometryManager.newPointSet();
 		}
 	}
 

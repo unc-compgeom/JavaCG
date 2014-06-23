@@ -5,27 +5,29 @@ import java.awt.Color;
 import predicates.Predicate;
 import cg.Circle;
 import cg.GeometryManager;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class Welzl {
-	public static void findSmallestEnclosingCircle(VertexSet vertices,
+	public static void findSmallestEnclosingCircle(PointSet points,
 			Circle result) {
-		VertexSet s = GeometryManager.getVertexSet(vertices);
+		PointSet s = GeometryManager.newPointSet(points);
 		s.setColor(Color.ORANGE);
-		result = SEC(s, GeometryManager.getVertexSet());
+		result = SEC(s, GeometryManager.newPointSet());
 	}
 
-	private static Circle SEC(VertexSet vertices, VertexSet set) {
+	private static Circle SEC(PointSet points, PointSet set) {
 		Circle c;
-		VertexSet S = vertices.clone();
-		VertexSet P = set.clone();
+		PointSet S = GeometryManager.newPointSet(points);
+		PointSet P = GeometryManager.newPointSet(set);
+		P.setColor(Color.PINK);
+
 		if (P.size() == 3 || S.size() == 0) {
 			// make circle from result;
-			c = GeometryManager.getCircle(P);
+			c = GeometryManager.newCircle(P);
 			c.setColor(Color.RED);
 		} else {
-			Vertex s = S.remove(0);
+			Point s = S.remove(0);
 			c = SEC(S, P);
 			if (!Predicate.isVertexInCircle(s, c)) {
 				P.add(s);
@@ -35,6 +37,9 @@ public class Welzl {
 				GeometryManager.destroyGeometry(tmp);
 			}
 		}
+
+		GeometryManager.destroyGeometry(S);
+		GeometryManager.destroyGeometry(P);
 		return c;
 	}
 }

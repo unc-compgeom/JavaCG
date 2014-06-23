@@ -5,26 +5,28 @@ import predicates.Predicate.Orientation;
 import util.CG;
 import cg.GeometryManager;
 import cg.Polygon;
-import cg.Vertex;
-import cg.VertexSet;
+import cg.Point;
+import cg.PointSet;
 
 public class QuickHull {
-	public static void findConvexHull(VertexSet points, Polygon hull) {
-		Vertex[] minMax = findMinMaxX(points);
+	public static void findConvexHull(PointSet points, Polygon hull) {
+		Point[] minMax = findMinMaxX(points);
 		hull.add(minMax[0]);
 		hull.add(minMax[1]);
 		// divide the point set
 		findHull(points, hull, minMax[0], minMax[1]);
 		findHull(points, hull, minMax[1], minMax[0]);
+		// close the hull
+		hull.add(hull.getFirst());
 	}
 
-	private static void findHull(VertexSet points, Polygon hull, Vertex a,
-			Vertex b) {
-		VertexSet sub = GeometryManager.getVertexSet();
+	private static void findHull(PointSet points, Polygon hull, Point a,
+			Point b) {
+		PointSet sub = GeometryManager.newPointSet();
 		sub.setColor(CG.randomColor());
 
 		// get only points counterclockwise of segment ab
-		for (Vertex point : points) {
+		for (Point point : points) {
 			Orientation o = Predicate.findOrientation(point, a, b);
 			if (o == Orientation.COUNTERCLOCKWISE) {
 				sub.add(point);
@@ -35,9 +37,9 @@ public class QuickHull {
 		}
 
 		// find farthest point from segment ab
-		Vertex c = sub.get(0);
+		Point c = sub.get(0);
 		long distance = 0;
-		for (Vertex point : sub) {
+		for (Point point : sub) {
 			long newDist = distance(a, b, point);
 			if (newDist > distance) {
 				distance = newDist;
@@ -52,7 +54,7 @@ public class QuickHull {
 		GeometryManager.destroyGeometry(sub);
 	}
 
-	private static long distance(Vertex A, Vertex B, Vertex C) {
+	private static long distance(Point A, Point B, Point C) {
 		int ABx = B.getX() - A.getX();
 		int ABy = B.getY() - A.getY();
 		int ACx = A.getX() - C.getX();
@@ -63,9 +65,9 @@ public class QuickHull {
 		return num;
 	}
 
-	private static Vertex[] findMinMaxX(VertexSet points) {
-		Vertex[] minMax = { points.get(0), points.get(0) };
-		for (Vertex point : points) {
+	private static Point[] findMinMaxX(PointSet points) {
+		Point[] minMax = { points.get(0), points.get(0) };
+		for (Point point : points) {
 			if (point.getX() < minMax[0].getX()) {
 				minMax[0] = point;
 			} else if (point.getX() > minMax[1].getX()) {

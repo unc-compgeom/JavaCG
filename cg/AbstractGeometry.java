@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 public abstract class AbstractGeometry implements Drawable {
 	private Color c;
+	private boolean invisible;
 
 	AbstractGeometry() {
 		this.c = Color.black;
@@ -29,5 +30,14 @@ public abstract class AbstractGeometry implements Drawable {
 	@Override
 	public void setColor(Color c) {
 		this.c = c;
+	}
+
+	@Override
+	public void setInvisible(boolean invisible) {
+		this.invisible = invisible;
+	}
+
+	protected boolean isInvisible() {
+		return invisible;
 	}
 }

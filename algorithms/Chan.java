@@ -5,20 +5,20 @@ import java.awt.Color;
 import util.CG;
 import cg.GeometryManager;
 import cg.Polygon;
-import cg.VertexSet;
+import cg.PointSet;
 
 public class Chan {
 
-	public static void findConvexHull(VertexSet points, Polygon hull) {
+	public static void findConvexHull(PointSet points, Polygon hull) {
 		for (int t = 1; t < points.size(); t++) {
 			int m = (int) Math.pow(2, Math.pow(2, t));
-			VertexSet[] divided = new VertexSet[m];
+			PointSet[] divided = new PointSet[m];
 			Polygon[] hulls = new Polygon[m];
 			for (int ps = 0; ps < hulls.length; ps++) {
 				Color c = CG.randomColor();
-				divided[ps] = GeometryManager.getVertexSet();
+				divided[ps] = GeometryManager.newPointSet();
 				divided[ps].setColor(c);
-				hulls[ps] = GeometryManager.getPolygon();
+				hulls[ps] = GeometryManager.newPolygon();
 				hulls[ps].setColor(c);
 				for (int i = 0; i < m && i + ps * m < points.size(); i++) {
 					divided[ps].addFirst(points.get(i + ps * m));
@@ -36,7 +36,7 @@ public class Chan {
 			// hull.addLast(p);
 			// }
 			// }
-			for (VertexSet p : divided) {
+			for (PointSet p : divided) {
 				GeometryManager.destroyGeometry(p);
 			}
 			for (Polygon p : hulls) {

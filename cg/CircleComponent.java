@@ -6,11 +6,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class CircleComponent extends AbstractGeometry implements Circle {
-	private Vertex origin;
+	private Point origin;
 	private int radiusSquared;
 
 	protected CircleComponent(int x, int y, int radiusSquared) {
-		this.origin = new VertexComponent(x, y);
+		origin = new PointComponent(x, y);
 		this.radiusSquared = radiusSquared;
 	}
 
@@ -21,25 +21,24 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	 *            points that lie on the circle's circumference.
 	 * 
 	 */
-	protected CircleComponent(VertexSet vertices) {
-		origin = new VertexComponent(0, 0);
+	protected CircleComponent(PointSet vertices) {
+		origin = new PointComponent(0, 0);
 		radiusSquared = -1;
 		if (vertices.size() == 1) {
 			origin = vertices.get(0);
 			radiusSquared = 0;
 		} else if (vertices.size() == 2) {
 			// we have a diameter
-			Vertex a = vertices.get(0);
-			Vertex b = vertices.get(1);
+			Point a = vertices.get(0);
+			Point b = vertices.get(1);
 			int dX = a.getX() - b.getX();
 			int dY = a.getY() - b.getY();
 			long dXSq = dX * dX;
 			long dYSq = dY * dY;
 			radiusSquared = (int) (dXSq + dYSq) / 4;
-			origin = new VertexComponent(a.getX() - dX / 2, a.getY() - dY / 2);
+			origin = new PointComponent(a.getX() - dX / 2, a.getY() - dY / 2);
 		} else if (vertices.size() > 2) {
-			Vertex p = vertices.get(0), q = vertices.get(1), r = vertices
-					.get(2);
+			Point p = vertices.get(0), q = vertices.get(1), r = vertices.get(2);
 			long px = p.getX(), py = p.getY();
 			long qx = q.getX(), qy = q.getY();
 			long rx = r.getX(), ry = r.getY();
@@ -52,15 +51,18 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 					.div(2).dot(p.sub(q))
 					* (px - rx))
 					/ det;
-			origin = new VertexComponent(x, y);
+			origin = new PointComponent(x, y);
 			radiusSquared = (p.sub(origin).dot(p.sub(origin)));
 		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
+		if (isInvisible()) {
+			return;
+		}
 		g.setColor(super.getColor());
-		int radius = (int) Math.sqrt(this.getRadiusSquared());
+		int radius = (int) Math.sqrt(getRadiusSquared());
 		int x = getOrigin().getX();
 		int y = getOrigin().getY();
 		Graphics2D g2D = (Graphics2D) g;
@@ -75,7 +77,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	}
 
 	@Override
-	public Vertex getOrigin() {
+	public Point getOrigin() {
 		return origin;
 	}
 

@@ -9,11 +9,10 @@ import javax.swing.SwingUtilities;
 import algorithms.Algorithm;
 import cg.GeometryManager;
 
-public class Controller implements ActionListener {
+public class ViewController implements ActionListener {
 	private final ViewModel model;
-	private View view;
 
-	public Controller(ViewModel model) {
+	public ViewController(ViewModel model) {
 		this.model = model;
 	}
 
@@ -31,7 +30,6 @@ public class Controller implements ActionListener {
 					break;
 				case "reset":
 					model.reset();
-					view.reset();
 					break;
 				case "setLarge":
 					GeometryManager.setSmallLarge();
@@ -45,7 +43,7 @@ public class Controller implements ActionListener {
 					break;
 				case "viewAddPoint":
 					java.awt.Point p = (java.awt.Point) e.getSource();
-					model.addPoint(GeometryManager.getVertex(p.x, p.y));
+					model.addPoint(GeometryManager.newPoint(p.x, p.y));
 					break;
 				case "viewEnablePolygon":
 					model.enablePolygon();
@@ -65,10 +63,6 @@ public class Controller implements ActionListener {
 				}
 			}
 		});
-	}
-
-	public void addView(View v) {
-		this.view = v;
 	}
 
 }

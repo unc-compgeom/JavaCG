@@ -24,10 +24,6 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		addMouseListener(this);
 	}
 
-	public void reset() {
-		GeometryManager.removeAllGeometry();
-	}
-
 	/**
 	 * JPanel methods
 	 */
