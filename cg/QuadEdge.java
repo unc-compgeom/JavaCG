@@ -1,4 +1,4 @@
-package quadEdge;
+package cg;
 
 class QuadEdge {
 
@@ -19,6 +19,7 @@ class QuadEdge {
 		edges[2].setNext(edges[2]);
 		edges[3].setNext(edges[1]);
 
+		System.out.println("made edge " + edges[0]);
 		return edges[0];
 	}
 
@@ -35,6 +36,7 @@ class QuadEdge {
 		b.setNext(t2);
 		alpha.setNext(t3);
 		beta.setNext(t4);
+		System.out.println("spliced " + a + " " + b);
 	}
 
 	public static Edge connect(Edge a, Edge b) {
@@ -56,6 +58,7 @@ class QuadEdge {
 		splice(e.sym(), b.lnext());
 		e.setOrig(a.dest());
 		e.setDest(b.dest());
+		System.out.println("swapped " + e);
 	}
 
 	public static void deleteEdge(Edge e) {

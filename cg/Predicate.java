@@ -1,6 +1,5 @@
-package quadEdge;
+package cg;
 
-import cg.Point;
 
 public class Predicate {
 	public static long triArea(Point a, Point b, Point c) {

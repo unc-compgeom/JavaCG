@@ -208,6 +208,11 @@ public class GeometryManager {
 		return (Segment) buildGeometry(s);
 	}
 
+	public static Subdivision newSubdivision(Point p1, Point p2, Point p3) {
+		Subdivision s = new SubdivisionComponent(p1, p2, p3);
+		return (Subdivision) buildGeometry(s);
+	}
+
 	private static void notifyAllObservers() {
 		synchronized (observers) {
 			for (CGObserver o : observers) {

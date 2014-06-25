@@ -1,9 +1,9 @@
-package quadEdge;
+package cg;
 
-import cg.Point;
-import cg.PointComponent;
+import java.awt.Graphics;
 
-class SubdivisionComponent implements Subdivision {
+public class SubdivisionComponent extends AbstractGeometry implements
+		Subdivision {
 	private Edge startingEdge;
 
 	public SubdivisionComponent(Point a, Point b, Point c) {
@@ -43,19 +43,24 @@ class SubdivisionComponent implements Subdivision {
 		do {
 			base = QuadEdge.connect(e, base.sym());
 			e = base.oPrev();
+			System.out.println("connected " + e + " to " + base);
 		} while (e.lnext() != startingEdge);
-
+		System.out.println("done connecting bases");
 		do {
 			Edge t = e.oPrev();
 			if (Predicate.rightOf(t.dest(), e)
 					&& Predicate.inCircle(e.orig(), t.dest(), e.dest(), p)) {
 				QuadEdge.swap(e);
 				e = e.oPrev();
+				System.out.println("is right and incircle " + e);
 			} else if (e.oNext() == startingEdge) {
+				System.out.println("back to beginning");
 				return;
 			} else {
 				e = e.oNext().lprev();
+				System.out.println("popped " + e);
 			}
+			System.out.println("Triangulation satisfied for " + t);
 		} while (true);
 	}
 
@@ -81,5 +86,16 @@ class SubdivisionComponent implements Subdivision {
 				return e;
 			}
 		}
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		if (isInvisible())
+			return;
+		Edge e = startingEdge;
+		do {
+			e.paintComponent(g);
+			e = e.oNext();
+		} while (e != startingEdge);
 	}
 }

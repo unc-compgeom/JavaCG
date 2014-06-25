@@ -1,8 +1,8 @@
-package quadEdge;
+package cg;
 
-import cg.Point;
+import java.awt.Graphics;
 
-class EdgeComponent implements Edge {
+class EdgeComponent extends AbstractGeometry implements Edge {
 
 	private Edge next;
 	private Edge rot; // the dual of this edge (counterclockwise)
@@ -76,26 +76,44 @@ class EdgeComponent implements Edge {
 	@Override
 	public void setDest(Point d) {
 		sym().setOrig(d);
+		notifyObservers();
 	}
 
 	@Override
 	public void setNext(Edge next) {
 		this.next = next;
+		notifyObservers();
 	}
 
 	@Override
 	public void setOrig(Point o) {
 		this.o = o;
+		notifyObservers();
 	}
 
 	@Override
 	public void setRot(Edge rot) {
 		this.rot = rot;
+		notifyObservers();
 	}
 
 	@Override
 	public Edge sym() {
 		return rot.rot();
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		if (isInvisible())
+			return;
+		g.drawLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
+		orig().paintComponent(g);
+		dest().paintComponent(g);
+	}
+
+	@Override
+	public String toString() {
+		return orig() + "-" + dest();
 	}
 
 }

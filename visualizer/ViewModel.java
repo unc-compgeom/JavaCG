@@ -10,6 +10,7 @@ import algorithms.Algorithm;
 import algorithms.BentleyFaustPreparata;
 import algorithms.Calipers;
 import algorithms.Chan;
+import algorithms.DelaunayTriangulation;
 import algorithms.GrahmScan;
 import algorithms.JarvisMarch;
 import algorithms.Melkman;
@@ -98,6 +99,9 @@ public class ViewModel {
 					case CHAN:
 						Chan.findConvexHull(points, hull);
 						break;
+					case DELAUNAY_TRIANGULATION:
+						DelaunayTriangulation.doDelaunay(points);
+						break;
 					case GRAHM_SCAN:
 						GrahmScan.findConvexHull(points, hull);
 						break;
@@ -117,8 +121,8 @@ public class ViewModel {
 						Welzl.findSmallestEnclosingCircle(points, null);
 						break;
 					default:
-						System.out
-								.println("Algorithm not yet implemented in ViewModel.");
+						System.out.println(algorithm
+								+ " not yet implemented in ViewModel.");
 						break;
 					}
 				} catch (Exception e) {

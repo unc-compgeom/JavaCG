@@ -1,8 +1,6 @@
-package quadEdge;
+package cg;
 
-import cg.Point;
-
-public interface Edge {
+public interface Edge extends Drawable {
 	public Edge dNext();
 
 	public Edge dPrev();
