@@ -57,4 +57,9 @@ class QuadEdge {
 		e.setOrig(a.dest());
 		e.setDest(b.dest());
 	}
+
+	public static void deleteEdge(Edge e) {
+		splice(e, e.oPrev());
+		splice(e.sym(), e.sym().oPrev());
+	}
 }

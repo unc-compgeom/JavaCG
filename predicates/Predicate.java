@@ -41,29 +41,6 @@ public class Predicate {
 		return o;
 	}
 
-	/**
-	 * 
-	 * @param p
-	 * @param q
-	 * @param r
-	 * @return T/F: Point p is left of or on segment qr.
-	 */
-	public static boolean isPointLeftOrOnSegment(Point p, Point q, Point r) {
-		Orientation o = findOrientation(p, q, r);
-		if (o == Orientation.COUNTERCLOCKWISE) {
-			return true;
-		} else {
-			Point a = q.sub(p), b = r.sub(p);
-			return o == Orientation.COLINEAR
-					&& Math.abs(a.getX() - b.getX()) > 0
-					&& Math.abs(a.getY() - b.getY()) > 0;
-		}
-	}
-
-	public static boolean isPointLeftOfLine(Point p, Point q, Point r) {
-		return findOrientation(p, q, r) == Orientation.COUNTERCLOCKWISE;
-	}
-
 	public static boolean isVertexInCircleByPoints(Point s, Circle c) {
 		// find three points, a, b, c, in the circle
 		// find the determinant of the matrix:
