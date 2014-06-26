@@ -1,8 +1,17 @@
 package cg;
 
-
+/**
+ * Predicates for Delaunay Triangulations
+ * 
+ * @author Vance Miller
+ * 
+ */
 public class Predicate {
 	public static long triArea(Point a, Point b, Point c) {
+		System.out
+				.println("triArea = "
+						+ ((b.getX() - a.getX()) * (c.getY() - a.getY()) - (b
+								.getY() - a.getY()) * (c.getX() - a.getX())));
 		return (b.getX() - a.getX()) * (c.getY() - a.getY())
 				- (b.getY() - a.getY()) * (c.getX() - a.getX());
 	}
@@ -49,13 +58,13 @@ public class Predicate {
 		if (triArea(a, b, p) == 0) {
 			// TODO correct this
 			if (p.getX() >= a.getX()) {
-				return p.getX() <= b.getX();
-			} else if (p.getX() <= a.getX()) {
-				return p.getX() >= b.getX();
-			} else if (p.getY() >= a.getY()) {
 				return p.getY() <= b.getY();
-			} else if (p.getY() <= a.getY()) {
+			} else if (p.getX() <= a.getX()) {
 				return p.getY() >= b.getY();
+			} else if (p.getY() >= a.getY()) {
+				return p.getX() <= b.getX();
+			} else if (p.getY() <= a.getY()) {
+				return p.getX() >= b.getX();
 			} else {
 				return false;
 			}

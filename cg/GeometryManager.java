@@ -115,6 +115,12 @@ public class GeometryManager {
 		return (Circle) buildGeometry(c);
 	}
 
+	// TODO #include this?
+	public static Edge newEdge(Point newPoint, Point newPoint2) {
+		Edge e = new EdgeComponent();
+		return (Edge) buildGeometry(e);
+	}
+
 	/**
 	 * Creates a <tt>Point</tt> whose location is given by <code>x</code> and
 	 * <code>y</code>. This factory constructor automatically registers

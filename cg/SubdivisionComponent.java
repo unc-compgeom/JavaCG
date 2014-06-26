@@ -65,7 +65,8 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	/**
-	 * Returns an <tt>Edge</tt> that <tt>p</tt> is on.
+	 * Returns the <tt>Edge</tt> that contains <tt>p</tt> or the edge of a
+	 * triangle containing <tt>p</tt>.
 	 * 
 	 * @param p
 	 *            the point to locate
@@ -74,7 +75,9 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	public Edge locate(Point p) {
 		Edge e = startingEdge;
 		while (true) {
+			System.out.println("looking for " + p + " on " + e);
 			if (p == e.orig() || p == e.dest()) {
+				System.out.println("Located " + p + " on " + e);
 				return e;
 			} else if (Predicate.rightOf(p, e)) {
 				e = e.sym();
@@ -83,6 +86,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			} else if (!Predicate.rightOf(p, e.dPrev())) {
 				e = e.dPrev();
 			} else {
+				System.out.println("Located " + p + " on " + e);
 				return e;
 			}
 		}
@@ -94,8 +98,10 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			return;
 		Edge e = startingEdge;
 		do {
+			g.setColor(getColor());
 			e.paintComponent(g);
 			e = e.oNext();
+			System.out.println("    painted edge " + e);
 		} while (e != startingEdge);
 	}
 }
