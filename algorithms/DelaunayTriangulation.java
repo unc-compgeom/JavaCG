@@ -18,8 +18,6 @@ public class DelaunayTriangulation {
 		points.add(GeometryManager.newPoint(0, 50));
 		points.add(GeometryManager.newPoint(50, 50));
 		points.add(GeometryManager.newPoint(50, 0));
-		points.add(GeometryManager.newPoint(20, 50));
-		points.add(GeometryManager.newPoint(50, 20));
 		s.setColor(Color.CYAN);
 		for (Point p : points) {
 			p.setColor(Color.red);

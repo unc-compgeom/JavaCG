@@ -25,12 +25,12 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public Point dest() {
-		return rot.rot().orig();
+		return sym().orig();
 	}
 
 	@Override
 	public Edge invRot() {
-		return rot.sym();
+		return rot.rot().rot();
 	}
 
 	@Override
@@ -40,7 +40,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public Edge lprev() {
-		return next.sym();
+		return oNext().sym();
 	}
 
 	@Override
@@ -50,7 +50,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public Edge oPrev() {
-		return rot.oNext().rot();
+		return rot().oNext().rot();
 	}
 
 	@Override
@@ -60,7 +60,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public Edge rnext() {
-		return rot.oNext().invRot();
+		return rot().oNext().invRot();
 	}
 
 	@Override

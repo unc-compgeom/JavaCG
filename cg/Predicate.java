@@ -7,9 +7,29 @@ package cg;
  * 
  */
 public class Predicate {
+	/**
+	 * Calculates twice the signed area of the triangle defined by
+	 * {@link Points} a, b, and c. If a, b, and c are in counterclockwise order,
+	 * the area is positive, if they are co-linear the area is zero, else the
+	 * area is negative.
+	 * 
+	 * @param a
+	 *            a Point
+	 * @param b
+	 *            a Point
+	 * @param c
+	 *            a Point
+	 * @return twice the signed area
+	 */
 	public static long triArea(Point a, Point b, Point c) {
 		System.out
-				.println("triArea = "
+				.println(a
+						+ " "
+						+ b
+						+ " "
+						+ c
+						+ " "
+						+ " triArea = "
 						+ ((b.getX() - a.getX()) * (c.getY() - a.getY()) - (b
 								.getY() - a.getY()) * (c.getX() - a.getX())));
 		return (b.getX() - a.getX()) * (c.getY() - a.getY())
@@ -41,7 +61,9 @@ public class Predicate {
 	}
 
 	public static boolean ccw(Point a, Point b, Point c) {
-		return triArea(a, b, c) > 0;
+		boolean t = triArea(a, b, c) > 0;
+		System.out.println(t);
+		return t;
 	}
 
 	public static boolean rightOf(Point p, Edge e) {

@@ -89,6 +89,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 				System.out.println("Located " + p + " on " + e);
 				return e;
 			}
+			System.out.println("   not found on " + e);
 		}
 	}
 
