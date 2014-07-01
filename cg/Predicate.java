@@ -1,5 +1,7 @@
 package cg;
 
+import util.CG;
+
 /**
  * Predicates for Delaunay Triangulations
  * 
@@ -78,18 +80,9 @@ public class Predicate {
 		Point a = e.orig();
 		Point b = e.dest();
 		if (triArea(a, b, p) == 0) {
-			// TODO correct this
-			if (p.getX() >= a.getX()) {
-				return p.getY() <= b.getY();
-			} else if (p.getX() <= a.getX()) {
-				return p.getY() >= b.getY();
-			} else if (p.getY() >= a.getY()) {
-				return p.getX() <= b.getX();
-			} else if (p.getY() <= a.getY()) {
-				return p.getX() >= b.getX();
-			} else {
-				return false;
-			}
+			long dot = p.sub(a).dot(b.sub(a));
+			long distSq = CG.distSquared(a, b);
+			return 0 <= dot && dot <= distSq;
 		} else {
 			return false;
 		}

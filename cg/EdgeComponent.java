@@ -76,25 +76,21 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public void setDest(Point d) {
 		sym().setOrig(d);
-		notifyObservers();
 	}
 
 	@Override
 	public void setNext(Edge next) {
 		this.next = next;
-		notifyObservers();
 	}
 
 	@Override
 	public void setOrig(Point o) {
 		this.o = o;
-		notifyObservers();
 	}
 
 	@Override
 	public void setRot(Edge rot) {
 		this.rot = rot;
-		notifyObservers();
 	}
 
 	@Override

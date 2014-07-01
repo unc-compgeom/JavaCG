@@ -1,10 +1,13 @@
 package cg;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubdivisionComponent extends AbstractGeometry implements
 		Subdivision {
 	private Edge startingEdge;
+	private final List<Edge> edges;
 
 	public SubdivisionComponent(Point a, Point b, Point c) {
 		Edge ea = QuadEdge.makeEdge();
@@ -20,9 +23,14 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		QuadEdge.splice(eb.sym(), ec);
 		ec.setOrig(c);
 		ec.setDest(a);
-		QuadEdge.splice(ec, ea);
 
+		QuadEdge.splice(ec.sym(), ea);
 		this.startingEdge = ea;
+		edges = new ArrayList<Edge>();
+		edges.add(ea);
+		edges.add(eb);
+		edges.add(ec);
+		notifyObservers();
 	}
 
 	@Override
@@ -34,8 +42,10 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		} else if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
 			QuadEdge.deleteEdge(e.oNext());
+			notifyObservers();
 		}
 		Edge base = QuadEdge.makeEdge();
+		edges.add(base);
 		base.setOrig(e.orig());
 		base.setDest(new PointComponent(p.getX(), p.getY()));
 		QuadEdge.splice(base, e);
@@ -43,24 +53,19 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		do {
 			base = QuadEdge.connect(e, base.sym());
 			e = base.oPrev();
-			System.out.println("connected " + e + " to " + base);
 		} while (e.lnext() != startingEdge);
-		System.out.println("done connecting bases");
 		do {
 			Edge t = e.oPrev();
 			if (Predicate.rightOf(t.dest(), e)
 					&& Predicate.inCircle(e.orig(), t.dest(), e.dest(), p)) {
 				QuadEdge.swap(e);
+				notifyObservers();
 				e = e.oPrev();
-				System.out.println("is right and incircle " + e);
 			} else if (e.oNext() == startingEdge) {
-				System.out.println("back to beginning");
 				return;
 			} else {
 				e = e.oNext().lprev();
-				System.out.println("popped " + e);
 			}
-			System.out.println("Triangulation satisfied for " + t);
 		} while (true);
 	}
 
@@ -68,28 +73,33 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	 * Returns the <tt>Edge</tt> that contains <tt>p</tt> or the edge of a
 	 * triangle containing <tt>p</tt>.
 	 * 
-	 * @param p
+	 * @param q
 	 *            the point to locate
 	 * @return the edge that p is on;
 	 */
 	public Edge locate(Point p) {
 		Edge e = startingEdge;
+		if (Predicate.rightOf(p, e)) {
+			e = e.sym();
+		}
 		while (true) {
-			System.out.println("looking for " + p + " on " + e);
-			if (p == e.orig() || p == e.dest()) {
-				System.out.println("Located " + p + " on " + e);
+			if (p == e.dest() || p == e.orig()) {
 				return e;
-			} else if (Predicate.rightOf(p, e)) {
-				e = e.sym();
-			} else if (!Predicate.rightOf(p, e.oNext())) {
-				e = e.oNext();
-			} else if (!Predicate.rightOf(p, e.dPrev())) {
-				e = e.dPrev();
 			} else {
-				System.out.println("Located " + p + " on " + e);
-				return e;
+				int whichOp = 0;
+				if (!Predicate.rightOf(p, e.oNext())) {
+					whichOp+=1;
+				}
+				if (!Predicate.rightOf(p, e.dPrev())) {
+					whichOp+=2;
+				}
+				switch (whichOp){
+				case 0: return e;
+				case 1: e = e.oNext();
+				case 2: e = e.dPrev();
+				default: if ()
+				}
 			}
-			System.out.println("   not found on " + e);
 		}
 	}
 
@@ -97,12 +107,8 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	public void paintComponent(Graphics g) {
 		if (isInvisible())
 			return;
-		Edge e = startingEdge;
-		do {
-			g.setColor(getColor());
+		for (Edge e : edges) {
 			e.paintComponent(g);
-			e = e.oNext();
-			System.out.println("    painted edge " + e);
-		} while (e != startingEdge);
+		}
 	}
 }

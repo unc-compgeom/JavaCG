@@ -80,13 +80,13 @@ public class PredicateTest {
 	@Test
 	public void testOnEdge() {
 		Edge e = QuadEdge.makeEdge();
-		e.setOrig(new PointComponent(0, 0));
+		e.setOrig(new PointComponent(0, 1));
 		e.setDest(new PointComponent(0, 2));
 		assertEquals(true, Predicate.onEdge(GeometryManager.newPoint(0, 1), e));
 		assertEquals(false,
 				Predicate.onEdge(GeometryManager.newPoint(45, -1), e));
 		assertEquals(false, Predicate.onEdge(GeometryManager.newPoint(0, 3), e));
-		assertEquals(true, Predicate.onEdge(GeometryManager.newPoint(0, 0), e));
+		assertEquals(false, Predicate.onEdge(GeometryManager.newPoint(0, 0), e));
 		assertEquals(true, Predicate.onEdge(GeometryManager.newPoint(0, 2), e));
 	}
 

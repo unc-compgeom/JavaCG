@@ -1,6 +1,37 @@
 package cg;
 
 class QuadEdge {
+	/**
+	 * Creates a new QuadEdge collection that connects the destination of
+	 * <tt>a</tt> to the origin of <tt>b</tt>, so that all three have the same
+	 * left face after the connection is complete and the data pointers of the
+	 * new edge are set.
+	 * 
+	 * @param a
+	 *            an edge
+	 * @param b
+	 *            an edge
+	 * @return the new edge connecting <tt>a</tt> and <tt>b</tt>
+	 */
+	public static Edge connect(Edge a, Edge b) {
+		Edge e = makeEdge();
+		splice(e, a.lnext());
+		splice(e.sym(), b);
+		e.setOrig(a.dest());
+		e.setDest(b.orig());
+		return e;
+	}
+
+	/**
+	 * Disconnects edge e from the collection of edges.
+	 * 
+	 * @param e
+	 *            the edge to delete
+	 */
+	public static void deleteEdge(Edge e) {
+		splice(e, e.oPrev());
+		splice(e.sym(), e.sym().oPrev());
+	}
 
 	/**
 	 * Creates an empty edge quartet.
@@ -8,24 +39,8 @@ class QuadEdge {
 	 * @return the edge
 	 */
 	public static Edge makeEdge() {
-		Edge[] edges = new Edge[4];
-		edges[0] = new EdgeComponent();
-		edges[1] = new EdgeComponent();
-		edges[2] = new EdgeComponent();
-		edges[3] = new EdgeComponent();
-
-		edges[0].setRot(edges[1]);
-		edges[1].setRot(edges[2]);
-		edges[2].setRot(edges[3]);
-		edges[3].setRot(edges[0]);
-
-		edges[0].setNext(edges[0]);
-		edges[1].setNext(edges[3]);
-		edges[2].setNext(edges[2]);
-		edges[3].setNext(edges[1]);
-
-		System.out.println("made edge " + edges[0]);
-		return edges[0];
+		QuadEdge q = new QuadEdge();
+		return q.edges[0];
 	}
 
 	/**
@@ -55,28 +70,6 @@ class QuadEdge {
 		b.setNext(t2);
 		alpha.setNext(t3);
 		beta.setNext(t4);
-		System.out.println("spliced " + a + " " + b);
-	}
-
-	/**
-	 * Creates a new QuadEdge collection that connects the destination of
-	 * <tt>a</tt> to the origin of <tt>b</tt>, so that all three have the same
-	 * left face after the connection is complete and the data pointers of the
-	 * new edge are set.
-	 * 
-	 * @param a
-	 *            an edge
-	 * @param b
-	 *            an edge
-	 * @return the new edge connecting <tt>a</tt> and <tt>b</tt>
-	 */
-	public static Edge connect(Edge a, Edge b) {
-		Edge e = makeEdge();
-		splice(e, a.lnext());
-		splice(e.sym(), b);
-		e.setOrig(a.dest());
-		e.setDest(b.orig());
-		return e;
 	}
 
 	/**
@@ -98,14 +91,23 @@ class QuadEdge {
 		System.out.println("swapped " + e);
 	}
 
-	/**
-	 * Disconnects edge e from the collection of edges.
-	 * 
-	 * @param e
-	 *            the edge to delete
-	 */
-	public static void deleteEdge(Edge e) {
-		splice(e, e.oPrev());
-		splice(e.sym(), e.sym().oPrev());
+	Edge[] edges;
+
+	private QuadEdge() {
+		edges = new Edge[4];
+		edges[0] = new EdgeComponent();
+		edges[1] = new EdgeComponent();
+		edges[2] = new EdgeComponent();
+		edges[3] = new EdgeComponent();
+
+		edges[0].setRot(edges[1]);
+		edges[1].setRot(edges[2]);
+		edges[2].setRot(edges[3]);
+		edges[3].setRot(edges[0]);
+
+		edges[0].setNext(edges[0]);
+		edges[1].setNext(edges[3]);
+		edges[2].setNext(edges[2]);
+		edges[3].setNext(edges[1]);
 	}
 }
