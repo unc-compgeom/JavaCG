@@ -1,5 +1,13 @@
 package cg;
 
+/**
+ * A collection of four directed edges designed for representing general
+ * subdivisions of orientable manifolds. This data structure is described in a
+ * paper by Guibas and Stolfi (1985).
+ * 
+ * @author Vance Miller
+ * 
+ */
 class QuadEdge {
 	/**
 	 * Creates a new QuadEdge collection that connects the destination of
@@ -79,16 +87,16 @@ class QuadEdge {
 	 *            the edge to swap
 	 */
 	public static void swap(Edge e) {
+		String tmp = e.toString();
 		Edge a = e.oPrev();
 		Edge b = e.sym().oPrev();
 		splice(e, a);
 		splice(e.sym(), b);
 		splice(e, a.lnext());
 		splice(e.sym(), b.lnext());
-		splice(e.sym(), b.lnext());
 		e.setOrig(a.dest());
 		e.setDest(b.dest());
-		System.out.println("swapped " + e);
+		System.out.println("swapped " + tmp + " to " + e);
 	}
 
 	Edge[] edges;

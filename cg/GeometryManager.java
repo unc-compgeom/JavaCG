@@ -6,6 +6,15 @@ import java.util.List;
 
 import util.CGObserver;
 
+/**
+ * This class consists of many static methods that enable an algorithm designer
+ * to get access to geometry objects. Call
+ * <tt>GeometryManager.new[Object]()</tt> to get an instance of a {@link cg}
+ * object that will draw itself when manipulated by an algorithm.
+ * 
+ * @author Vance Miller
+ * 
+ */
 public class GeometryManager {
 	private static int delay = 150;
 	private static List<Drawable> dispersedObjects = Collections
@@ -22,6 +31,15 @@ public class GeometryManager {
 		}
 	}
 
+	/**
+	 * Build the bare geometry object by setting universal parameters. Invoke
+	 * this method inside a factory constructor before returning the new
+	 * geometry.
+	 * 
+	 * @param d
+	 *            the geometry to be built
+	 * @return the finished geometry
+	 */
 	private static Drawable buildGeometry(Drawable d) {
 		synchronized (dispersedObjects) {
 			dispersedObjects.add(d);
@@ -30,7 +48,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Remove one <tt>Drawable</tt> object from the set of drawn objects.
+	 * Remove one {@link Drawable} object from the set of drawn objects.
 	 * 
 	 * @param d
 	 *            The <tt>Drawable</tt> to remove.
@@ -44,7 +62,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Get all <tt>Drawable</tt> objects currently managed by the
+	 * Get all {@link Drawable} objects currently managed by the
 	 * <tt>GeometryManager</tt>.
 	 * 
 	 * @return a <tt>List</tt> of <tt>Drawable</tt> geometry
@@ -54,20 +72,19 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Get the delay object that regulates the speed at which geometry is
-	 * animated.
+	 * Get the animation delay in milliseconds.
 	 * 
-	 * @return a <tt>Delay</tt> object.
+	 * @return the animation delay
 	 */
 	public static int getDelay() {
 		return delay;
 	}
 
 	/**
-	 * Get the <tt>CGObservers</tt> that are observing all instances of cg
+	 * Get the {@link CGObserver}s that are observing all instances of cg
 	 * objects.
 	 * 
-	 * @return a List of <tt>CGObservers</tt>
+	 * @return a List of <tt>CGObserver</tt>s
 	 */
 	public static List<CGObserver> getObservers() {
 		return observers;
@@ -84,7 +101,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new <tt>Circle</tt> initialized with a center point and radius.
+	 * Creates a new {@link Circle} initialized with a center point and radius.
 	 * This factory constructor automatically registers observers with the
 	 * object and sets its draw size.
 	 * 
@@ -101,7 +118,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new <tt>Circle</tt> initialized with the
+	 * Creates a new {@link Circle} initialized with the
 	 * <code>PointSet points</code> that are on the circumference of the circle.
 	 * This factory constructor automatically registers observers with the
 	 * object and sets its draw size.
@@ -122,7 +139,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a <tt>Point</tt> whose location is given by <code>x</code> and
+	 * Creates a {@link Point} whose location is given by <code>x</code> and
 	 * <code>y</code>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 * 
@@ -138,8 +155,22 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates an empty <tt>PointSet</tt>. This factory constructor
-	 * automatically registers observers with the object and sets its draw size.
+	 * Creates a {@link Point} whose location is given by Point <code>p</code>.
+	 * This factory constructor automatically registers observers with the
+	 * object and sets its draw size.
+	 * 
+	 * @param p
+	 *            the point that contains the location of the new point
+	 * @return a <tt>Point</tt> object
+	 */
+	public static Point newPoint(Point p) {
+		Point pt = new PointComponent(p);
+		return (Point) buildGeometry(pt);
+	}
+
+	/**
+	 * Creates an empty {@link PointSet}. This factory constructor automatically
+	 * registers observers with the object and sets its draw size.
 	 * 
 	 * @return a <tt>PointSet</tt> object
 	 */
@@ -149,7 +180,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a <tt>PointSet</tt> populated with <tt>points</tt>. This factory
+	 * Creates a {@link PointSet} populated with <tt>points</tt>. This factory
 	 * constructor automatically registers observers with the object and sets
 	 * its draw size.
 	 * 
@@ -168,7 +199,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new empty <tt>Polygon</tt>. This factory constructor
+	 * Creates a new empty {@link Polygon}. This factory constructor
 	 * automatically registers observers with the object and sets its draw size.
 	 * 
 	 * @return an empty <tt>Polygon</tt> object
@@ -179,7 +210,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new Segment from <tt>Point(x1, y1)</tt> to
+	 * Creates a new {@link Segment} from <tt>Point(x1, y1)</tt> to
 	 * <tt>Point(x2, y2)</tt>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 * 
@@ -199,9 +230,9 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new Segment from <tt>v1</tt> to <tt>v2</tt>. This factory
-	 * constructor automatically registers observers with the object and sets
-	 * its draw size.
+	 * Creates a new {@link Segment} from <tt>v1</tt> to <tt>v2</tt>. This
+	 * factory constructor automatically registers observers with the object and
+	 * sets its draw size.
 	 * 
 	 * @param p1
 	 *            The tail of the segment
@@ -214,11 +245,27 @@ public class GeometryManager {
 		return (Segment) buildGeometry(s);
 	}
 
+	/**
+	 * Creates a new {@link Subdivision} for a triangulation. The Subdivision is
+	 * initialized with three vertices. This factory constructor automatically
+	 * registers observers with the object and sets its draw size
+	 * 
+	 * @param p1
+	 *            a vertex
+	 * @param p2
+	 *            a vertex
+	 * @param p3
+	 *            a vertex
+	 * @return a <tt>Subdivision</tt> object
+	 */
 	public static Subdivision newSubdivision(Point p1, Point p2, Point p3) {
 		Subdivision s = new SubdivisionComponent(p1, p2, p3);
 		return (Subdivision) buildGeometry(s);
 	}
 
+	/**
+	 * Notifies all observers of dispersed geometry.
+	 */
 	private static void notifyAllObservers() {
 		synchronized (observers) {
 			for (CGObserver o : observers) {
@@ -227,16 +274,25 @@ public class GeometryManager {
 		}
 	}
 
+	/**
+	 * Notifies all observers of dispersed geometry. This method should be
+	 * called by geometry objects when their observable parameters are modified.
+	 */
 	protected static void notifyObservers() {
 		notifyAllObservers();
 		try {
 			Thread.sleep(delay);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// continue without delay
 		}
 	}
 
+	/**
+	 * Notifies all observers of dispersed geometry. This method should be
+	 * called by geometry objects when their observable parameters are modified
+	 * and the respective update should not be accompanied by an animation
+	 * delay.
+	 */
 	protected static void notifyObserversNoDelay() {
 		notifyAllObservers();
 	}
@@ -263,7 +319,7 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Remove <tt>CGObserver o</tt> from all geometry objects.
+	 * Remove {@link CGObserver} <tt>o</tt> from all geometry objects.
 	 * 
 	 * @param o
 	 *            The <tt>CGObserver</tt> to remove

@@ -1,8 +1,12 @@
 package cg;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
+
+import util.DuplicatePointException;
+import util.MalformedTriangulationException;
 
 public class SubdivisionComponent extends AbstractGeometry implements
 		Subdivision {
@@ -34,26 +38,34 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public void insertSite(Point p) {
+	public void insertSite(Point p) throws DuplicatePointException,
+			MalformedTriangulationException {
 		Edge e = locate(p);
-		if ((p == e.orig() || p == e.dest())) {
-			// point is already in the subdivision
-			return;
-		} else if (Predicate.onEdge(p, e)) {
+		if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
 			QuadEdge.deleteEdge(e.oNext());
 			notifyObservers();
 		}
+		// connect the new point to the vertices of the containing triangle
 		Edge base = QuadEdge.makeEdge();
-		edges.add(base);
 		base.setOrig(e.orig());
-		base.setDest(new PointComponent(p.getX(), p.getY()));
+		base.setDest(GeometryManager.newPoint(p));
 		QuadEdge.splice(base, e);
 		this.startingEdge = base;
+		// for drawing:
+		base.setColor(Color.red);
+		edges.add(base);
+
+		// add edges
 		do {
 			base = QuadEdge.connect(e, base.sym());
 			e = base.oPrev();
+			// for drawing:
+			base.setColor(Color.red);
+			edges.add(base);
 		} while (e.lnext() != startingEdge);
+		// examine suspect edges and ensure that the Delaunay condition is
+		// satisfied
 		do {
 			Edge t = e.oPrev();
 			if (Predicate.rightOf(t.dest(), e)
@@ -76,31 +88,39 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	 * @param q
 	 *            the point to locate
 	 * @return the edge that p is on;
+	 * @throws DuplicatePointException
+	 *             iff <tt>p</tt> is already in this subdivision
+	 * @throws MalformedTriangulationException
+	 *             iff <tt>p</tt> is not in the triangulation
 	 */
-	public Edge locate(Point p) {
+	public Edge locate(Point q) throws DuplicatePointException,
+			MalformedTriangulationException {
 		Edge e = startingEdge;
-		if (Predicate.rightOf(p, e)) {
+		int guard = 2 * edges.size();
+		if (!Predicate.rightOrAhead(e.dest(), e.orig(), q)) {
 			e = e.sym();
 		}
-		while (true) {
-			if (p == e.dest() || p == e.orig()) {
-				return e;
-			} else {
-				int whichOp = 0;
-				if (!Predicate.rightOf(p, e.oNext())) {
-					whichOp+=1;
-				}
-				if (!Predicate.rightOf(p, e.dPrev())) {
-					whichOp+=2;
-				}
-				switch (whichOp){
-				case 0: return e;
-				case 1: e = e.oNext();
-				case 2: e = e.dPrev();
-				default: if ()
-				}
-			}
+		Point p = e.orig();
+		if (p == q) {
+			throw new DuplicatePointException(q);
 		}
+		// invariant: e intersects pq with e.dest() on, right, or ahead of pq.
+		do {
+			System.out.println(guard);
+			if (q == e.dest()) {
+				// duplicate point
+				throw new DuplicatePointException(q);
+			} else if (!Predicate.leftOrAhead(q, e.orig(), e.dest())) {
+				// q is on an edge or inside a triangle edge
+				return e.sym();
+			} else if (Predicate.rightOrAhead(e.oNext().dest(), p, q)) {
+				e = e.oNext();
+			} else {
+				e = e.lnext().sym();
+			}
+		} while (guard-- > 0);
+		throw new MalformedTriangulationException();
+		// http://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-728.pdf
 	}
 
 	@Override

@@ -9,6 +9,22 @@ import util.CG;
  * 
  */
 public class Predicate {
+
+	/**
+	 * Tests if {@link Point} p is ahead of the segment from q to r;
+	 * 
+	 * @param p
+	 *            a point
+	 * @param q
+	 *            segment endpoint
+	 * @param r
+	 *            segment endpoint
+	 * @return true iff <tt>p</tt> is ahead of <tt>qr</tt>
+	 */
+	public static boolean ahead(Point p, Point q, Point r) {
+		return p.sub(q).dot(r.sub(q)) > CG.distSquared(q, r);
+	}
+
 	/**
 	 * Calculates twice the signed area of the triangle defined by
 	 * {@link Points} a, b, and c. If a, b, and c are in counterclockwise order,
@@ -24,16 +40,6 @@ public class Predicate {
 	 * @return twice the signed area
 	 */
 	public static long triArea(Point a, Point b, Point c) {
-		System.out
-				.println(a
-						+ " "
-						+ b
-						+ " "
-						+ c
-						+ " "
-						+ " triArea = "
-						+ ((b.getX() - a.getX()) * (c.getY() - a.getY()) - (b
-								.getY() - a.getY()) * (c.getX() - a.getX())));
 		return (b.getX() - a.getX()) * (c.getY() - a.getY())
 				- (b.getY() - a.getY()) * (c.getX() - a.getX());
 	}
@@ -63,17 +69,15 @@ public class Predicate {
 	}
 
 	public static boolean ccw(Point a, Point b, Point c) {
-		boolean t = triArea(a, b, c) > 0;
-		System.out.println(t);
-		return t;
+		return triArea(a, b, c) > 0;
 	}
 
 	public static boolean rightOf(Point p, Edge e) {
-		return ccw(p, e.dest(), e.orig());
+		return triArea(p, e.orig(), e.dest()) < 0;
 	}
 
 	public static boolean leftOf(Point p, Edge e) {
-		return ccw(p, e.orig(), e.dest());
+		return triArea(p, e.orig(), e.dest()) > 0;
 	}
 
 	public static boolean onEdge(Point p, Edge e) {
@@ -86,5 +90,15 @@ public class Predicate {
 		} else {
 			return false;
 		}
+	}
+
+	public static boolean rightOrAhead(Point p, Point q, Point r) {
+		long tmp = triArea(p, q, r);
+		return tmp < 0 || (tmp == 0 && ahead(p, q, r));
+	}
+
+	public static boolean leftOrAhead(Point p, Point q, Point r) {
+		long tmp = triArea(p, q, r);
+		return tmp > 0 || (tmp == 0 && ahead(p, q, r));
 	}
 }

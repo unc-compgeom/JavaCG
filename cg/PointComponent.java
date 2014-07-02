@@ -8,10 +8,16 @@ public class PointComponent extends AbstractGeometry implements Point {
 	private int y;
 
 	// TODO make package private
-	public PointComponent(int x, int y) {
+	PointComponent(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+
+	PointComponent(Point p) {
+		super();
+		this.x = p.getX();
+		this.y = p.getY();
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package algorithms;
 
+import util.DuplicatePointException;
+import util.MalformedTriangulationException;
 import cg.GeometryManager;
+import cg.Point;
 import cg.PointSet;
 import cg.Subdivision;
 
@@ -8,19 +11,17 @@ public class DelaunayTriangulation {
 	public static void doDelaunay(PointSet points) {
 		// TODO find a triangle large enough to encompass <tt>points</tt>
 		Subdivision s = GeometryManager.newSubdivision(
-				GeometryManager.newPoint(0, 0),
-				GeometryManager.newPoint(100, 0),
-				GeometryManager.newPoint(0, 100));
-		s.insertSite(GeometryManager.newPoint(50, 50));
-		// points.removeAll(points);
-		// points.add(GeometryManager.newPoint(0, 50));
-		// points.add(GeometryManager.newPoint(50, 50));
-		// points.add(GeometryManager.newPoint(50, 0));
-		// s.setColor(Color.CYAN);
-		// for (Point p : points) {
-		// p.setColor(Color.red);
-		// s.insertSite(p);
-		// System.out.println("inserted " + p);
-		// }
+				GeometryManager.newPoint(-1, -1),
+				GeometryManager.newPoint(1000, -1),
+				GeometryManager.newPoint(-1, 1000));
+		for (Point p : points) {
+			try {
+				s.insertSite(p);
+			} catch (DuplicatePointException | MalformedTriangulationException e) {
+
+				e.printStackTrace();
+			}
+		}
+
 	}
 }

@@ -102,6 +102,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	public void paintComponent(Graphics g) {
 		if (isInvisible())
 			return;
+		g.setColor(getColor());
 		g.drawLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
 		orig().paintComponent(g);
 		dest().paintComponent(g);

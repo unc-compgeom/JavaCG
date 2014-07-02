@@ -30,6 +30,7 @@ public abstract class AbstractGeometry implements Drawable {
 	@Override
 	public void setColor(Color c) {
 		this.c = c;
+		notifyObserversNoDelay();
 	}
 
 	@Override
