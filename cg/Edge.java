@@ -46,7 +46,7 @@ public interface Edge extends Drawable {
 	 * 
 	 * @return the next left face edge
 	 */
-	public Edge lnext();
+	public Edge lNext();
 
 	/**
 	 * Gets the CCW {@link Edge} around the left face before this edge
@@ -81,7 +81,7 @@ public interface Edge extends Drawable {
 	 * 
 	 * @return the next right face edge
 	 */
-	public Edge rnext();
+	public Edge rNext();
 
 	/**
 	 * Gets the dual of this edge, directed from its right to its left

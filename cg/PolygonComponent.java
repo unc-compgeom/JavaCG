@@ -13,7 +13,7 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible())
 			return;
 		// draw edges, then points
@@ -32,7 +32,7 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 				}
 				g2D.setStroke(new BasicStroke());
 			}
-			super.paintComponent(g);
+			super.paint(g);
 		}
 	}
 

@@ -3,6 +3,13 @@ package cg;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * This class contains all generic geometry methods. All geometry objects should
+ * inherit from this class with minimal method overriding as necessary.
+ * 
+ * @author Vance Miller
+ * 
+ */
 public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private boolean invisible;
@@ -25,7 +32,7 @@ public abstract class AbstractGeometry implements Drawable {
 	}
 
 	@Override
-	public abstract void paintComponent(Graphics g);
+	public abstract void paint(Graphics g);
 
 	@Override
 	public void setColor(Color c) {

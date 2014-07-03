@@ -54,8 +54,9 @@ public class GeometryManager {
 	 * @param d
 	 *            The <tt>Drawable</tt> to remove.
 	 */
+	@SuppressWarnings("unchecked")
 	public static void destroyGeometry(Drawable d) {
-		if (d instanceof Collection) {
+		if (d instanceof Collection<?>) {
 			for (Point p : ((Collection<Point>) d)) {
 				GeometryManager.destroyGeometry(p);
 			}
@@ -136,12 +137,6 @@ public class GeometryManager {
 	public static Circle newCircle(PointSet points) {
 		Circle c = new CircleComponent(points);
 		return (Circle) buildGeometry(c);
-	}
-
-	// TODO #include this?
-	public static Edge newEdge(Point newPoint, Point newPoint2) {
-		Edge e = new EdgeComponent();
-		return (Edge) buildGeometry(e);
 	}
 
 	/**

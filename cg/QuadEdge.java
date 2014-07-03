@@ -23,7 +23,7 @@ class QuadEdge {
 	 */
 	public static Edge connect(Edge a, Edge b) {
 		Edge e = makeEdge();
-		splice(e, a.lnext());
+		splice(e, a.lNext());
 		splice(e.sym(), b);
 		e.setOrig(a.dest());
 		e.setDest(b.orig());
@@ -91,8 +91,8 @@ class QuadEdge {
 		Edge b = e.sym().oPrev();
 		splice(e, a);
 		splice(e.sym(), b);
-		splice(e, a.lnext());
-		splice(e.sym(), b.lnext());
+		splice(e, a.lNext());
+		splice(e.sym(), b.lNext());
 		e.setOrig(a.dest());
 		e.setDest(b.dest());
 	}

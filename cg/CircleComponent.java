@@ -57,7 +57,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible()) {
 			return;
 		}

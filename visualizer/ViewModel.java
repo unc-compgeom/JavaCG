@@ -276,6 +276,11 @@ public class ViewModel {
 		}
 	}
 
+	/**
+	 * Choose how the points should be drawn onto the screen.
+	 * 
+	 * @param mode
+	 */
 	public void setInsertionMode(InsertionMode mode) {
 		this.mode = mode;
 		if (mode == InsertionMode.POINTS_RANDOM) {

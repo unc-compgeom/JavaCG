@@ -70,7 +70,7 @@ public class PointComponent extends AbstractGeometry implements Point {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible())
 			return;
 		g.setColor(super.getColor());

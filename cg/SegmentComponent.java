@@ -90,7 +90,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible()) {
 			return;
 		}

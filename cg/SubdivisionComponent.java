@@ -5,9 +5,17 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import predicates.Predicate;
 import util.DuplicatePointException;
 import util.MalformedTriangulationException;
 
+/**
+ * This class can be used to represent a Delaunay Triangulation. It uses the
+ * {@link QuadEdge} data structure to maintain edge data.
+ * 
+ * @author Vance Miller
+ * 
+ */
 public class SubdivisionComponent extends AbstractGeometry implements
 		Subdivision {
 	private Edge startingEdge;
@@ -68,7 +76,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			edges.add(base);
 			if (base.isInvisible())
 				base.setInvisible(true);
-		} while (e.lnext() != startingEdge);
+		} while (e.lNext() != startingEdge);
 		// examine suspect edges and ensure that the Delaunay condition is
 		// satisfied
 		do {
@@ -86,18 +94,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		} while (true);
 	}
 
-	/**
-	 * Returns the <tt>Edge</tt> that contains <tt>p</tt> or the edge of a
-	 * triangle containing <tt>p</tt>.
-	 * 
-	 * @param q
-	 *            the point to locate
-	 * @return the edge that p is on;
-	 * @throws DuplicatePointException
-	 *             iff <tt>p</tt> is already in this subdivision
-	 * @throws MalformedTriangulationException
-	 *             iff <tt>p</tt> is not in the triangulation
-	 */
+	@Override
 	public Edge locate(Point q) throws DuplicatePointException,
 			MalformedTriangulationException {
 		Edge e = startingEdge;
@@ -120,18 +117,18 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			} else if (Predicate.rightOrAhead(e.oNext().dest(), p, q)) {
 				e = e.oNext();
 			} else {
-				e = e.lnext().sym();
+				e = e.lNext().sym();
 			}
 		} while (guard-- > 0);
 		throw new MalformedTriangulationException();
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible())
 			return;
 		for (Edge e : edges) {
-			e.paintComponent(g);
+			e.paint(g);
 		}
 	}
 }

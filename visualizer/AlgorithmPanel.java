@@ -42,7 +42,7 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 		List<Drawable> geometry = GeometryManager.getAllGeometry();
 		synchronized (geometry) {
 			for (Drawable d : geometry) {
-				d.paintComponent(g);
+				d.paint(g);
 			}
 		}
 	}

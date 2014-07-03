@@ -36,7 +36,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public Edge lnext() {
+	public Edge lNext() {
 		return invRot().oNext().rot();
 	}
 
@@ -61,7 +61,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public Edge rnext() {
+	public Edge rNext() {
 		return rot().oNext().invRot();
 	}
 
@@ -101,7 +101,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible())
 			return;
 		g.setColor(getColor());
@@ -109,8 +109,8 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
 		g2D.drawLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
 		g2D.setStroke(new BasicStroke());
-		orig().paintComponent(g);
-		dest().paintComponent(g);
+		orig().paint(g);
+		dest().paint(g);
 	}
 
 	@Override

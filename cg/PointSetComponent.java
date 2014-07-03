@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 public class PointSetComponent extends AbstractGeometry implements PointSet {
 	private static final long serialVersionUID = -1545417749354389726L;
@@ -99,13 +100,6 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
-	public PointSet clone() {
-		PointSet v = GeometryManager.newPointSet(this);
-		v.setColor(getColor());
-		return v;
-	}
-
-	@Override
 	public boolean contains(Object o) {
 		synchronized (this) {
 			return points.contains(o);
@@ -156,8 +150,11 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
-	public Point getSecond() {
+	public Point getSecond() throws NoSuchElementException {
 		synchronized (this) {
+			if (this.size() < 2) {
+				throw new NoSuchElementException();
+			}
 			return points.get(1);
 		}
 	}
@@ -245,13 +242,13 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		if (isInvisible()) {
 			return;
 		}
 		synchronized (this) {
 			for (Point p : this) {
-				p.paintComponent(g);
+				p.paint(g);
 			}
 		}
 	}
@@ -274,6 +271,28 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	public Point peekLast() {
 		synchronized (this) {
 			return points.peekLast();
+		}
+	}
+
+	@Override
+	public Point peekSecond() {
+		synchronized (this) {
+			if (points.size() < 2) {
+				return null;
+			}
+			return points.get(1);
+		}
+	}
+
+	@Override
+	public Point peekSecondToLast() {
+		if (points.isEmpty()) {
+			return null;
+		}
+		if (points.size() < 2) {
+			return points.get(0);
+		} else {
+			return points.get(size() - 2);
 		}
 	}
 
@@ -355,14 +374,6 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		}
 		notifyObservers();
 		return b;
-	}
-
-	@Override
-	public void remove(Point v) {
-		synchronized (this) {
-			points.remove(v);
-		}
-		notifyObservers();
 	}
 
 	@Override
