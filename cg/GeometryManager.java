@@ -194,7 +194,7 @@ public class GeometryManager {
 		PointSet s = new PointSetComponent();
 		s.setColor(points.getColor());
 		for (Point point : points) {
-			s.addNoDelay(point.clone());
+			s.addNoDelay(new PointComponent(point));
 		}
 		return (PointSet) buildGeometry(s);
 	}

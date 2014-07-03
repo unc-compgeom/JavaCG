@@ -1,9 +1,10 @@
 package algorithms;
 
 import predicates.Predicate;
-import cg.Polygon;
+import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class Melkman {
 
@@ -12,7 +13,7 @@ public class Melkman {
 		Point p1 = points.get(1);
 		hull.addFirst(p0);
 		hull.addFirst(p1);
-		hull.addLast(p1.clone());
+		hull.addLast(GeometryManager.newPoint(p1));
 		for (int i = 2; i < points.size(); i++) {
 			if (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 					hull.getLast(), points.get(i))
@@ -28,7 +29,7 @@ public class Melkman {
 					hull.removeFirst();
 				}
 				hull.addFirst(points.get(i));
-				hull.addLast(points.get(i).clone());
+				hull.addLast(GeometryManager.newPoint(points.get(i)));
 			}
 		}
 	}

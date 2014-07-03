@@ -7,7 +7,6 @@ public class PointComponent extends AbstractGeometry implements Point {
 	private int x;
 	private int y;
 
-	// TODO make package private
 	PointComponent(int x, int y) {
 		super();
 		this.x = x;
@@ -23,11 +22,6 @@ public class PointComponent extends AbstractGeometry implements Point {
 	@Override
 	public Point add(Point p1) {
 		return new PointComponent(x + p1.getX(), y + p1.getY());
-	}
-
-	@Override
-	public Point clone() {
-		return new PointComponent(x, y);
 	}
 
 	@Override

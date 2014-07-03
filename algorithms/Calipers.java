@@ -209,9 +209,9 @@ public class Calipers {
 	 * @return
 	 */
 	private static boolean cwIntersection(int i, int j, Polygon hull) {
-		Point Pa = hull.get(i - 1).clone();
-		Point Pb = hull.get(i).clone();
-		Point Pd = hull.get(j + 1).clone();
+		Point Pa = GeometryManager.newPoint(hull.get(i - 1));
+		Point Pb = GeometryManager.newPoint(hull.get(i));
+		Point Pd = GeometryManager.newPoint(hull.get(j + 1));
 		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
