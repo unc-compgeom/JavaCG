@@ -1,5 +1,6 @@
 package cg;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +55,11 @@ public class GeometryManager {
 	 *            The <tt>Drawable</tt> to remove.
 	 */
 	public static void destroyGeometry(Drawable d) {
+		if (d instanceof Collection) {
+			for (Point p : ((Collection<Point>) d)) {
+				GeometryManager.destroyGeometry(p);
+			}
+		}
 		synchronized (dispersedObjects) {
 			dispersedObjects.remove(d);
 		}

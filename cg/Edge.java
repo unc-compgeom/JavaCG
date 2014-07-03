@@ -53,7 +53,7 @@ public interface Edge extends Drawable {
 	 * 
 	 * @return the previous left face edge
 	 */
-	public Edge lprev();
+	public Edge lPrev();
 
 	/**
 	 * Gets the next CCW {@link Edge} around the origin of this edge
@@ -95,7 +95,7 @@ public interface Edge extends Drawable {
 	 * 
 	 * @return the previous right face edge
 	 */
-	public Edge rprev();
+	public Edge rPrev();
 
 	/**
 	 * Sets the connected {@link Edge}

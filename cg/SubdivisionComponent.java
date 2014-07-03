@@ -31,6 +31,9 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		QuadEdge.splice(ec.sym(), ea);
 		this.startingEdge = ea;
 		edges = new ArrayList<Edge>();
+		ea.setInvisible(true);
+		eb.setInvisible(true);
+		ec.setInvisible(true);
 		edges.add(ea);
 		edges.add(eb);
 		edges.add(ec);
@@ -63,6 +66,8 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			// for drawing:
 			base.setColor(Color.red);
 			edges.add(base);
+			if (base.isInvisible())
+				base.setInvisible(true);
 		} while (e.lnext() != startingEdge);
 		// examine suspect edges and ensure that the Delaunay condition is
 		// satisfied
@@ -76,7 +81,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			} else if (e.oNext() == startingEdge) {
 				return;
 			} else {
-				e = e.oNext().lprev();
+				e = e.oNext().lPrev();
 			}
 		} while (true);
 	}
@@ -106,7 +111,6 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		}
 		// invariant: e intersects pq with e.dest() on, right, or ahead of pq.
 		do {
-			System.out.println(guard);
 			if (q == e.dest()) {
 				// duplicate point
 				throw new DuplicatePointException(q);
@@ -120,7 +124,6 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			}
 		} while (guard-- > 0);
 		throw new MalformedTriangulationException();
-		// http://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-728.pdf
 	}
 
 	@Override

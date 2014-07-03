@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,12 +30,12 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		super();
 		this.a = a;
 		elements = new HashMap<String, JComponent>();
-		this.setLayout(new GridBagLayout());
+		setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
 		// build buttons
 		// draw polygon/points
 		JButton drawPolygon = new JButton("Draw polygon");
-		drawPolygon.setActionCommand("viewEnablePolygon");
+		drawPolygon.setActionCommand("enablePolygon");
 		drawPolygon.addActionListener(a);
 		drawPolygon.addActionListener(this);
 		gc.gridx = 0;
@@ -42,12 +43,28 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		add(drawPolygon, gc);
 
 		// random points
-		JButton randomPoints = new JButton("Generate random points");
-		randomPoints.setActionCommand("viewMakeRandomPoints");
-		randomPoints.addActionListener(a);
+		JButton makePoints = new JButton("r");
+		makePoints.setActionCommand("makePoints");
+		makePoints.addActionListener(a);
 		gc.gridx++;
-		elements.put("randomPoints", randomPoints);
-		add(randomPoints, gc);
+		elements.put("makePoints", makePoints);
+		add(makePoints, gc);
+
+		// circle
+		JButton makeCircle = new JButton("c");
+		makeCircle.setActionCommand("makeCirclePoints");
+		makeCircle.addActionListener(a);
+		gc.gridx++;
+		elements.put("makeCircle", makeCircle);
+		add(makeCircle, gc);
+
+		// line
+		JButton makeLine = new JButton("l");
+		makeLine.setActionCommand("makeLinePoints");
+		makeLine.addActionListener(a);
+		gc.gridx++;
+		elements.put("makeLine", makeLine);
+		add(makeLine, gc);
 
 		// algorithms
 		JComboBox<Algorithm> algorithms = new JComboBox<Algorithm>(
@@ -74,7 +91,8 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 
 		// speed slider
 		int initialValue = (int) (Math.log10(GeometryManager.getDelay() + 1) * 10);
-		JSlider speed = new JSlider(JSlider.HORIZONTAL, 0, 35, initialValue);
+		JSlider speed = new JSlider(SwingConstants.HORIZONTAL, 0, 35,
+				initialValue);
 		speed.setMajorTickSpacing(5);
 		speed.setMinorTickSpacing(1);
 		speed.setPaintTicks(true);
@@ -88,22 +106,28 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "viewEnablePolygon": {
+		case "enablePolygon": {
 			JButton drawPolygon = (JButton) elements.get("drawPolygon");
-			JButton randomPoints = (JButton) elements.get("randomPoints");
+			JButton makePoints = (JButton) elements.get("makePoints");
+			JButton makeCircle = (JButton) elements.get("makeCircle");
+			JButton makeLine = (JButton) elements.get("makeLine");
 			drawPolygon.setText("Draw points");
-			drawPolygon.setActionCommand("viewEnablePoints");
-			randomPoints.setActionCommand("viewMakeRandomPolygon");
-			randomPoints.setText("Generate Random Polygon");
+			drawPolygon.setActionCommand("enablePoints");
+			makePoints.setActionCommand("makePolygon");
+			makeCircle.setActionCommand("makeCirclePolygon");
+			makeLine.setActionCommand("makeLinePolygon");
 			break;
 		}
-		case "viewEnablePoints": {
+		case "enablePoints": {
 			JButton drawPolygon = (JButton) elements.get("drawPolygon");
-			JButton randomPoints = (JButton) elements.get("randomPoints");
+			JButton makePoints = (JButton) elements.get("makePoints");
+			JButton makeCircle = (JButton) elements.get("makeCircle");
+			JButton makeLine = (JButton) elements.get("makeLine");
 			drawPolygon.setText("Draw polygon");
-			drawPolygon.setActionCommand("viewEnablePolygon");
-			randomPoints.setActionCommand("viewMakeRandomPoints");
-			randomPoints.setText("Generate Random Points");
+			drawPolygon.setActionCommand("enablePolygon");
+			makePoints.setActionCommand("makePoints");
+			makeCircle.setActionCommand("makeCirclePoints");
+			makeLine.setActionCommand("makeLinePoints");
 			break;
 		}
 		case "run":

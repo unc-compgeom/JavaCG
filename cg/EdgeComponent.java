@@ -1,6 +1,8 @@
 package cg;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 class EdgeComponent extends AbstractGeometry implements Edge {
 
@@ -39,7 +41,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public Edge lprev() {
+	public Edge lPrev() {
 		return oNext().sym();
 	}
 
@@ -69,7 +71,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public Edge rprev() {
+	public Edge rPrev() {
 		return sym().oNext();
 	}
 
@@ -103,7 +105,10 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		if (isInvisible())
 			return;
 		g.setColor(getColor());
-		g.drawLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
+		Graphics2D g2D = (Graphics2D) g;
+		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
+		g2D.drawLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
+		g2D.setStroke(new BasicStroke());
 		orig().paintComponent(g);
 		dest().paintComponent(g);
 	}

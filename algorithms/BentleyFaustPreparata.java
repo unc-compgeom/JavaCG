@@ -6,9 +6,9 @@ import java.util.ListIterator;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import cg.GeometryManager;
-import cg.Polygon;
 import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class BentleyFaustPreparata {
 	public static void findConvexHull(PointSet points, Polygon hull) {
@@ -121,6 +121,8 @@ public class BentleyFaustPreparata {
 		for (Point vt : upper) {
 			hull.add(vt);
 		}
+		// connect the first and last edges
+		hull.add(hull.getFirst());
 		// clean up
 		GeometryManager.destroyGeometry(upper);
 		GeometryManager.destroyGeometry(lower);

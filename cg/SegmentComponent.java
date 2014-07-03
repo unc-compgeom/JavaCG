@@ -1,6 +1,8 @@
 package cg;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * The segment will have an origin indicating the location of the tail of the
@@ -10,11 +12,11 @@ import java.awt.Graphics;
  */
 public class SegmentComponent extends AbstractGeometry implements Segment {
 
+	int dX;
+	int dY;
 	private Point head;
 	private final double[] homogeneous = { 0, 0, 0 };
 	private Point tail;
-	int dX;
-	int dY;
 
 	protected SegmentComponent(int x1, int y1, int x2, int y2) {
 		tail = new PointComponent(x1, y1);
@@ -43,6 +45,16 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	// }
 
 	@Override
+	public int getDX() {
+		return dX;
+	}
+
+	@Override
+	public int getDY() {
+		return dY;
+	}
+
+	@Override
 	public Point getHead() {
 		return head;
 	}
@@ -58,16 +70,6 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	@Override
 	public Point getTail() {
 		return tail;
-	}
-
-	@Override
-	public int getDX() {
-		return dX;
-	}
-
-	@Override
-	public int getDY() {
-		return dY;
 	}
 
 	@Override
@@ -92,24 +94,28 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public Segment tailReflection() {
-		return new SegmentComponent(tail.getX(), tail.getY(), tail.getX() - dX,
-				tail.getY() - dY);
-	}
-
-	@Override
 	public void paintComponent(Graphics g) {
 		if (isInvisible()) {
 			return;
 		}
 		g.setColor(super.getColor());
-		g.drawLine(tail.getX(), tail.getY(), head.getX(), head.getY());
+		g.setColor(getColor());
+		Graphics2D g2D = (Graphics2D) g;
+		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
+		g2D.drawLine(tail.getX(), tail.getY(), head.getX(), head.getY());
+		g2D.setStroke(new BasicStroke());
 	}
 
 	@Override
 	public Segment perpendicular() {
 		return new SegmentComponent(tail.getX(), tail.getY(),
 				-dY + tail.getX(), dX + tail.getY());
+	}
+
+	@Override
+	public Segment tailReflection() {
+		return new SegmentComponent(tail.getX(), tail.getY(), tail.getX() - dX,
+				tail.getY() - dY);
 	}
 
 	@Override

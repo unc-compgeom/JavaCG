@@ -87,7 +87,6 @@ class QuadEdge {
 	 *            the edge to swap
 	 */
 	public static void swap(Edge e) {
-		String tmp = e.toString();
 		Edge a = e.oPrev();
 		Edge b = e.sym().oPrev();
 		splice(e, a);
@@ -96,7 +95,6 @@ class QuadEdge {
 		splice(e.sym(), b.lnext());
 		e.setOrig(a.dest());
 		e.setDest(b.dest());
-		System.out.println("swapped " + tmp + " to " + e);
 	}
 
 	Edge[] edges;

@@ -34,11 +34,12 @@ public abstract class AbstractGeometry implements Drawable {
 	}
 
 	@Override
-	public void setInvisible(boolean invisible) {
-		this.invisible = invisible;
+	public boolean isInvisible() {
+		return invisible;
 	}
 
-	protected boolean isInvisible() {
-		return invisible;
+	@Override
+	public void setInvisible(boolean isInvisible) {
+		this.invisible = isInvisible;
 	}
 }

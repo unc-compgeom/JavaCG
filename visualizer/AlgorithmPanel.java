@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -14,7 +15,8 @@ import util.CGObserver;
 import cg.Drawable;
 import cg.GeometryManager;
 
-class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
+class AlgorithmPanel extends JPanel implements MouseListener,
+		MouseMotionListener, CGObserver {
 	private static final long serialVersionUID = 717443380063382616L;
 	private final ActionListener a;
 
@@ -22,6 +24,7 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 		super();
 		this.a = a;
 		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
 	/**
@@ -82,5 +85,17 @@ class AlgorithmPanel extends JPanel implements MouseListener, CGObserver {
 	@Override
 	public void update(Drawable o) {
 		repaint();
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		a.actionPerformed(new ActionEvent(e, ActionEvent.ACTION_PERFORMED,
+				"mouseMoved"));
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		a.actionPerformed(new ActionEvent(e, ActionEvent.ACTION_PERFORMED,
+				"mouseMoved"));
 	}
 }
