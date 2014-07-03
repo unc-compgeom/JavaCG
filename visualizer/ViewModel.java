@@ -24,19 +24,15 @@ import cg.Segment;
 
 public class ViewModel {
 	enum InsertionMode {
-		POINTS_CIRCLE(false, true), POINTS_INCREMENTAL(false, false), POINTS_LINE(
-				false, true), POINTS_RANDOM(false, false), POLYGON_CIRCLE(true,
-				true), POLYGON_INCREMENTAL(true, false), POLYGON_LINE(true,
-				true), POLYGON_RANDOM(true, false);
-		final boolean isPolygon;
+		CIRCLE(true), INCREMENTAL(false), LINE(true), RANDOM(false);
 		final boolean isTwoClick;
 
-		InsertionMode(boolean isPolygon, boolean isTwoClick) {
-			this.isPolygon = isPolygon;
+		InsertionMode(boolean isTwoClick) {
 			this.isTwoClick = isTwoClick;
 		}
 	}
 
+	private boolean polygonEnabled;
 	private InsertionMode mode;
 	private final int NUMPOINTS = 64;
 	private PointSet pointSet;
@@ -47,7 +43,8 @@ public class ViewModel {
 	public ViewModel() {
 		pointSet = GeometryManager.newPointSet();
 		polygon = GeometryManager.newPolygon();
-		mode = InsertionMode.POINTS_INCREMENTAL;
+		mode = InsertionMode.INCREMENTAL;
+		polygonEnabled = false;
 	}
 
 	public void draw(int x, int y) {
@@ -59,17 +56,19 @@ public class ViewModel {
 			GeometryManager.destroyGeometry(preview);
 			preview = null;
 			switch (mode) {
-			case POINTS_CIRCLE:
-				pointSet.addAll(makeCirclePoints(x1, y1, x, y));
+			case CIRCLE:
+				if (!polygonEnabled) {
+					pointSet.addAll(makeCirclePoints(x1, y1, x, y));
+				} else {
+					polygon.addAll(makeCirclePolygon(x1, y1, x, y));
+				}
 				break;
-			case POINTS_LINE:
-				pointSet.addAll(makeLinePoints(x1, y1, x, y));
-				break;
-			case POLYGON_CIRCLE:
-				polygon.addAll(makeCirclePolygon(x1, y1, x, y));
-				break;
-			case POLYGON_LINE:
-				polygon.addAll(makeLinePolygon(x1, y1, x, y));
+			case LINE:
+				if (!polygonEnabled) {
+					pointSet.addAll(makeLinePoints(x1, y1, x, y));
+				} else {
+					polygon.addAll(makeLinePolygon(x1, y1, x, y));
+				}
 				break;
 			default:
 				System.out
@@ -82,17 +81,19 @@ public class ViewModel {
 			firstPoint.setColor(Color.CYAN);
 		} else {
 			switch (mode) {
-			case POINTS_INCREMENTAL:
-				pointSet.addNoDelay(GeometryManager.newPoint(x, y));
+			case INCREMENTAL:
+				if (!polygonEnabled) {
+					pointSet.addNoDelay(GeometryManager.newPoint(x, y));
+				} else {
+					polygon.addNoDelay(GeometryManager.newPoint(x, y));
+				}
 				break;
-			case POINTS_RANDOM:
-				pointSet.addAll(makeRandomPoints());
-				break;
-			case POLYGON_INCREMENTAL:
-				polygon.addNoDelay(GeometryManager.newPoint(x, y));
-				break;
-			case POLYGON_RANDOM:
-				polygon.addAll(makeRandomPolygon());
+			case RANDOM:
+				if (!polygonEnabled) {
+					pointSet.addAll(makeRandomPoints());
+				} else {
+					polygon.addAll(makeRandomPolygon());
+				}
 				break;
 			default:
 				System.out
@@ -194,20 +195,23 @@ public class ViewModel {
 		GeometryManager.destroyGeometry(preview);
 		preview = null;
 		switch (mode) {
-		case POINTS_CIRCLE:
-			preview = makeCirclePoints(firstPoint.getX(), firstPoint.getY(), x,
-					y);
+		case CIRCLE:
+			if (!polygonEnabled) {
+				preview = makeCirclePoints(firstPoint.getX(),
+						firstPoint.getY(), x, y);
+			} else {
+				preview = makeCirclePolygon(firstPoint.getX(),
+						firstPoint.getY(), x, y);
+			}
 			break;
-		case POINTS_LINE:
-			preview = makeLinePoints(firstPoint.getX(), firstPoint.getY(), x, y);
-			break;
-		case POLYGON_CIRCLE:
-			preview = makeCirclePolygon(firstPoint.getX(), firstPoint.getY(),
-					x, y);
-			break;
-		case POLYGON_LINE:
-			preview = makeLinePolygon(firstPoint.getX(), firstPoint.getY(), x,
-					y);
+		case LINE:
+			if (!polygonEnabled) {
+				preview = makeLinePoints(firstPoint.getX(), firstPoint.getY(),
+						x, y);
+			} else {
+				preview = makeLinePolygon(firstPoint.getX(), firstPoint.getY(),
+						x, y);
+			}
 			break;
 		default:
 			System.out
@@ -223,7 +227,7 @@ public class ViewModel {
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
-		final PointSet points = (mode.isPolygon) ? polygon : pointSet;
+		final PointSet points = (polygonEnabled) ? polygon : pointSet;
 		final Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(Color.RED);
 		try {
@@ -269,7 +273,7 @@ public class ViewModel {
 			System.out.println("Exception while running " + algorithm);
 			e.printStackTrace();
 		}
-		if (mode.isPolygon) {
+		if (polygonEnabled) {
 			polygon = GeometryManager.newPolygon();
 		} else {
 			pointSet = GeometryManager.newPointSet();
@@ -283,16 +287,17 @@ public class ViewModel {
 	 */
 	public void setInsertionMode(InsertionMode mode) {
 		this.mode = mode;
-		if (mode == InsertionMode.POINTS_RANDOM) {
+		if (mode == InsertionMode.RANDOM) {
 			draw(0, 0);
-			this.mode = InsertionMode.POINTS_INCREMENTAL;
-		} else if (mode == InsertionMode.POLYGON_RANDOM) {
-			draw(0, 0);
-			this.mode = InsertionMode.POLYGON_INCREMENTAL;
+			this.mode = InsertionMode.INCREMENTAL;
 		}
 	}
 
 	public void setSize(Dimension size) {
 		this.size = size;
+	}
+
+	public void enablePolygon(boolean b) {
+		polygonEnabled = b;
 	}
 }

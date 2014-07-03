@@ -34,37 +34,49 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 		GridBagConstraints gc = new GridBagConstraints();
 		// build buttons
 		// draw polygon/points
-		JButton drawPolygon = new JButton("Draw polygon");
-		drawPolygon.setActionCommand("enablePolygon");
-		drawPolygon.addActionListener(a);
-		drawPolygon.addActionListener(this);
+		JButton enablePolygon = new JButton("Polygon");
+		enablePolygon.setActionCommand("enablePolygon");
+		enablePolygon.addActionListener(a);
+		enablePolygon.addActionListener(this);
 		gc.gridx = 0;
-		elements.put("drawPolygon", drawPolygon);
-		add(drawPolygon, gc);
+		elements.put("enablePolygon", enablePolygon);
+		add(enablePolygon, gc);
 
-		// random points
-		JButton makePoints = new JButton("r");
-		makePoints.setActionCommand("makePoints");
-		makePoints.addActionListener(a);
+		// single point
+		JButton makePoint = new JButton("p");
+		makePoint.setActionCommand("makePoint");
+		makePoint.addActionListener(a);
+		makePoint.addActionListener(this);
+		makePoint.setEnabled(false); // initialized
 		gc.gridx++;
-		elements.put("makePoints", makePoints);
-		add(makePoints, gc);
+		elements.put("makePoint", makePoint);
+		add(makePoint, gc);
 
 		// circle
 		JButton makeCircle = new JButton("c");
-		makeCircle.setActionCommand("makeCirclePoints");
+		makeCircle.setActionCommand("makeCircle");
 		makeCircle.addActionListener(a);
+		makeCircle.addActionListener(this);
 		gc.gridx++;
 		elements.put("makeCircle", makeCircle);
 		add(makeCircle, gc);
 
 		// line
 		JButton makeLine = new JButton("l");
-		makeLine.setActionCommand("makeLinePoints");
+		makeLine.setActionCommand("makeLine");
 		makeLine.addActionListener(a);
+		makeLine.addActionListener(this);
 		gc.gridx++;
 		elements.put("makeLine", makeLine);
 		add(makeLine, gc);
+
+		// random points
+		JButton makeRandom = new JButton("r");
+		makeRandom.setActionCommand("makeRandom");
+		makeRandom.addActionListener(a);
+		gc.gridx++;
+		elements.put("makeRandom", makeRandom);
+		add(makeRandom, gc);
 
 		// algorithms
 		JComboBox<Algorithm> algorithms = new JComboBox<Algorithm>(
@@ -107,27 +119,42 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "enablePolygon": {
-			JButton drawPolygon = (JButton) elements.get("drawPolygon");
-			JButton makePoints = (JButton) elements.get("makePoints");
-			JButton makeCircle = (JButton) elements.get("makeCircle");
-			JButton makeLine = (JButton) elements.get("makeLine");
-			drawPolygon.setText("Draw points");
-			drawPolygon.setActionCommand("enablePoints");
-			makePoints.setActionCommand("makePolygon");
-			makeCircle.setActionCommand("makeCirclePolygon");
-			makeLine.setActionCommand("makeLinePolygon");
+			JButton enablePolygon = (JButton) elements.get("enablePolygon");
+			enablePolygon.setText("  Points ");
+			enablePolygon.setActionCommand("enablePoints");
 			break;
 		}
 		case "enablePoints": {
-			JButton drawPolygon = (JButton) elements.get("drawPolygon");
-			JButton makePoints = (JButton) elements.get("makePoints");
+			JButton enablePolygon = (JButton) elements.get("enablePolygon");
+			enablePolygon.setText("Polygon");
+			enablePolygon.setActionCommand("enablePolygon");
+			break;
+		}
+		case "makeCircle": {
 			JButton makeCircle = (JButton) elements.get("makeCircle");
+			makeCircle.setEnabled(false);
 			JButton makeLine = (JButton) elements.get("makeLine");
-			drawPolygon.setText("Draw polygon");
-			drawPolygon.setActionCommand("enablePolygon");
-			makePoints.setActionCommand("makePoints");
-			makeCircle.setActionCommand("makeCirclePoints");
-			makeLine.setActionCommand("makeLinePoints");
+			makeLine.setEnabled(true);
+			JButton makePoint = (JButton) elements.get("makePoint");
+			makePoint.setEnabled(true);
+			break;
+		}
+		case "makeLine": {
+			JButton makeCircle = (JButton) elements.get("makeCircle");
+			makeCircle.setEnabled(true);
+			JButton makeLine = (JButton) elements.get("makeLine");
+			makeLine.setEnabled(false);
+			JButton makePoint = (JButton) elements.get("makePoint");
+			makePoint.setEnabled(true);
+			break;
+		}
+		case "makePoint": {
+			JButton makeCircle = (JButton) elements.get("makeCircle");
+			makeCircle.setEnabled(true);
+			JButton makeLine = (JButton) elements.get("makeLine");
+			makeLine.setEnabled(true);
+			JButton makePoint = (JButton) elements.get("makePoint");
+			makePoint.setEnabled(false);
 			break;
 		}
 		case "run":

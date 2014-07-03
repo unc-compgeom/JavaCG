@@ -25,28 +25,22 @@ public class ViewController implements ActionListener {
 			protected Void doInBackground() {
 				switch (e.getActionCommand()) {
 				case "enablePolygon":
-					model.setInsertionMode(InsertionMode.POLYGON_INCREMENTAL);
+					model.enablePolygon(true);
 					break;
 				case "enablePoints":
-					model.setInsertionMode(InsertionMode.POINTS_INCREMENTAL);
+					model.enablePolygon(false);
 					break;
-				case "makeCirclePoints":
-					model.setInsertionMode(InsertionMode.POINTS_CIRCLE);
+				case "makeCircle":
+					model.setInsertionMode(InsertionMode.CIRCLE);
 					break;
-				case "makeCirclePolygon":
-					model.setInsertionMode(InsertionMode.POLYGON_CIRCLE);
+				case "makeLine":
+					model.setInsertionMode(InsertionMode.LINE);
 					break;
-				case "makeLinePoints":
-					model.setInsertionMode(InsertionMode.POINTS_LINE);
+				case "makePoint":
+					model.setInsertionMode(InsertionMode.INCREMENTAL);
 					break;
-				case "makeLinePolygon":
-					model.setInsertionMode(InsertionMode.POLYGON_LINE);
-					break;
-				case "makePoints":
-					model.setInsertionMode(InsertionMode.POINTS_RANDOM);
-					break;
-				case "makePolygon":
-					model.setInsertionMode(InsertionMode.POLYGON_RANDOM);
+				case "makeRandom":
+					model.setInsertionMode(InsertionMode.RANDOM);
 					break;
 				case "mouseMoved":
 					MouseEvent me = (MouseEvent) e.getSource();
