@@ -7,10 +7,17 @@ public class PointComponent extends AbstractGeometry implements Point {
 	private int x;
 	private int y;
 
-	protected PointComponent(int x, int y) {
+	// TODO make package private
+	PointComponent(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+
+	PointComponent(Point p) {
+		super();
+		this.x = p.getX();
+		this.y = p.getY();
 	}
 
 	@Override
@@ -25,6 +32,7 @@ public class PointComponent extends AbstractGeometry implements Point {
 
 	@Override
 	public int compareTo(Point p) {
+		// lexicographical comparison
 		return (x < p.getX()) ? -1 : (x > p.getX()) ? 1 : (y < p.getY()) ? -1
 				: (y > p.getY()) ? 1 : 0;
 	}

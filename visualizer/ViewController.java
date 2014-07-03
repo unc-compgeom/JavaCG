@@ -3,9 +3,11 @@ package visualizer;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
-import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
+import visualizer.ViewModel.InsertionMode;
 import algorithms.Algorithm;
 import cg.GeometryManager;
 
@@ -18,15 +20,39 @@ public class ViewController implements ActionListener {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingWorker<Void, Void> w = (new SwingWorker<Void, Void>() {
 			@Override
-			public void run() {
+			protected Void doInBackground() {
 				switch (e.getActionCommand()) {
-				case "viewMakeRandomPoints":
-					model.makeRandomPoints();
+				case "enablePolygon":
+					model.setInsertionMode(InsertionMode.POLYGON_INCREMENTAL);
 					break;
-				case "viewMakeRandomPolygon":
-					model.makeRandomPolygon();
+				case "enablePoints":
+					model.setInsertionMode(InsertionMode.POINTS_INCREMENTAL);
+					break;
+				case "makeCirclePoints":
+					model.setInsertionMode(InsertionMode.POINTS_CIRCLE);
+					break;
+				case "makeCirclePolygon":
+					model.setInsertionMode(InsertionMode.POLYGON_CIRCLE);
+					break;
+				case "makeLinePoints":
+					model.setInsertionMode(InsertionMode.POINTS_LINE);
+					break;
+				case "makeLinePolygon":
+					model.setInsertionMode(InsertionMode.POLYGON_LINE);
+					break;
+				case "makePoints":
+					model.setInsertionMode(InsertionMode.POINTS_RANDOM);
+					break;
+				case "makePolygon":
+					model.setInsertionMode(InsertionMode.POLYGON_RANDOM);
+					break;
+				case "mouseMoved":
+					MouseEvent me = (MouseEvent) e.getSource();
+					int x = me.getX();
+					int y = me.getY();
+					model.preview(x, y);
 					break;
 				case "reset":
 					model.reset();
@@ -43,13 +69,7 @@ public class ViewController implements ActionListener {
 					break;
 				case "viewAddPoint":
 					java.awt.Point p = (java.awt.Point) e.getSource();
-					model.addPoint(GeometryManager.newPoint(p.x, p.y));
-					break;
-				case "viewEnablePolygon":
-					model.enablePolygon();
-					break;
-				case "viewEnablePoints":
-					model.enablePoints();
+					model.draw(p.x, p.y);
 					break;
 				default:
 					try {
@@ -61,8 +81,9 @@ public class ViewController implements ActionListener {
 					}
 					break;
 				}
+				return null;
 			}
 		});
+		w.execute();
 	}
-
 }

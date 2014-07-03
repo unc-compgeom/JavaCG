@@ -9,7 +9,9 @@ public interface Drawable {
 
 	public Color getColor();
 
+	public boolean isInvisible();
+
 	public void setColor(Color c);
 
-	public void setInvisible(boolean invisible);
+	public void setInvisible(boolean isInvisible);
 }

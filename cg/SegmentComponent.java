@@ -60,6 +60,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		double x2 = homogeneous[0] * vHomogeneous[1] - homogeneous[1]
 				* vHomogeneous[0];
 		return new PointComponent((int) (x1 / x0), (int) (x2 / x0));
+
 	}
 
 	@Override
@@ -115,6 +116,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	public void setTail(Point tail) {
 		this.tail = tail;
 		notifyObservers();
+
 	}
 
 	@Override
