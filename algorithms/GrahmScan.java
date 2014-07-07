@@ -3,9 +3,9 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
-import cg.Polygon;
 import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class GrahmScan {
 
@@ -18,7 +18,12 @@ public class GrahmScan {
 		while (i < sorted.size()) {
 			Point p2 = hull.getFirst();
 			Point p1 = hull.getSecond();
-			if (Predicate.findOrientation(sorted.get(i), p1, p2) == Orientation.CLOCKWISE) {
+			Orientation o = Predicate.findOrientation(sorted.get(i), p1, p2);
+			if (o == Orientation.CLOCKWISE) {
+				hull.push(sorted.get(i));
+				i++;
+			} else if (o == Orientation.COLINEAR) {
+				hull.pop();
 				hull.push(sorted.get(i));
 				i++;
 			} else {

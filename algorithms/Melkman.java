@@ -21,6 +21,7 @@ public class Melkman {
 							hull.getFirst(), hull.getSecond())) {
 				while (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 						hull.getLast(), points.get(i))) {
+					// fails when initial points are colinear
 					hull.removeLast();
 
 				}

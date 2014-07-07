@@ -34,7 +34,6 @@ public class ViewModel {
 
 	private boolean polygonEnabled;
 	private InsertionMode mode;
-	private final int NUMPOINTS = 64;
 	private PointSet pointSet;
 	private Polygon polygon;
 	private Point firstPoint;
@@ -111,12 +110,13 @@ public class ViewModel {
 	public PointSet makeCirclePoints(int origX, int origY, int radX, int radY) {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double radius = Math.hypot(radX - origX, radY - origY);
-		for (int i = 0; i < NUMPOINTS; i++) {
+		int numPoints = radius / 4 > 5 ? (int) (radius / 4) : 5;
+		for (int i = 0; i < numPoints; i++) {
 			pointSet.addNoDelay(GeometryManager.newPoint(
 					origX
-							+ (int) (Math.cos(2 * Math.PI * i / NUMPOINTS) * radius),
+							+ (int) (Math.cos(2 * Math.PI * i / numPoints) * radius),
 					origY
-							+ (int) (Math.sin(2 * Math.PI * i / NUMPOINTS) * radius)));
+							+ (int) (Math.sin(2 * Math.PI * i / numPoints) * radius)));
 		}
 		return pointSet;
 	}
@@ -124,12 +124,13 @@ public class ViewModel {
 	public Polygon makeCirclePolygon(int origX, int origY, int radX, int radY) {
 		Polygon polygon = GeometryManager.newPolygon();
 		double radius = Math.hypot(radX - origX, radY - origY);
-		for (int i = 0; i < NUMPOINTS; i++) {
+		int numPoints = radius / 4 > 5 ? (int) (radius / 4) : 5;
+		for (int i = 0; i < numPoints; i++) {
 			polygon.addNoDelay(GeometryManager.newPoint(
 					origX
-							+ (int) (Math.cos(2 * Math.PI * i / NUMPOINTS) * radius),
+							+ (int) (Math.cos(2 * Math.PI * i / numPoints) * radius),
 					origY
-							+ (int) (Math.sin(2 * Math.PI * i / NUMPOINTS) * radius)));
+							+ (int) (Math.sin(2 * Math.PI * i / numPoints) * radius)));
 		}
 		return polygon;
 	}
@@ -138,12 +139,14 @@ public class ViewModel {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double x = x1;
 		double y = y1;
-		double dx = (x2 - x1) / (double) NUMPOINTS;
-		double dy = (y2 - y1) / (double) NUMPOINTS;
-		for (int i = 0; i < NUMPOINTS; i++) {
-			pointSet.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+		int numPoints = (int) Math.hypot(x2 - x1, y2 - y1) / 16;
+		double dx = (x2 - x1) / (double) numPoints;
+		double dy = (y2 - y1) / (double) numPoints;
+		pointSet.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+		for (int i = 0; i < numPoints; i++) {
 			x += dx;
 			y += dy;
+			pointSet.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
 		}
 		return pointSet;
 	}
@@ -152,12 +155,14 @@ public class ViewModel {
 		Polygon polygon = GeometryManager.newPolygon();
 		double x = x1;
 		double y = y1;
-		double dx = (x2 - x1) / (double) NUMPOINTS;
-		double dy = (y2 - y1) / (double) NUMPOINTS;
-		for (int i = 0; i < NUMPOINTS; i++) {
-			polygon.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+		int numPoints = (int) Math.hypot(x2 - x1, y2 - y1) / 16;
+		double dx = (x2 - x1) / (double) numPoints;
+		double dy = (y2 - y1) / (double) numPoints;
+		polygon.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+		for (int i = 0; i < numPoints; i++) {
 			x += dx;
 			y += dy;
+			polygon.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
 		}
 		return polygon;
 	}
@@ -167,7 +172,8 @@ public class ViewModel {
 		int width = size.width;
 		int height = size.height;
 		Random Ayn = new Random();
-		for (int i = 0; i < NUMPOINTS; i++) {
+		int numPoints = (int) Math.sqrt(width * height) / 16;
+		for (int i = 0; i < numPoints; i++) {
 			pointSet.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
@@ -179,7 +185,8 @@ public class ViewModel {
 		int width = size.width;
 		int height = size.height;
 		Random Ayn = new Random();
-		for (int i = 0; i < NUMPOINTS; i++) {
+		int numPoints = (int) Math.sqrt(width * height) / 16;
+		for (int i = 0; i < numPoints; i++) {
 			polygon.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
 					Ayn.nextInt(height)));
 		}
@@ -230,6 +237,11 @@ public class ViewModel {
 		final PointSet points = (polygonEnabled) ? polygon : pointSet;
 		final Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(Color.RED);
+		if (polygonEnabled) {
+			polygon = GeometryManager.newPolygon();
+		} else {
+			pointSet = GeometryManager.newPointSet();
+		}
 		try {
 			switch (algorithm) {
 			case BENTLEY_FAUST_PREPARATA:
@@ -273,11 +285,7 @@ public class ViewModel {
 			System.out.println("Exception while running " + algorithm);
 			e.printStackTrace();
 		}
-		if (polygonEnabled) {
-			polygon = GeometryManager.newPolygon();
-		} else {
-			pointSet = GeometryManager.newPointSet();
-		}
+
 	}
 
 	/**
@@ -286,10 +294,13 @@ public class ViewModel {
 	 * @param mode
 	 */
 	public void setInsertionMode(InsertionMode mode) {
-		this.mode = mode;
 		if (mode == InsertionMode.RANDOM) {
+			InsertionMode tmp = this.mode;
+			this.mode = mode;
 			draw(0, 0);
-			this.mode = InsertionMode.INCREMENTAL;
+			this.mode = tmp;
+		} else {
+			this.mode = mode;
 		}
 	}
 

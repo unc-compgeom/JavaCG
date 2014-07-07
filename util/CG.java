@@ -25,18 +25,37 @@ public class CG {
 		Point min = points.get(0);
 		int minY = min.getY();
 		Point lookingAt;
+		Color oldLooking = null;
+		min.setColor(Color.GREEN);
 		for (int i = 1; i < points.size(); i++) {
 			lookingAt = points.get(i);
+			if (lookingAt != min) {
+				oldLooking = lookingAt.getColor();
+				lookingAt.setColor(Color.ORANGE);
+			}
 			if (lookingAt.getY() <= minY) {
 				if (lookingAt.getY() < minY) {
+					min.setColor(oldLooking);
 					min = lookingAt;
 					minY = min.getY();
+					min.setColor(Color.GREEN);
 				} else {
+					min.setColor(oldLooking);
 					min = (min.getX() < lookingAt.getX()) ? min : lookingAt;
 					minY = min.getY();
+					min.setColor(Color.GREEN);
 				}
 			}
+			try {
+				Thread.sleep(GeometryManager.getDelay());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (lookingAt != min) {
+				lookingAt.setColor(oldLooking);
+			}
 		}
+		min.setColor(oldLooking);
 		return min;
 	}
 
