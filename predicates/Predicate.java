@@ -1,8 +1,13 @@
 package predicates;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 import util.CG;
 import cg.Circle;
 import cg.Edge;
+import cg.GeometryManager;
 import cg.Point;
 
 public class Predicate {
@@ -61,30 +66,6 @@ public class Predicate {
 		return o;
 	}
 
-	/**
-	 * Tests if the point <tt>d</tt> is inside the circle defined by points
-	 * <tt>a</tt>, <tt>b</tt>, and <tt>c</tt>.
-	 * 
-	 * @param a
-	 *            Point on circle
-	 * @param b
-	 *            Point on circle
-	 * @param c
-	 *            Point on circle
-	 * @param d
-	 *            Point to be tested
-	 * @return true iff d is in the circle
-	 */
-	public static boolean inCircle(Point a, Point b, Point c, Point d) {
-		return (a.getX() * a.getX() + a.getY() * a.getY()) * triArea(b, c, d)
-				- (b.getX() * b.getX() + b.getY() * b.getY())
-				* triArea(a, c, d)
-				+ (c.getX() * c.getX() + c.getY() * c.getY())
-				* triArea(a, b, d)
-				- (d.getX() * d.getX() + d.getY() * d.getY())
-				* triArea(a, b, c) > 0;
-	}
-
 	public static boolean isLeftOrInside(Point p, Point q, Point r) {
 		/* test = (qx-px)*(ry-py) - (qy-py)*(rx-px); */
 		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
@@ -96,43 +77,124 @@ public class Predicate {
 		return det >= 0;
 	}
 
-	public static boolean isVertexInCircle(Point s, Circle c) {
+	/**
+	 * Tests if {@link Point} s is inside of or on the circumference of
+	 * {@link Circle} c.
+	 * 
+	 * @param s
+	 *            the point
+	 * @param c
+	 *            the circle
+	 * @return true iff s is inside or on the boundary of the circle
+	 */
+	public static boolean isPointInCircle(Point s, Circle c) {
 		// correctly handles the case of the null circle (radiusSquared = -1)
 		// correctly handles the case of the one point circle (radiusSquared =
 		// 0);
+		// do test
 		if (c.getRadiusSquared() == -1) {
 			return false;
 		}
-		return CG.distSquared(s, c.getOrigin()) <= c.getRadiusSquared();
+		boolean isInCircle = CG.distSquared(s, c.getOrigin()) <= c
+				.getRadiusSquared();
+		// animation code
+		Circle tmp = GeometryManager.newCircle(c);
+		tmp.setColor(Color.YELLOW);
+		Color old = s.getColor();
+		s.setColor(Color.YELLOW);
+		CG.animationDelay();
+		if (isInCircle) {
+			tmp.setColor(Color.GREEN);
+			s.setColor(Color.GREEN);
+		} else {
+			tmp.setColor(Color.RED);
+			s.setColor(Color.RED);
+		}
+		CG.animationDelay();
+		s.setColor(old);
+		GeometryManager.destroyGeometry(tmp);
+
+		return isInCircle;
 	}
 
-	public static boolean isVertexInCircleByPoints(Point s, Circle c) {
-		// find three points, a, b, c, in the circle
-		// find the determinant of the matrix:
-		// [[a_x, a_y, a_x^2 + a_y^2, 1]
-		// [b_x, b_y, b_x^2 + b_y^2, 1]
-		// [c_x, c_y, c_x^2 + c_y^2, 1]
-		// [s_x, s_y, s_x^2 + s_y^2, 1]]
-		// ==
-		// [[a_x - s_x, a_y - s_y, (a_x - s_x)^2 + (a_y - s_y)^2]
-		// [b_x - s_x, b_y - s_y, (b_x - s_x)^2 + (b_y - s_y)^2]
-		// [c_x - s_x, c_y - s_y, (c_x - s_x)^2 + (c_y - s_y)^2]]
-		int x = c.getOrigin().getX();
-		int y = c.getOrigin().getY();
-		int radius = (int) Math.sqrt(c.getRadiusSquared());
-		int ax = x, ay = y + radius;
-		int bx = x, by = y - radius;
-		int cx = x + radius, cy = y;
-		int sx = s.getX(), sy = s.getY();
-
-		long result = ((ax - sx) * (ax - sx) + (ay - sy) * (ay - sy))
-				* ((bx - sx) * (cy - sy) - (by - sy) * (cx - sx))
-				- ((bx - sx) * (bx - sx) + (by - sy) * (by - sy))
-				* ((ax - sx) * (cy - sy) - (ay - sy) * (cx - sx))
-				+ ((cx - sx) * (cx - sx) + (cy - sy) * (cy - sy))
-				* ((ax - sx) * (by - sy) - (ay - sy) * (bx - sx));
-		return (result < 0) ? false : true;
+	/**
+	 * Tests if the {@link Point} <tt>test</tt> is inside the {@link Circle}
+	 * defined by points <tt>a</tt>, <tt>b</tt>, and <tt>c</tt>.
+	 * 
+	 * @param test
+	 *            Point to be tested
+	 * @param a
+	 *            Point on circle
+	 * @param b
+	 *            Point on circle
+	 * @param c
+	 *            Point on circle
+	 * 
+	 * @return true iff <tt>test</tt> is in the circle
+	 */
+	public static boolean isPointInCircle(Point test, Point a, Point b, Point c) {
+		double det = (a.getX() * a.getX() + a.getY() * a.getY())
+				* triArea(b, c, test)
+				- (b.getX() * b.getX() + b.getY() * b.getY())
+				* triArea(a, c, test)
+				+ (c.getX() * c.getX() + c.getY() * c.getY())
+				* triArea(a, b, test)
+				- (test.getX() * test.getX() + test.getY() * test.getY())
+				* triArea(a, b, c);
+		boolean isInCircle = det > 0;
+		if (det == 0) {
+			return false;
+		}
+		// animation code
+		List<Point> points = new ArrayList<Point>(3);
+		points.add(a);
+		points.add(b);
+		points.add(c);
+		Circle tmp = GeometryManager.newCircle(points);
+		tmp.setColor(Color.YELLOW);
+		Color old = test.getColor();
+		test.setColor(Color.YELLOW);
+		CG.animationDelay();
+		if (isInCircle) {
+			tmp.setColor(Color.GREEN);
+			test.setColor(Color.GREEN);
+		} else {
+			tmp.setColor(Color.RED);
+			test.setColor(Color.RED);
+		}
+		CG.animationDelay();
+		test.setColor(old);
+		GeometryManager.destroyGeometry(tmp);
+		return isInCircle;
 	}
+
+	// public static boolean isVertexInCircleByPoints(Point s, Circle c) {
+	// // find three points, a, b, c, in the circle
+	// // find the determinant of the matrix:
+	// // [[a_x, a_y, a_x^2 + a_y^2, 1]
+	// // [b_x, b_y, b_x^2 + b_y^2, 1]
+	// // [c_x, c_y, c_x^2 + c_y^2, 1]
+	// // [s_x, s_y, s_x^2 + s_y^2, 1]]
+	// // ==
+	// // [[a_x - s_x, a_y - s_y, (a_x - s_x)^2 + (a_y - s_y)^2]
+	// // [b_x - s_x, b_y - s_y, (b_x - s_x)^2 + (b_y - s_y)^2]
+	// // [c_x - s_x, c_y - s_y, (c_x - s_x)^2 + (c_y - s_y)^2]]
+	// int x = c.getOrigin().getX();
+	// int y = c.getOrigin().getY();
+	// int radius = (int) Math.sqrt(c.getRadiusSquared());
+	// int ax = x, ay = y + radius;
+	// int bx = x, by = y - radius;
+	// int cx = x + radius, cy = y;
+	// int sx = s.getX(), sy = s.getY();
+	//
+	// long result = ((ax - sx) * (ax - sx) + (ay - sy) * (ay - sy))
+	// * ((bx - sx) * (cy - sy) - (by - sy) * (cx - sx))
+	// - ((bx - sx) * (bx - sx) + (by - sy) * (by - sy))
+	// * ((ax - sx) * (cy - sy) - (ay - sy) * (cx - sx))
+	// + ((cx - sx) * (cx - sx) + (cy - sy) * (cy - sy))
+	// * ((ax - sx) * (by - sy) - (ay - sy) * (bx - sx));
+	// return (result < 0) ? false : true;
+	// }
 
 	public static boolean leftOf(Point p, Edge e) {
 		return triArea(p, e.orig(), e.dest()) > 0;

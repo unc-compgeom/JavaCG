@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.List;
 
 public class CircleComponent extends AbstractGeometry implements Circle {
 	private Point origin;
@@ -17,28 +18,28 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	/**
 	 * Create a Circle object given points that lie on its circumference.
 	 * 
-	 * @param vertices
+	 * @param points
 	 *            points that lie on the circle's circumference.
 	 * 
 	 */
-	protected CircleComponent(PointSet vertices) {
+	protected CircleComponent(List<Point> points) {
 		origin = new PointComponent(0, 0);
 		radiusSquared = -1;
-		if (vertices.size() == 1) {
-			origin = vertices.get(0);
+		if (points.size() == 1) {
+			origin = points.get(0);
 			radiusSquared = 0;
-		} else if (vertices.size() == 2) {
+		} else if (points.size() == 2) {
 			// we have a diameter
-			Point a = vertices.get(0);
-			Point b = vertices.get(1);
+			Point a = points.get(0);
+			Point b = points.get(1);
 			int dX = a.getX() - b.getX();
 			int dY = a.getY() - b.getY();
 			long dXSq = dX * dX;
 			long dYSq = dY * dY;
 			radiusSquared = (int) (dXSq + dYSq) / 4;
 			origin = new PointComponent(a.getX() - dX / 2, a.getY() - dY / 2);
-		} else if (vertices.size() > 2) {
-			Point p = vertices.get(0), q = vertices.get(1), r = vertices.get(2);
+		} else if (points.size() > 2) {
+			Point p = points.get(0), q = points.get(1), r = points.get(2);
 			long px = p.getX(), py = p.getY();
 			long qx = q.getX(), qy = q.getY();
 			long rx = r.getX(), ry = r.getY();
@@ -54,6 +55,11 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			origin = new PointComponent(x, y);
 			radiusSquared = (p.sub(origin).dot(p.sub(origin)));
 		}
+	}
+
+	public CircleComponent(Circle c) {
+		origin = c.getOrigin();
+		radiusSquared = c.getRadiusSquared();
 	}
 
 	@Override

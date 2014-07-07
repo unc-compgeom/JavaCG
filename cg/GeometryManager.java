@@ -134,9 +134,23 @@ public class GeometryManager {
 	 *            Points on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
-	public static Circle newCircle(PointSet points) {
+	public static Circle newCircle(List<Point> points) {
 		Circle c = new CircleComponent(points);
 		return (Circle) buildGeometry(c);
+	}
+
+	/**
+	 * Creates a new {@link Circle} initialized with the same properties as
+	 * <code>Circle c</code>. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
+	 * 
+	 * @param points
+	 *            Points on the circumference of the circle.
+	 * @return <tt>Circle</tt> object
+	 */
+	public static Circle newCircle(Circle c) {
+		Circle ci = new CircleComponent(c);
+		return (Circle) buildGeometry(ci);
 	}
 
 	/**
@@ -194,7 +208,7 @@ public class GeometryManager {
 		PointSet s = new PointSetComponent();
 		s.setColor(points.getColor());
 		for (Point point : points) {
-			s.addNoDelay(new PointComponent(point));
+			s.addNoDelay(point);
 		}
 		return (PointSet) buildGeometry(s);
 	}

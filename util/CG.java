@@ -13,6 +13,42 @@ import cg.PointSet;
 
 public class CG {
 
+	public static int cross = 0;
+	public static int distSquared = 0;
+	public static int findSmallestYX = 0;
+	public static int lexicographicalSort = 0;
+	public static int randomColor = 0;
+	public static int sortByAngle = 0;
+
+	/**
+	 * 
+	 * @param o
+	 * @param a
+	 * @param b
+	 * @return the cross product of the two vectors oa, ob
+	 */
+	public static long cross(Point o, Point a, Point b) {
+		// increment the call counter
+		cross++;
+		// do work
+		return (a.getX() - o.getX()) * (b.getY() - o.getY())
+				- (a.getY() - o.getY()) * (b.getX() - o.getX());
+	}
+
+	/**
+	 * 
+	 * @param p
+	 * @param q
+	 * @return distance squared between points p and q.
+	 */
+	public static long distSquared(Point p, Point q) {
+		// increment the call counter
+		distSquared++;
+		// do work
+		long dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
+		return dx * dx + dy * dy;
+	}
+
 	/**
 	 * This method finds the point in the set <code>points</code> that has the
 	 * smallest Y value. If there is a tie, it finds the point with the smallest
@@ -22,6 +58,9 @@ public class CG {
 	 * @return the point with the lowest Y, X value.
 	 */
 	public static Point findSmallestYX(PointSet points) {
+		// increment the call counter
+		findSmallestYX++;
+		// do work
 		Point min = points.get(0);
 		int minY = min.getY();
 		Point lookingAt;
@@ -46,11 +85,7 @@ public class CG {
 					min.setColor(Color.GREEN);
 				}
 			}
-			try {
-				Thread.sleep(GeometryManager.getDelay());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			animationDelay();
 			if (lookingAt != min) {
 				lookingAt.setColor(oldLooking);
 			}
@@ -67,6 +102,9 @@ public class CG {
 	 * @return A PointSet of the sorted points
 	 */
 	public static PointSet lexicographicalSort(PointSet points) {
+		// increment the call counter
+		lexicographicalSort++;
+		// do work
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
 		sorter.addAll(points);
 		PointSet sorted = GeometryManager.newPointSet();
@@ -77,6 +115,15 @@ public class CG {
 		}
 		sorted.setColor(c);
 		return sorted;
+	}
+
+	public static Color randomColor() {
+		// increment the call counter
+		randomColor++;
+		// do work
+		Random Ayn = new Random();
+		return new Color(100 + Ayn.nextInt(156), 100 + Ayn.nextInt(156),
+				100 + Ayn.nextInt(156));
 	}
 
 	/**
@@ -90,6 +137,9 @@ public class CG {
 	 * @return A set of points sorted by angle
 	 */
 	public static PointSet sortByAngle(PointSet points, final Point compare) {
+		// increment the call counter
+		sortByAngle++;
+		// do work
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>(11,
 				new Comparator<Point>() {
 					@Override
@@ -126,32 +176,11 @@ public class CG {
 		return sorted;
 	}
 
-	/**
-	 * 
-	 * @param p
-	 * @param q
-	 * @return distance squared between points p and q.
-	 */
-	public static long distSquared(Point p, Point q) {
-		long dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
-		return dx * dx + dy * dy;
-	}
+	public static void animationDelay() {
+		try {
+			Thread.sleep(GeometryManager.getDelay());
+		} catch (InterruptedException e) {
 
-	/**
-	 * 
-	 * @param o
-	 * @param a
-	 * @param b
-	 * @return the cross product of the two vectors oa, ob
-	 */
-	public static long cross(Point o, Point a, Point b) {
-		return (a.getX() - o.getX()) * (b.getY() - o.getY())
-				- (a.getY() - o.getY()) * (b.getX() - o.getX());
-	}
-
-	public static Color randomColor() {
-		Random Ayn = new Random();
-		return new Color(100 + Ayn.nextInt(156), 100 + Ayn.nextInt(156),
-				100 + Ayn.nextInt(156));
+		}
 	}
 }

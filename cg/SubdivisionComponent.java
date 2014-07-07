@@ -62,18 +62,20 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		base.setOrig(e.orig());
 		base.setDest(GeometryManager.newPoint(p));
 		QuadEdge.splice(base, e);
+
 		this.startingEdge = base;
 		// for drawing:
-		base.setColor(Color.red);
 		edges.add(base);
-
+		base.setColor(getColor());
 		// add edges
 		do {
+
 			base = QuadEdge.connect(e, base.sym());
+
 			e = base.oPrev();
 			// for drawing:
-			base.setColor(Color.red);
 			edges.add(base);
+			base.setColor(getColor());
 			if (base.isInvisible())
 				base.setInvisible(true);
 		} while (e.lNext() != startingEdge);
@@ -82,7 +84,8 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		do {
 			Edge t = e.oPrev();
 			if (Predicate.rightOf(t.dest(), e)
-					&& Predicate.inCircle(e.orig(), t.dest(), e.dest(), p)) {
+					&& Predicate.isPointInCircle(p, e.orig(), t.dest(),
+							e.dest())) {
 				QuadEdge.swap(e);
 				notifyObservers();
 				e = e.oPrev();
@@ -129,6 +132,14 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			return;
 		for (Edge e : edges) {
 			e.paint(g);
+		}
+	}
+
+	@Override
+	public void setColor(Color c) {
+		super.setColor(c);
+		for (Edge e : edges) {
+			e.setColor(c);
 		}
 	}
 }

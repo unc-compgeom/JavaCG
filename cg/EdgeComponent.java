@@ -81,6 +81,15 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
+	public void setInvisible(boolean isInvisible) {
+		super.setInvisible(isInvisible);
+		synchronized (this) {
+			o.setInvisible(isInvisible);
+			sym().orig().setInvisible(isInvisible);
+		}
+	}
+
+	@Override
 	public void setNext(Edge next) {
 		this.next = next;
 	}
@@ -102,8 +111,9 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public void paint(Graphics g) {
-		if (isInvisible())
+		if (isInvisible()) {
 			return;
+		}
 		g.setColor(getColor());
 		Graphics2D g2D = (Graphics2D) g;
 		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
