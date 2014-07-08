@@ -1,6 +1,9 @@
 package cg;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * The segment will have an origin indicating the location of the tail of the
@@ -10,20 +13,20 @@ import java.awt.Graphics;
  */
 public class SegmentComponent extends AbstractGeometry implements Segment {
 
-	private static int getDx(Segment s) {
+	private static float getDx(Segment s) {
 		return s.getTail().getX() - s.getHead().getX();
 	}
 
-	private static int getDy(Segment s) {
+	private static float getDy(Segment s) {
 		return s.getTail().getY() - s.getHead().getY();
 	}
 
-	private static long[] getHomogeneous(Segment s) {
-		long[] homogeneous = new long[3];
-		int x1 = s.getTail().getX();
-		int x2 = s.getHead().getX();
-		int y1 = s.getTail().getY();
-		int y2 = s.getHead().getY();
+	private static double[] getHomogeneous(Segment s) {
+		double[] homogeneous = new double[3];
+		float x1 = s.getTail().getX();
+		float x2 = s.getHead().getX();
+		float y1 = s.getTail().getY();
+		float y2 = s.getHead().getY();
 		homogeneous[0] = (x1 * y2) - (y1 * x2);
 		homogeneous[1] = y1 - y2;
 		homogeneous[2] = x2 - x1;
@@ -32,7 +35,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	private Point tail, head;
 
-	protected SegmentComponent(int x1, int y1, int x2, int y2) {
+	protected SegmentComponent(float x1, float y1, float x2, float y2) {
 		this.tail = new PointComponent(x1, y1);
 		this.head = new PointComponent(x2, y2);
 
@@ -44,22 +47,23 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	@Override
 	public Segment add(Segment v) {
-		int x = head.getX() + getDx(v);
-		int y = head.getY() + getDy(v);
+		float x = head.getX() + getDx(v);
+		float y = head.getY() + getDy(v);
 		return new SegmentComponent(tail.getX(), tail.getY(), x, y);
 	}
 
 	@Override
 	public Point findIntersection(Segment v) {
-		long[] homogeneous = getHomogeneous(this);
-		long[] vHomogeneous = getHomogeneous(v);
+		double[] homogeneous = getHomogeneous(this);
+		double[] vHomogeneous = getHomogeneous(v);
 		double x0 = homogeneous[1] * vHomogeneous[2] - homogeneous[2]
 				* vHomogeneous[1];
 		double x1 = -homogeneous[0] * vHomogeneous[2] + homogeneous[2]
 				* vHomogeneous[0];
 		double x2 = homogeneous[0] * vHomogeneous[1] - homogeneous[1]
 				* vHomogeneous[0];
-		return new PointComponent((int) (x1 / x0), (int) (x2 / x0));
+		// TODO remove this cast down and preserve precision
+		return new PointComponent((float) (x1 / x0), (float) (x2 / x0));
 
 	}
 
@@ -94,8 +98,27 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		if (isInvisible()) {
 			return;
 		}
-		g.setColor(super.getColor());
-		g.drawLine(tail.getX(), tail.getY(), head.getX(), head.getY());
+		Graphics2D g2D = (Graphics2D) g;
+		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
+		g2D.setColor(super.getColor());
+		g2D.drawLine((int) tail.getX(), (int) tail.getY(), (int) head.getX(),
+				(int) head.getY());
+		g2D.setStroke(new BasicStroke());
+		Color oldHead = head.getColor();
+		Color oldTail = tail.getColor();
+		head.setColor(getColor());
+		tail.setColor(getColor());
+		head.paint(g);
+		tail.paint(g);
+		head.setColor(oldHead);
+		tail.setColor(oldTail);
+	}
+
+	@Override
+	public void setColor(Color c) {
+		super.setColor(c);
+		head.setColor(c);
+		tail.setColor(c);
 	}
 
 	@Override

@@ -71,10 +71,10 @@ public class Calipers {
 				i++;
 			}
 		}
-		GeometryManager.destroyGeometry(diamSupport1);
-		GeometryManager.destroyGeometry(diamSupport2);
-		GeometryManager.destroyGeometry(widthSupport1);
-		GeometryManager.destroyGeometry(widthSupport2);
+		GeometryManager.destroy(diamSupport1);
+		GeometryManager.destroy(diamSupport2);
+		GeometryManager.destroy(widthSupport1);
+		GeometryManager.destroy(widthSupport2);
 	}
 
 	/**

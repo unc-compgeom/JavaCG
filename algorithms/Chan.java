@@ -4,8 +4,9 @@ import java.awt.Color;
 
 import util.CG;
 import cg.GeometryManager;
-import cg.Polygon;
+import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class Chan {
 
@@ -28,19 +29,19 @@ public class Chan {
 			int[] minHullPt = getMinHullPoint(hulls);
 			hull.addFirst(hulls[minHullPt[0]].get(minHullPt[1]));
 			// TODO fix
-			// for (int x = 0; x < m; x++) {
-			// Point p = nextHullPoint(hulls, hull.getLast());
-			// if (p.equals(hull.getFirst())) {
-			// return;
-			// } else {
-			// hull.addLast(p);
-			// }
-			// }
+			for (int x = 0; x < m; x++) {
+				Point p = nextHullPoint(hulls, hull.getLast());
+				if (p.equals(hull.getFirst())) {
+					return;
+				} else {
+					hull.addLast(p);
+				}
+			}
 			for (PointSet p : divided) {
-				GeometryManager.destroyGeometry(p);
+				GeometryManager.destroy(p);
 			}
 			for (Polygon p : hulls) {
-				GeometryManager.destroyGeometry(p);
+				GeometryManager.destroy(p);
 			}
 			hull.clear();
 		}

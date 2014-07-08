@@ -48,11 +48,11 @@ public class ViewModel {
 
 	public void draw(int x, int y) {
 		if (firstPoint != null) {
-			int x1 = firstPoint.getX();
-			int y1 = firstPoint.getY();
-			GeometryManager.destroyGeometry(firstPoint);
+			int x1 = (int) firstPoint.getX();
+			int y1 = (int) firstPoint.getY();
+			GeometryManager.destroy(firstPoint);
 			firstPoint = null;
-			GeometryManager.destroyGeometry(preview);
+			GeometryManager.destroy(preview);
 			preview = null;
 			switch (mode) {
 			case CIRCLE:
@@ -199,25 +199,25 @@ public class ViewModel {
 		if (firstPoint == null) {
 			return;
 		}
-		GeometryManager.destroyGeometry(preview);
+		GeometryManager.destroy(preview);
 		preview = null;
 		switch (mode) {
 		case CIRCLE:
 			if (!polygonEnabled) {
-				preview = makeCirclePoints(firstPoint.getX(),
-						firstPoint.getY(), x, y);
+				preview = makeCirclePoints((int) firstPoint.getX(),
+						(int) firstPoint.getY(), x, y);
 			} else {
-				preview = makeCirclePolygon(firstPoint.getX(),
-						firstPoint.getY(), x, y);
+				preview = makeCirclePolygon((int) firstPoint.getX(),
+						(int) firstPoint.getY(), x, y);
 			}
 			break;
 		case LINE:
 			if (!polygonEnabled) {
-				preview = makeLinePoints(firstPoint.getX(), firstPoint.getY(),
-						x, y);
+				preview = makeLinePoints((int) firstPoint.getX(),
+						(int) firstPoint.getY(), x, y);
 			} else {
-				preview = makeLinePolygon(firstPoint.getX(), firstPoint.getY(),
-						x, y);
+				preview = makeLinePolygon((int) firstPoint.getX(),
+						(int) firstPoint.getY(), x, y);
 			}
 			break;
 		default:

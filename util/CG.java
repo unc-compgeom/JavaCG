@@ -22,30 +22,15 @@ public class CG {
 
 	/**
 	 * 
-	 * @param o
-	 * @param a
-	 * @param b
-	 * @return the cross product of the two vectors oa, ob
-	 */
-	public static long cross(Point o, Point a, Point b) {
-		// increment the call counter
-		cross++;
-		// do work
-		return (a.getX() - o.getX()) * (b.getY() - o.getY())
-				- (a.getY() - o.getY()) * (b.getX() - o.getX());
-	}
-
-	/**
-	 * 
 	 * @param p
 	 * @param q
 	 * @return distance squared between points p and q.
 	 */
-	public static long distSquared(Point p, Point q) {
+	public static double distSquared(Point p, Point q) {
 		// increment the call counter
 		distSquared++;
 		// do work
-		long dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
+		double dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
 		return dx * dx + dy * dy;
 	}
 
@@ -62,7 +47,7 @@ public class CG {
 		findSmallestYX++;
 		// do work
 		Point min = points.get(0);
-		int minY = min.getY();
+		double minY = min.getY();
 		Point lookingAt;
 		Color oldLooking = null;
 		min.setColor(Color.GREEN);
@@ -152,8 +137,8 @@ public class CG {
 							return 1;
 						} else {
 							// colinear
-							long dP = distSquared(compare, p);
-							long dQ = distSquared(compare, q);
+							double dP = distSquared(compare, p);
+							double dQ = distSquared(compare, q);
 							if (dP < dQ) {
 								return -1;
 							} else if (dP > dQ) {

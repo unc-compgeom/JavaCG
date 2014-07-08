@@ -15,12 +15,12 @@ public abstract class AbstractGeometry implements Drawable {
 	private boolean invisible;
 
 	AbstractGeometry() {
-		this.c = Color.black;
+		c = Color.black;
 	}
 
 	@Override
 	public Color getColor() {
-		return this.c;
+		return c;
 	}
 
 	protected void notifyObserversNoDelay() {
@@ -47,6 +47,7 @@ public abstract class AbstractGeometry implements Drawable {
 
 	@Override
 	public void setInvisible(boolean isInvisible) {
-		this.invisible = isInvisible;
+		invisible = isInvisible;
+		notifyObserversNoDelay();
 	}
 }

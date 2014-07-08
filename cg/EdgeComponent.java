@@ -1,18 +1,24 @@
 package cg;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 class EdgeComponent extends AbstractGeometry implements Edge {
 
 	private Edge next;
-	private Edge rot; // the dual of this edge (counterclockwise)
 	private Point o;
+	private Edge rot; // the dual of this edge (counterclockwise)
 
 	EdgeComponent() {
 		super();
 
+	}
+
+	@Override
+	public Point dest() {
+		return sym().orig();
 	}
 
 	@Override
@@ -23,11 +29,6 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public Edge dPrev() {
 		return invRot().oNext().invRot();
-	}
-
-	@Override
-	public Point dest() {
-		return sym().orig();
 	}
 
 	@Override
@@ -61,6 +62,21 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
+	public void paint(Graphics g) {
+		if (isInvisible()) {
+			return;
+		}
+		g.setColor(getColor());
+		Graphics2D g2D = (Graphics2D) g;
+		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
+		g2D.drawLine((int) orig().getX(), (int) orig().getY(), (int) dest()
+				.getX(), (int) dest().getY());
+		g2D.setStroke(new BasicStroke());
+		orig().paint(g);
+		dest().paint(g);
+	}
+
+	@Override
 	public Edge rNext() {
 		return rot().oNext().invRot();
 	}
@@ -76,6 +92,13 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
+	public void setColor(Color c) {
+		super.setColor(c);
+		o.setColor(c);
+		sym().orig().setColor(c);
+	}
+
+	@Override
 	public void setDest(Point d) {
 		sym().setOrig(d);
 	}
@@ -83,10 +106,8 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public void setInvisible(boolean isInvisible) {
 		super.setInvisible(isInvisible);
-		synchronized (this) {
-			o.setInvisible(isInvisible);
-			sym().orig().setInvisible(isInvisible);
-		}
+		o.setInvisible(isInvisible);
+		sym().orig().setInvisible(isInvisible);
 	}
 
 	@Override
@@ -107,20 +128,6 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public Edge sym() {
 		return rot.rot();
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		if (isInvisible()) {
-			return;
-		}
-		g.setColor(getColor());
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-		g2D.drawLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
-		g2D.setStroke(new BasicStroke());
-		orig().paint(g);
-		dest().paint(g);
 	}
 
 	@Override

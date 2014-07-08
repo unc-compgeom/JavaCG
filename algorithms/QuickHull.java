@@ -4,9 +4,9 @@ import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
 import cg.GeometryManager;
-import cg.Polygon;
 import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class QuickHull {
 	public static void findConvexHull(PointSet points, Polygon hull) {
@@ -20,8 +20,7 @@ public class QuickHull {
 		hull.add(hull.getFirst());
 	}
 
-	private static void findHull(PointSet points, Polygon hull, Point a,
-			Point b) {
+	private static void findHull(PointSet points, Polygon hull, Point a, Point b) {
 		PointSet sub = GeometryManager.newPointSet();
 		sub.setColor(CG.randomColor());
 
@@ -38,9 +37,9 @@ public class QuickHull {
 
 		// find farthest point from segment ab
 		Point c = sub.get(0);
-		long distance = 0;
+		double distance = 0;
 		for (Point point : sub) {
-			long newDist = distance(a, b, point);
+			double newDist = distance(a, b, point);
 			if (newDist > distance) {
 				distance = newDist;
 				c = point;
@@ -51,15 +50,15 @@ public class QuickHull {
 		findHull(sub, hull, a, c);
 		findHull(sub, hull, c, b);
 		// clean up
-		GeometryManager.destroyGeometry(sub);
+		GeometryManager.destroy(sub);
 	}
 
-	private static long distance(Point A, Point B, Point C) {
-		int ABx = B.getX() - A.getX();
-		int ABy = B.getY() - A.getY();
-		int ACx = A.getX() - C.getX();
-		int ACy = A.getY() - C.getY();
-		int num = ABx * ACy - ABy * ACx;
+	private static double distance(Point A, Point B, Point C) {
+		float ABx = B.getX() - A.getX();
+		float ABy = B.getY() - A.getY();
+		float ACx = A.getX() - C.getX();
+		float ACy = A.getY() - C.getY();
+		double num = ABx * ACy - ABy * ACx;
 		if (num < 0)
 			num = -num;
 		return num;

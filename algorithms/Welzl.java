@@ -36,13 +36,13 @@ public class Welzl {
 				c.setColor(new Color(220, 220, 220));
 				Circle tmp = c;
 				c = SEC(S, P);
-				GeometryManager.destroyGeometry(tmp);
+				GeometryManager.destroy(tmp);
 			}
 			s.setColor(old);
 		}
 
-		GeometryManager.destroyGeometry(S);
-		GeometryManager.destroyGeometry(P);
+		GeometryManager.destroy(S);
+		GeometryManager.destroy(P);
 		return c;
 	}
 }

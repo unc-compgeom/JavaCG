@@ -3,36 +3,6 @@ package cg;
 public interface Point extends Comparable<Point>, Cloneable, Drawable {
 
 	/**
-	 * Sets the x-coordinate.
-	 * 
-	 * @param x
-	 *            the x-coordinate.
-	 */
-	public void setX(int x);
-
-	/**
-	 * Sets the y-coordinate.
-	 * 
-	 * @param y
-	 *            the y-coordinate.
-	 */
-	public void setY(int y);
-
-	/**
-	 * Gets the x-coordinate.
-	 * 
-	 * @return the x-coordinate.
-	 */
-	public int getX();
-
-	/**
-	 * Gets the y-coordinate.
-	 * 
-	 * @return the y-coordinate.
-	 */
-	public int getY();
-
-	/**
 	 * Adds this point's coordinates to another point's coordinates. Returns a
 	 * new point at location (this.x + p.x, this.y + p.y).
 	 * 
@@ -43,14 +13,12 @@ public interface Point extends Comparable<Point>, Cloneable, Drawable {
 	public Point add(Point p);
 
 	/**
-	 * Subtracts another point's coordinates from this point's coordinates.
-	 * Returns a new point with location (this.x - p.x, this.y - p.y).
+	 * Computes the distance squared from this point to point p.
 	 * 
 	 * @param p
-	 *            the point to subtract
-	 * @return a new point at location (this.x - p.x, this.y - p.y).
+	 * @return the distance squared from this point to point p.
 	 */
-	public Point sub(Point p);
+	public double distanceSquared(Point p);
 
 	/**
 	 * Divides this point's coordinates by a scalar. Returns a new point with
@@ -60,17 +28,7 @@ public interface Point extends Comparable<Point>, Cloneable, Drawable {
 	 *            the scalar
 	 * @return a new point at location (this.x/i, this.y/i).
 	 */
-	public Point div(double i);
-
-	/**
-	 * Multiplies this point's coordinates by a scalar. Returns a new point with
-	 * location (this.x*i, this.y*i).
-	 * 
-	 * @param i
-	 *            the scalar
-	 * @return a new point at location (this.x*i, this.y*i).
-	 */
-	public Point mult(double i);
+	public Point div(float i);
 
 	/**
 	 * Computes the dot product of this point with point p. Returns this.x*p.x +
@@ -80,14 +38,56 @@ public interface Point extends Comparable<Point>, Cloneable, Drawable {
 	 *            the point
 	 * @return this.x*p.x + this.y * p.y.
 	 */
-	public int dot(Point p);
+	public double dot(Point p);
 
 	/**
-	 * Computes the distance squared from this point to point p.
+	 * Gets the x-coordinate.
+	 * 
+	 * @return the x-coordinate.
+	 */
+	public float getX();
+
+	/**
+	 * Gets the y-coordinate.
+	 * 
+	 * @return the y-coordinate.
+	 */
+	public float getY();
+
+	/**
+	 * Multiplies this point's coordinates by a scalar. Returns a new point with
+	 * location (this.x*i, this.y*i).
+	 * 
+	 * @param i
+	 *            the scalar
+	 * @return a new point at location (this.x*i, this.y*i).
+	 */
+	public Point mult(float i);
+
+	/**
+	 * Sets the x-coordinate.
+	 * 
+	 * @param x
+	 *            the x-coordinate.
+	 */
+	public void setX(float x);
+
+	/**
+	 * Sets the y-coordinate.
+	 * 
+	 * @param y
+	 *            the y-coordinate.
+	 */
+	public void setY(float y);
+
+	/**
+	 * Subtracts another point's coordinates from this point's coordinates.
+	 * Returns a new point with location (this.x - p.x, this.y - p.y).
 	 * 
 	 * @param p
-	 * @return the distance squared from this point to point p.
+	 *            the point to subtract
+	 * @return a new point at location (this.x - p.x, this.y - p.y).
 	 */
-	public double distanceSquared(Point p);
+	public Point sub(Point p);
 
 }

@@ -11,20 +11,27 @@ import cg.PointSet;
 import cg.Polygon;
 
 public class BentleyFaustPreparata {
+	/**
+	 * Computes the convex hull using the Bentley Faust Preparata. Precondition:
+	 * all points are at integer coordinates.
+	 * 
+	 * @param points
+	 * @param hull
+	 */
 	public static void findConvexHull(PointSet points, Polygon hull) {
 		ListIterator<Point> it = points.listIterator();
 		Point v = it.next();
-		int minX = v.getX(), maxX = v.getX();
+		int minX = (int) v.getX(), maxX = (int) v.getX();
 		Point minMin = v, minMax = v, maxMin = v, maxMax = v;
 		// find min/max vertices
 		while (it.hasNext()) {
 			v = it.next();
 			if (v.getX() < minX) {
-				minX = v.getX();
+				minX = (int) v.getX();
 				minMin = v;
 				minMax = v;
 			} else if (v.getX() > maxX) {
-				maxX = v.getX();
+				maxX = (int) v.getX();
 				maxMin = v;
 				maxMax = v;
 			} else if (v.getX() == minX) {
@@ -55,7 +62,7 @@ public class BentleyFaustPreparata {
 		it = points.listIterator();
 		while (it.hasNext()) {
 			v = it.next();
-			int index = (v.getX() - minX);
+			int index = (int) (v.getX() - minX);
 			if (buckets[index] == null) {
 				buckets[index] = new VertexHolder();
 			}
@@ -124,8 +131,8 @@ public class BentleyFaustPreparata {
 		// connect the first and last edges
 		hull.add(hull.getFirst());
 		// clean up
-		GeometryManager.destroyGeometry(upper);
-		GeometryManager.destroyGeometry(lower);
+		GeometryManager.destroy(upper);
+		GeometryManager.destroy(lower);
 	}
 }
 

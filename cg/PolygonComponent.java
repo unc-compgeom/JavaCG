@@ -27,7 +27,8 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 				g2D.setColor(super.getColor());
 				while (it.hasNext()) {
 					q = it.next();
-					g2D.drawLine(p.getX(), p.getY(), q.getX(), q.getY());
+					g2D.drawLine((int) p.getX(), (int) p.getY(),
+							(int) q.getX(), (int) q.getY());
 					p = q;
 				}
 				g2D.setStroke(new BasicStroke());

@@ -62,7 +62,6 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		base.setOrig(e.orig());
 		base.setDest(GeometryManager.newPoint(p));
 		QuadEdge.splice(base, e);
-
 		this.startingEdge = base;
 		// for drawing:
 		edges.add(base);

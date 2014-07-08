@@ -55,10 +55,10 @@ public class GeometryManager {
 	 *            The <tt>Drawable</tt> to remove.
 	 */
 	@SuppressWarnings("unchecked")
-	public static void destroyGeometry(Drawable d) {
+	public static void destroy(Drawable d) {
 		if (d instanceof Collection<?>) {
 			for (Point p : ((Collection<Point>) d)) {
-				GeometryManager.destroyGeometry(p);
+				GeometryManager.destroy(p);
 			}
 		}
 		synchronized (dispersedObjects) {
@@ -108,23 +108,6 @@ public class GeometryManager {
 	}
 
 	/**
-	 * Creates a new {@link Circle} initialized with a center point and radius.
-	 * This factory constructor automatically registers observers with the
-	 * object and sets its draw size.
-	 * 
-	 * @param x
-	 *            Center x-coordinate
-	 * @param y
-	 *            Center y-coordinate
-	 * @param radiusSquared
-	 * @return <tt>Circle</tt> object
-	 */
-	public static Circle newCircle(int x, int y, int radiusSquared) {
-		Circle c = new CircleComponent(x, y, radiusSquared);
-		return (Circle) buildGeometry(c);
-	}
-
-	/**
 	 * Creates a new {@link Circle} initialized with the
 	 * <code>PointSet points</code> that are on the circumference of the circle.
 	 * This factory constructor automatically registers observers with the
@@ -164,7 +147,7 @@ public class GeometryManager {
 	 *            the y-coordinate of the point
 	 * @return a <tt>Point</tt> object
 	 */
-	public static Point newPoint(int x, int y) {
+	public static Point newPoint(float x, float y) {
 		Point v = new PointComponent(x, y);
 		return (Point) buildGeometry(v);
 	}

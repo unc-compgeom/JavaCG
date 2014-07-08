@@ -9,6 +9,7 @@ import cg.Circle;
 import cg.Edge;
 import cg.GeometryManager;
 import cg.Point;
+import cg.Segment;
 
 public class Predicate {
 	public enum Orientation {
@@ -53,7 +54,7 @@ public class Predicate {
 		// ==
 		// [[ q.x-p.x, q.y-p.y]
 		// [ r.x-p.x, r.y-p.y]]
-		long det = (q.getX() - p.getX()) * (r.getY() - p.getY())
+		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
 		Orientation o;
 		if (det > 0) {
@@ -88,38 +89,56 @@ public class Predicate {
 	 * @return true iff s is inside or on the boundary of the circle
 	 */
 	public static boolean isPointInCircle(Point s, Circle c) {
-		// correctly handles the case of the null circle (radiusSquared = -1)
-		// correctly handles the case of the one point circle (radiusSquared =
-		// 0);
-		// do test
-		if (c.getRadiusSquared() == -1) {
+		// correctly handles the case of the null circle (no points).
+		// correctly handles the case of the one-point circle (one point).
+		// correctly handles the case of the two-point circle (diameter).
+		List<Point> points = c.getPoints();
+		if (points.size() == 0) {
 			return false;
-		}
-		boolean isInCircle = CG.distSquared(s, c.getOrigin()) <= c
-				.getRadiusSquared();
-		// animation code
-		Circle tmp = GeometryManager.newCircle(c);
-		tmp.setColor(Color.YELLOW);
-		Color old = s.getColor();
-		s.setColor(Color.YELLOW);
-		CG.animationDelay();
-		if (isInCircle) {
-			tmp.setColor(Color.GREEN);
-			s.setColor(Color.GREEN);
+		} else if (points.size() == 1) {
+			return s.compareTo(points.get(0)) == 0;
+		} else if (points.size() == 2) {
+			Point origin = GeometryManager.newPoint(points.get(1)
+					.sub(points.get(0)).div(2).add(points.get(0)));
+			double radiusSquared = points.get(0).distanceSquared(origin);
+			boolean isInCircle = CG.distSquared(s, origin) <= radiusSquared;
+			// animation code
+			Circle tmp = GeometryManager.newCircle(points);
+			Segment rad = GeometryManager.newSegment(s, origin);
+			Color old = s.getColor();
+			rad.setColor(Color.YELLOW);
+			tmp.setColor(Color.YELLOW);
+			origin.setColor(Color.YELLOW);
+			CG.animationDelay();
+			if (isInCircle) {
+				tmp.setColor(Color.GREEN);
+				rad.setColor(Color.GREEN);
+			} else {
+				tmp.setColor(Color.RED);
+				rad.setColor(Color.RED);
+			}
+			CG.animationDelay();
+			GeometryManager.destroy(origin);
+			GeometryManager.destroy(rad);
+			s.setColor(old);
+			GeometryManager.destroy(tmp);
+			return isInCircle;
 		} else {
-			tmp.setColor(Color.RED);
-			s.setColor(Color.RED);
+			Point p0 = points.get(0), p1 = points.get(1), p2 = points.get(2);
+			if (ccw(p0, p1, p2)) {
+				return isPointInCircle(s, points.get(0), points.get(1),
+						points.get(2));
+			} else {
+				return isPointInCircle(s, points.get(0), points.get(2),
+						points.get(1));
+			}
 		}
-		CG.animationDelay();
-		s.setColor(old);
-		GeometryManager.destroyGeometry(tmp);
-
-		return isInCircle;
 	}
 
 	/**
-	 * Tests if the {@link Point} <tt>test</tt> is inside the {@link Circle}
-	 * defined by points <tt>a</tt>, <tt>b</tt>, and <tt>c</tt>.
+	 * Tests if a {@link Point} is inside the {@link Circle} defined by points
+	 * <tt>a</tt>, <tt>b</tt>, and <tt>c</tt>. Points must be oriented
+	 * counterclockwise.
 	 * 
 	 * @param test
 	 *            Point to be tested
@@ -133,14 +152,14 @@ public class Predicate {
 	 * @return true iff <tt>test</tt> is in the circle
 	 */
 	public static boolean isPointInCircle(Point test, Point a, Point b, Point c) {
-		double det = (a.getX() * a.getX() + a.getY() * a.getY())
-				* triArea(b, c, test)
-				- (b.getX() * b.getX() + b.getY() * b.getY())
-				* triArea(a, c, test)
-				+ (c.getX() * c.getX() + c.getY() * c.getY())
-				* triArea(a, b, test)
-				- (test.getX() * test.getX() + test.getY() * test.getY())
-				* triArea(a, b, c);
+		float ax = a.getX(), ay = a.getY();
+		float bx = b.getX(), by = b.getY();
+		float cx = c.getX(), cy = c.getY();
+		float dx = test.getX(), dy = test.getY();
+		double det = (ax * ax + ay * ay) * triArea(b, c, test)
+				- (bx * bx + by * by) * triArea(a, c, test)
+				+ (cx * cx + cy * cy) * triArea(a, b, test)
+				- (dx * dx + dy * dy) * triArea(a, b, c);
 		boolean isInCircle = det > 0;
 		if (det == 0) {
 			return false;
@@ -151,20 +170,35 @@ public class Predicate {
 		points.add(b);
 		points.add(c);
 		Circle tmp = GeometryManager.newCircle(points);
-		tmp.setColor(Color.YELLOW);
+		// compute circle's origin
+		Point p = points.get(0), q = points.get(1), r = points.get(2);
+		double px = p.getX(), py = p.getY();
+		double qx = q.getX(), qy = q.getY();
+		double rx = r.getX(), ry = r.getY();
+		double det2 = (px - qx) * (py - ry) - (py - qy) * (px - rx);
+		float x = (float) ((p.add(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
+				* (p.add(r).div(2).dot(p.sub(r)))) / det2);
+		float y = (float) (((px - qx) * p.add(r).div(2).dot(p.sub(r)) - p
+				.add(q).div(2).dot(p.sub(q))
+				* (px - rx)) / det2);
+		Point origin = GeometryManager.newPoint(x, y);
+		Segment rad = GeometryManager.newSegment(origin, test);
 		Color old = test.getColor();
-		test.setColor(Color.YELLOW);
+		rad.setColor(Color.YELLOW);
+		tmp.setColor(Color.YELLOW);
 		CG.animationDelay();
 		if (isInCircle) {
 			tmp.setColor(Color.GREEN);
-			test.setColor(Color.GREEN);
+			rad.setColor(Color.GREEN);
 		} else {
 			tmp.setColor(Color.RED);
-			test.setColor(Color.RED);
+			rad.setColor(Color.RED);
 		}
 		CG.animationDelay();
+		GeometryManager.destroy(tmp);
+		GeometryManager.destroy(rad);
+		GeometryManager.destroy(origin);
 		test.setColor(old);
-		GeometryManager.destroyGeometry(tmp);
 		return isInCircle;
 	}
 
@@ -201,7 +235,7 @@ public class Predicate {
 	}
 
 	public static boolean leftOrAhead(Point p, Point q, Point r) {
-		long tmp = triArea(p, q, r);
+		double tmp = triArea(p, q, r);
 		return tmp > 0 || (tmp == 0 && ahead(p, q, r));
 	}
 
@@ -209,8 +243,8 @@ public class Predicate {
 		Point a = e.orig();
 		Point b = e.dest();
 		if (triArea(a, b, p) == 0) {
-			long dot = p.sub(a).dot(b.sub(a));
-			long distSq = CG.distSquared(a, b);
+			double dot = p.sub(a).dot(b.sub(a));
+			double distSq = CG.distSquared(a, b);
 			return 0 <= dot && dot <= distSq;
 		} else {
 			return false;
@@ -222,7 +256,7 @@ public class Predicate {
 	}
 
 	public static boolean rightOrAhead(Point p, Point q, Point r) {
-		long tmp = triArea(p, q, r);
+		double tmp = triArea(p, q, r);
 		return tmp < 0 || (tmp == 0 && ahead(p, q, r));
 	}
 
@@ -240,8 +274,8 @@ public class Predicate {
 	 *            a Point
 	 * @return twice the signed area
 	 */
-	public static long triArea(Point a, Point b, Point c) {
-		return (b.getX() - a.getX()) * (c.getY() - a.getY())
-				- (b.getY() - a.getY()) * (c.getX() - a.getX());
+	public static double triArea(Point a, Point b, Point c) {
+		return b.sub(a).getX() * c.sub(a).getY() - b.sub(a).getY()
+				* c.sub(a).getX();
 	}
 }

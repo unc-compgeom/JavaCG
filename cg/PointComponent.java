@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class PointComponent extends AbstractGeometry implements Point {
-	private int x;
-	private int y;
+	private float x;
+	private float y;
 
-	PointComponent(int x, int y) {
+	PointComponent(float x, float y) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -39,28 +39,28 @@ public class PointComponent extends AbstractGeometry implements Point {
 	}
 
 	@Override
-	public Point div(double i) {
-		return new PointComponent((int) (x / i), (int) (y / i));
+	public Point div(float i) {
+		return new PointComponent(x / i, y / i);
 	}
 
 	@Override
-	public int dot(Point v) {
+	public double dot(Point v) {
 		return x * v.getX() + y * v.getY();
 	}
 
 	@Override
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
 	@Override
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
 	@Override
-	public Point mult(double i) {
-		return new PointComponent((int) (x * i), (int) (y * i));
+	public Point mult(float i) {
+		return new PointComponent(x * i, y * i);
 	}
 
 	@Override
@@ -70,19 +70,19 @@ public class PointComponent extends AbstractGeometry implements Point {
 		g.setColor(super.getColor());
 		int size = (GeometryManager.getSize() > 2) ? GeometryManager.getSize()
 				: 2;
-		g.fillOval(x - size, y - size, 2 * size, 2 * size);
+		g.fillOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
 		g.setColor((super.getColor() == null || super.getColor() == Color.BLACK) ? Color.LIGHT_GRAY
 				: Color.BLACK);
-		g.drawOval(x - size, y - size, 2 * size, 2 * size);
+		g.drawOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
 	}
 
 	@Override
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
 	@Override
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
