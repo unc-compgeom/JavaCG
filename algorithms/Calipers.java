@@ -221,6 +221,6 @@ public class Calipers {
 		while (index < 0) {
 			index += points.size();
 		}
-		return points.get(index);
+		return points.get(index % points.size());
 	}
 }

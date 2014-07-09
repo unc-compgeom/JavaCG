@@ -40,6 +40,6 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 	@Override
 	public Point get(int i) {
 		// this method should throw an exception if i is out of bounds
-		return super.get(i % this.size());
+		return super.get(i);
 	}
 }
