@@ -3,13 +3,16 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
 public class QuickHull {
-	public static void findConvexHull(PointSet points, Polygon hull) {
+	public static Polygon findConvexHull(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		Point[] minMax = findMinMaxX(points);
 		hull.add(minMax[0]);
 		hull.add(minMax[1]);
@@ -18,6 +21,7 @@ public class QuickHull {
 		findHull(points, hull, minMax[1], minMax[0]);
 		// close the hull
 		hull.add(hull.getFirst());
+		return hull;
 	}
 
 	private static void findHull(PointSet points, Polygon hull, Point a, Point b) {

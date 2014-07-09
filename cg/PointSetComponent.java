@@ -129,6 +129,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public Point get(int index) {
+		// this method should thrown an exception if the index is out of bounds
 		synchronized (this) {
 			return points.get(index);
 		}

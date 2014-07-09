@@ -1,8 +1,7 @@
 package algorithms;
 
-import java.awt.Color;
-
 import predicates.Predicate;
+import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
@@ -26,9 +25,14 @@ public class Calipers {
 	 * @param diameterLine
 	 *            the line segment to be calculated by the algorithm (initially
 	 *            empty);
+	 * 
+	 * @return the convex hull
 	 */
-	public static void doCalipers(PointSet points, Polygon hull,
-			Segment widthLine, Segment diameterLine) {
+	public static Polygon doCalipers(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
+		Segment widthLine = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment diameterLine = GeometryManager.newSegment(-1, -1, -1, -1);
 		int i = 0;
 		int j = 1;
 		double diam = -1;
@@ -40,15 +44,15 @@ public class Calipers {
 		Segment widthSupport1 = GeometryManager.newSegment(-1, -1, -1, -1);
 		Segment widthSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
 
-		diamSupport1.setColor(Color.BLUE);
-		diamSupport2.setColor(Color.BLUE);
-		widthSupport1.setColor(Color.BLUE);
-		widthSupport2.setColor(Color.BLUE);
-		diameterLine.setColor(Color.GREEN);
-		widthLine.setColor(Color.ORANGE);
+		diamSupport1.setColor(ColorSpecial.BLUE);
+		diamSupport2.setColor(ColorSpecial.BLUE);
+		widthSupport1.setColor(ColorSpecial.BLUE);
+		widthSupport2.setColor(ColorSpecial.BLUE);
+		diameterLine.setColor(ColorSpecial.GREEN);
+		widthLine.setColor(ColorSpecial.ORANGE);
 
 		// Jarvis march is used to find the convex hull
-		JarvisMarch.findConvexHull(points, hull);
+		hull = JarvisMarch.findConvexHull(points);
 
 		// Initialization Step
 		while (cwIntersection(0, j, hull)) {
@@ -75,6 +79,7 @@ public class Calipers {
 		GeometryManager.destroy(diamSupport2);
 		GeometryManager.destroy(widthSupport1);
 		GeometryManager.destroy(widthSupport2);
+		return hull;
 	}
 
 	/**

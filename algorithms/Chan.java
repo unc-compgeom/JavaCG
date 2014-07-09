@@ -3,51 +3,81 @@ package algorithms;
 import java.awt.Color;
 
 import util.CG;
+import util.ColorSpecial;
 import cg.GeometryManager;
-import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
 public class Chan {
 
-	public static void findConvexHull(PointSet points, Polygon hull) {
-		for (int t = 1; t < points.size(); t++) {
-			int m = (int) Math.pow(2, Math.pow(2, t));
-			PointSet[] divided = new PointSet[m];
-			Polygon[] hulls = new Polygon[m];
-			for (int ps = 0; ps < hulls.length; ps++) {
-				Color c = CG.randomColor();
-				divided[ps] = GeometryManager.newPointSet();
-				divided[ps].setColor(c);
-				hulls[ps] = GeometryManager.newPolygon();
-				hulls[ps].setColor(c);
-				for (int i = 0; i < m && i + ps * m < points.size(); i++) {
-					divided[ps].addFirst(points.get(i + ps * m));
-				}
-				GrahmScan.findConvexHull(divided[ps], hulls[ps]);
+	public static Polygon findConvexHull(PointSet points) {
+		int t = 1;
+		int m, h;
+		Polygon hull;
+		do {
+			m = h = (int) Math.pow(2, Math.pow(2, t));
+			if (m > points.size()) {
+				return findConvexHull(points, points.size(), points.size());
 			}
-			int[] minHullPt = getMinHullPoint(hulls);
-			hull.addFirst(hulls[minHullPt[0]].get(minHullPt[1]));
-			// TODO fix
-			for (int x = 0; x < m; x++) {
-				Point p = nextHullPoint(hulls, hull.getLast());
-				if (p.equals(hull.getFirst())) {
-					return;
-				} else {
-					hull.addLast(p);
-				}
+			hull = findConvexHull(points, m, h);
+			if (!hull.isEmpty()) {
+				return hull;
 			}
-			for (PointSet p : divided) {
-				GeometryManager.destroy(p);
-			}
-			for (Polygon p : hulls) {
-				GeometryManager.destroy(p);
-			}
-			hull.clear();
-		}
+			t++;
+		} while (true);
+
 	}
 
-	private static int[] getMinHullPoint(Polygon[] hulls) {
+	private static Polygon findConvexHull(PointSet points, double m, int h) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
+		// Partition points into ceil(n/m) subsets each of size at most m.
+		PointSet[] partitions = new PointSet[(int) Math.ceil(points.size() / m)];
+		Polygon[] hulls = new Polygon[(int) Math.ceil(points.size() / m)];
+		for (int i = 0; i < partitions.length; i++) {
+			Color c = CG.randomColor();
+			partitions[i] = GeometryManager.newPointSet();
+			partitions[i].setColor(c);
+			hulls[i] = GeometryManager.newPolygon();
+			hulls[i].setColor(c);
+			for (int j = 0; j < m && j + i * m < points.size(); j++) {
+				partitions[i].add(points.get((int) (j + i * m)));
+			}
+		}
+		// compute the convex hull of each partition
+		for (int i = 0; i < partitions.length; i++) {
+			hulls[i] = GrahmScan.findConvexHull(partitions[i]);
+		}
+		// initialize the convex hull
+		int[] hullAndPoint = getLeftmostHullAndPoint(hulls);
+		hull.add(hulls[hullAndPoint[0]].get(hullAndPoint[1]));
+		hullAndPoint = getRightmostHullAndPoint(hulls);
+		hull.add(hulls[hullAndPoint[0]].get(hullAndPoint[1]));
+		// conquer
+		for (int k = 1; k < m; k++) {
+			for (int i = 1; i < hulls.length; i++) {
+				// find point q_i that maximizes <p_{k-1}p_{k}q_{i}
+			}
+		}
+		// TODO fix
+		// Clean up
+		for (PointSet p : partitions) {
+			GeometryManager.destroy(p);
+		}
+		for (Polygon p : hulls) {
+			GeometryManager.destroy(p);
+		}
+		// if done {
+		// return hull;
+		// } else
+		{
+			hull.clear();
+		}
+		// TODO remove this line
+		return hull;
+	}
+
+	private static int[] getLeftmostHullAndPoint(Polygon[] hulls) {
 		int minHull = 0;
 		int minPt = 0;
 		for (int i = 0; i < hulls.length; i++) {
@@ -59,5 +89,19 @@ public class Chan {
 			}
 		}
 		return new int[] { minHull, minPt };
+	}
+
+	private static int[] getRightmostHullAndPoint(Polygon[] hulls) {
+		int maxHull = 0;
+		int maxPt = 0;
+		for (int i = 0; i < hulls.length; i++) {
+			for (int j = 0; j < hulls[i].size(); j++) {
+				if (hulls[i].get(j).compareTo(hulls[maxHull].get(maxPt)) > 0) {
+					maxHull = i;
+					maxPt = j;
+				}
+			}
+		}
+		return new int[] { maxHull, maxPt };
 	}
 }

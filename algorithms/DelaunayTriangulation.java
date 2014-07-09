@@ -1,7 +1,6 @@
 package algorithms;
 
-import java.awt.Color;
-
+import util.ColorSpecial;
 import util.DuplicatePointException;
 import util.MalformedTriangulationException;
 import cg.GeometryManager;
@@ -10,14 +9,14 @@ import cg.PointSet;
 import cg.Subdivision;
 
 public class DelaunayTriangulation {
-	public static void doDelaunay(PointSet points) {
+	public static Subdivision doDelaunay(PointSet points) {
 		// TODO find a triangle large enough to encompass <tt>points</tt>
 		int scale = 16364;
 		Subdivision s = GeometryManager.newSubdivision(
 				GeometryManager.newPoint(-1 * scale, -1 * scale),
 				GeometryManager.newPoint(2 * scale, -1 * scale),
 				GeometryManager.newPoint(-1 * scale, 2 * scale));
-		s.setColor(Color.GREEN.darker());
+		s.setColor(ColorSpecial.PASTEL_GREEN);
 		for (Point p : points) {
 			try {
 				s.insertSite(p);
@@ -29,6 +28,6 @@ public class DelaunayTriangulation {
 				e.printStackTrace();
 			}
 		}
-
+		return s;
 	}
 }

@@ -3,17 +3,19 @@ package algorithms;
 import java.awt.Color;
 
 import predicates.Predicate;
+import util.ColorSpecial;
 import cg.Circle;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 
 public class Welzl {
-	public static void findSmallestEnclosingCircle(PointSet points,
-			Circle result) {
+	public static Circle findSmallestEnclosingCircle(PointSet points) {
+		Circle result;
 		PointSet s = GeometryManager.newPointSet(points);
 		result = SEC(s, GeometryManager.newPointSet());
-		result.setColor(Color.GREEN);
+		result.setColor(ColorSpecial.PASTEL_GREEN);
+		return result;
 	}
 
 	private static Circle SEC(PointSet points, PointSet set) {
@@ -28,8 +30,7 @@ public class Welzl {
 			c.setColor(Color.PINK);
 		} else {
 			Point s = S.remove(0);
-			Color old = s.getColor();
-			s.setColor(Color.LIGHT_GRAY);
+			s.setColor(s.getColor().darker());
 			c = SEC(S, P);
 			if (!Predicate.isPointInCircle(s, c)) {
 				P.add(s);
@@ -38,7 +39,7 @@ public class Welzl {
 				c = SEC(S, P);
 				GeometryManager.destroy(tmp);
 			}
-			s.setColor(old);
+			s.setColor(s.getColor().brighter());
 		}
 
 		GeometryManager.destroy(S);

@@ -38,7 +38,7 @@ public interface Drawable {
 	 * Sets the color of this object. The object will be painted with this
 	 * color.
 	 * 
-	 * @param c
+	 * @param green
 	 *            the color
 	 */
 	public void setColor(Color c);

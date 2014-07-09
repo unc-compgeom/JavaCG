@@ -1,6 +1,7 @@
 package algorithms;
 
 import predicates.Predicate;
+import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
@@ -8,7 +9,9 @@ import cg.Polygon;
 
 public class Melkman {
 
-	public static void findConvexHull(PointSet points, Polygon hull) {
+	public static Polygon findConvexHull(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		Point p0 = points.get(0);
 		Point p1 = points.get(1);
 		hull.addFirst(p0);
@@ -33,5 +36,6 @@ public class Melkman {
 				hull.addLast(GeometryManager.newPoint(points.get(i)));
 			}
 		}
+		return hull;
 	}
 }

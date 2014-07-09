@@ -1,10 +1,10 @@
 package algorithms;
 
-import java.awt.Color;
 import java.util.ListIterator;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
+import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
@@ -16,9 +16,11 @@ public class BentleyFaustPreparata {
 	 * all points are at integer coordinates.
 	 * 
 	 * @param points
-	 * @param hull
+	 * @return the convex hull
 	 */
-	public static void findConvexHull(PointSet points, Polygon hull) {
+	public static Polygon findConvexHull(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		ListIterator<Point> it = points.listIterator();
 		Point v = it.next();
 		int minX = (int) v.getX(), maxX = (int) v.getX();
@@ -85,7 +87,7 @@ public class BentleyFaustPreparata {
 		// modification of Monotone Chain
 		// lower
 		Polygon lower = GeometryManager.newPolygon();
-		lower.setColor(Color.MAGENTA);
+		lower.setColor(ColorSpecial.MAGENTA);
 		lower.add(minMin);
 		for (int i = 1; i < buckets.length; i++) {
 			if (buckets[i] == null) {
@@ -104,7 +106,7 @@ public class BentleyFaustPreparata {
 		}
 		// upper
 		Polygon upper = GeometryManager.newPolygon();
-		upper.setColor(Color.BLUE);
+		upper.setColor(ColorSpecial.BLUE);
 		upper.add(maxMax);
 		for (int i = buckets.length - 2; i >= 0; i--) {
 			if (buckets[i] == null) {
@@ -133,6 +135,7 @@ public class BentleyFaustPreparata {
 		// clean up
 		GeometryManager.destroy(upper);
 		GeometryManager.destroy(lower);
+		return hull;
 	}
 }
 

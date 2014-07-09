@@ -5,14 +5,17 @@ import java.awt.Color;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import util.ColorSpecial;
 import cg.GeometryManager;
-import cg.Polygon;
 import cg.Point;
 import cg.PointSet;
+import cg.Polygon;
 
 public class MonotoneChain {
 
-	public static void findConvexHull(PointSet points, Polygon hull) {
+	public static Polygon findConvexHull(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		PointSet sorted = CG.lexicographicalSort(points);
 		// lower hull
 		Polygon lower = GeometryManager.newPolygon();
@@ -48,5 +51,6 @@ public class MonotoneChain {
 		// clean up
 		GeometryManager.destroy(upper);
 		GeometryManager.destroy(lower);
+		return hull;
 	}
 }

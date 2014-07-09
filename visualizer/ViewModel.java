@@ -5,22 +5,11 @@ import java.awt.Dimension;
 import java.util.Random;
 
 import algorithms.Algorithm;
-import algorithms.BentleyFaustPreparata;
-import algorithms.Calipers;
-import algorithms.Chan;
-import algorithms.DelaunayTriangulation;
-import algorithms.GrahmScan;
-import algorithms.JarvisMarch;
-import algorithms.Melkman;
-import algorithms.MonotoneChain;
-import algorithms.QuickHull;
-import algorithms.Welzl;
 import cg.Drawable;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
-import cg.Segment;
 
 public class ViewModel {
 	enum InsertionMode {
@@ -235,57 +224,17 @@ public class ViewModel {
 
 	public void runAlgorithm(final Algorithm algorithm) {
 		final PointSet points = (polygonEnabled) ? polygon : pointSet;
-		final Polygon hull = GeometryManager.newPolygon();
-		hull.setColor(Color.RED);
 		if (polygonEnabled) {
 			polygon = GeometryManager.newPolygon();
 		} else {
 			pointSet = GeometryManager.newPointSet();
 		}
 		try {
-			switch (algorithm) {
-			case BENTLEY_FAUST_PREPARATA:
-				BentleyFaustPreparata.findConvexHull(points, hull);
-				break;
-			case CALIPERS:
-				Segment width = GeometryManager.newSegment(-1, -1, -1, -1);
-				Segment diameter = GeometryManager.newSegment(-1, -1, -1, -1);
-				Calipers.doCalipers(points, hull, width, diameter);
-				break;
-			case CHAN:
-				Chan.findConvexHull(points, hull);
-				break;
-			case DELAUNAY_TRIANGULATION:
-				DelaunayTriangulation.doDelaunay(points);
-				break;
-			case GRAHM_SCAN:
-				GrahmScan.findConvexHull(points, hull);
-				break;
-			case JARVIS_MARCH:
-				JarvisMarch.findConvexHull(points, hull);
-				break;
-			case MELKMAN:
-				Melkman.findConvexHull(points, hull);
-				break;
-			case MONOTONE_CHAIN:
-				MonotoneChain.findConvexHull(points, hull);
-				break;
-			case QUICKHULL:
-				QuickHull.findConvexHull(points, hull);
-				break;
-			case Welzl:
-				Welzl.findSmallestEnclosingCircle(points, null);
-				break;
-			default:
-				System.out.println(algorithm
-						+ " not yet implemented in ViewModel.");
-				break;
-			}
+			Algorithm.run(algorithm, points);
 		} catch (Exception e) {
 			System.out.println("Exception while running " + algorithm);
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

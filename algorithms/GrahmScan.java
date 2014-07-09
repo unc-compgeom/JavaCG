@@ -3,13 +3,27 @@ package algorithms;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
+import util.ColorSpecial;
+import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
 public class GrahmScan {
 
-	public static void findConvexHull(PointSet points, Polygon hull) {
+	public static Polygon findConvexHull(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
+		// degenerate case handling
+		{
+			if (points.size() == 0) {
+				return hull;
+			} else if (points.size() == 1) {
+				hull.add(points.get(0));
+				return hull;
+			}
+		}
+		// Grahm Scan
 		Point smallest = CG.findSmallestYX(points);
 		PointSet sorted = CG.sortByAngle(points, smallest);
 		hull.push(sorted.get(0));
@@ -32,5 +46,6 @@ public class GrahmScan {
 		}
 		// close hull
 		hull.addFirst(hull.getLast());
+		return hull;
 	}
 }

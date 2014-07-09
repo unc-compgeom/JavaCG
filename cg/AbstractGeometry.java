@@ -15,7 +15,7 @@ public abstract class AbstractGeometry implements Drawable {
 	private boolean invisible;
 
 	AbstractGeometry() {
-		c = Color.black;
+		c = Color.BLACK;
 	}
 
 	@Override

@@ -50,24 +50,24 @@ public class CG {
 		double minY = min.getY();
 		Point lookingAt;
 		Color oldLooking = null;
-		min.setColor(Color.GREEN);
+		min.setColor(ColorSpecial.GREEN);
 		for (int i = 1; i < points.size(); i++) {
 			lookingAt = points.get(i);
 			if (lookingAt != min) {
 				oldLooking = lookingAt.getColor();
-				lookingAt.setColor(Color.ORANGE);
+				lookingAt.setColor(ColorSpecial.ORANGE);
 			}
 			if (lookingAt.getY() <= minY) {
 				if (lookingAt.getY() < minY) {
 					min.setColor(oldLooking);
 					min = lookingAt;
 					minY = min.getY();
-					min.setColor(Color.GREEN);
+					min.setColor(ColorSpecial.GREEN);
 				} else {
 					min.setColor(oldLooking);
 					min = (min.getX() < lookingAt.getX()) ? min : lookingAt;
 					minY = min.getY();
-					min.setColor(Color.GREEN);
+					min.setColor(ColorSpecial.GREEN);
 				}
 			}
 			animationDelay();
@@ -94,7 +94,7 @@ public class CG {
 		sorter.addAll(points);
 		PointSet sorted = GeometryManager.newPointSet();
 		Color c = sorted.getColor();
-		sorted.setColor(Color.cyan);
+		sorted.setColor(ColorSpecial.CYAN);
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
@@ -153,7 +153,7 @@ public class CG {
 		sorter.addAll(points);
 		PointSet sorted = GeometryManager.newPointSet();
 		Color c = sorted.getColor();
-		sorted.setColor(Color.cyan);
+		sorted.setColor(ColorSpecial.CYAN);
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
