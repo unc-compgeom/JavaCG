@@ -94,8 +94,8 @@ public class Calipers {
 	 */
 	public static double checkDiameter(double diam, int i, int j, Polygon hull,
 			Segment diamline, Segment diamSupport1, Segment diamSupport2) {
-		Point pi = hull.get(i);
-		Point pj = hull.get(j);
+		Point pi = get(hull, i);
+		Point pj = get(hull, j);
 		double tempdiam = pi.distanceSquared(pj);
 		if (tempdiam > diam) {
 			int tan1, tan2;
@@ -115,8 +115,8 @@ public class Calipers {
 			// as the
 			// head of its reflection about its tail are the endpoints for the
 			// support lines.
-			Segment supportBasis = GeometryManager.newSegment(hull.get(tan1),
-					hull.get(tan2));
+			Segment supportBasis = GeometryManager.newSegment(get(hull, tan1),
+					get(hull, tan2));
 			supportBasis.setInvisible(true);
 			supportBasis.translate(pi);
 			diamSupport1.setTail(supportBasis.getHead());
@@ -163,19 +163,19 @@ public class Calipers {
 			q = i + 1;
 		}
 		// line segment from p to q
-		Segment pq = GeometryManager.newSegment(hull.get(p), hull.get(q));
+		Segment pq = GeometryManager.newSegment(get(hull, p), get(hull, q));
 		pq.setInvisible(true);
 		// line segment at r parallel to the line segment p to q
-		Segment rrq = GeometryManager.newSegment(hull.get(p), hull.get(q));
+		Segment rrq = GeometryManager.newSegment(get(hull, p), get(hull, q));
 		rrq.setInvisible(true);
-		rrq.translate(hull.get(r));
+		rrq.translate(get(hull, r));
 		// intersection of line pq with the line perpendicular to rrq
 		Point intersection = rrq.findPerpendicular().findIntersection(pq);
 		// distance from r to the intersection point is a candidate width
-		tempwidth = intersection.distanceSquared(hull.get(r));
+		tempwidth = intersection.distanceSquared(get(hull, r));
 		if (tempwidth < width) {
 			width = tempwidth;
-			widthline.setTail(hull.get(r));
+			widthline.setTail(get(hull, r));
 			widthline.setHead(intersection);
 			// The support basis stores the direction that the support lines
 			// will point
@@ -209,11 +209,18 @@ public class Calipers {
 	 * @return
 	 */
 	private static boolean cwIntersection(int i, int j, Polygon hull) {
-		Point Pa = GeometryManager.newPoint(hull.get(i - 1));
-		Point Pb = GeometryManager.newPoint(hull.get(i));
-		Point Pd = GeometryManager.newPoint(hull.get(j + 1));
-		Pd.setX(Pd.getX() - hull.get(j).getX() + Pb.getX());
-		Pd.setY(Pd.getY() - hull.get(j).getY() + Pb.getY());
+		Point Pa = GeometryManager.newPoint(get(hull, i - 1));
+		Point Pb = GeometryManager.newPoint(get(hull, i));
+		Point Pd = GeometryManager.newPoint(get(hull, j + 1));
+		Pd.setX(Pd.getX() - get(hull, j).getX() + Pb.getX());
+		Pd.setY(Pd.getY() - get(hull, j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
+	}
+
+	private static Point get(PointSet points, int index) {
+		while (index < 0) {
+			index += points.size();
+		}
+		return points.get(index);
 	}
 }

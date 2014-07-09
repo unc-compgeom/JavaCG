@@ -39,9 +39,7 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 
 	@Override
 	public Point get(int i) {
-		while (i < 0) {
-			i = i + this.size();
-		}
+		// this method should throw an exception if i is out of bounds
 		return super.get(i % this.size());
 	}
 }
