@@ -13,6 +13,7 @@ import cg.PointSet;
 
 public class CG {
 
+	// method call counters
 	public static int cross = 0;
 	public static int distSquared = 0;
 	public static int findSmallestYX = 0;
@@ -21,6 +22,7 @@ public class CG {
 	public static int sortByAngle = 0;
 
 	/**
+	 * Computes the distance squared between points p and q
 	 * 
 	 * @param p
 	 * @param q

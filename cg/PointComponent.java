@@ -1,8 +1,7 @@
 package cg;
 
+import java.awt.Color;
 import java.awt.Graphics;
-
-import util.ColorSpecial;
 
 public class PointComponent extends AbstractGeometry implements Point {
 	private float x;
@@ -68,13 +67,17 @@ public class PointComponent extends AbstractGeometry implements Point {
 	public void paint(Graphics g) {
 		if (isInvisible())
 			return;
-		g.setColor(super.getColor());
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
+		}
 		int size = (GeometryManager.getSize() > 2) ? GeometryManager.getSize()
 				: 2;
 		g.fillOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
-		g.setColor((super.getColor() == null || super.getColor() == ColorSpecial.BLACK) ? ColorSpecial.LIGHT_GRAY
-				: ColorSpecial.BLACK);
+		g.setColor((c == null || c == Color.BLACK) ? Color.LIGHT_GRAY
+				: Color.BLACK);
 		g.drawOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
+		g.setColor(oldG);
 	}
 
 	@Override

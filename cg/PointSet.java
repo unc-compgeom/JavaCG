@@ -56,4 +56,15 @@ public interface PointSet extends Drawable, List<Point>, Deque<Point>,
 	 */
 	public void addNoDelay(Point v);
 
+	/**
+	 * Adds a point to the point set and notifies its observers without any
+	 * animation delay.
+	 * 
+	 * @param x
+	 *            the x-coordinate of the point to add.
+	 * @param y
+	 *            the y-coordinate of the poitn to add.
+	 */
+	public void addNoDelay(int x, int y);
+
 }

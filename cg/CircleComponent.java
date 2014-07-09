@@ -24,6 +24,9 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	 */
 	CircleComponent(List<Point> points) {
 		this.points = points;
+		for (Point point : points) {
+			GeometryManager.destroy(point);
+		}
 		// do computations for drawing
 		origin = new PointComponent(0, 0);
 		radiusSquared = -1;
@@ -67,7 +70,10 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 		if (isInvisible()) {
 			return;
 		}
-		g.setColor(super.getColor());
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
+		}
 		int radius = (int) Math.sqrt(radiusSquared);
 		double x = origin.getX();
 		double y = origin.getY();
@@ -77,11 +83,9 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 				radius * 2);
 		g2D.setStroke(new BasicStroke());
 		for (Point p : points) {
-			Color old = p.getColor();
-			p.setColor(getColor());
 			p.paint(g);
-			p.setColor(old);
 		}
+		g.setColor(oldG);
 	}
 
 	@Override

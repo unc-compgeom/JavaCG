@@ -1,6 +1,5 @@
 package cg;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,13 +53,7 @@ public class GeometryManager {
 	 * @param d
 	 *            The <tt>Drawable</tt> to remove.
 	 */
-	@SuppressWarnings("unchecked")
 	public static void destroy(Drawable d) {
-		if (d instanceof Collection<?>) {
-			for (Point p : ((Collection<Point>) d)) {
-				GeometryManager.destroy(p);
-			}
-		}
 		synchronized (dispersedObjects) {
 			dispersedObjects.remove(d);
 		}
@@ -124,8 +117,8 @@ public class GeometryManager {
 
 	/**
 	 * Creates a new {@link Circle} initialized with the same properties as
-	 * <code>Circle c</code>. This factory constructor automatically registers
-	 * observers with the object and sets its draw size.
+	 * <code>Circle color</code>. This factory constructor automatically
+	 * registers observers with the object and sets its draw size.
 	 * 
 	 * @param points
 	 *            Points on the circumference of the circle.

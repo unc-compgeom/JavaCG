@@ -14,8 +14,6 @@ import cg.Polygon;
 public class MonotoneChain {
 
 	public static Polygon findConvexHull(PointSet points) {
-		Polygon hull = GeometryManager.newPolygon();
-		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		PointSet sorted = CG.lexicographicalSort(points);
 		// lower hull
 		Polygon lower = GeometryManager.newPolygon();
@@ -42,6 +40,8 @@ public class MonotoneChain {
 			upper.addLast(sorted.get(i));
 		}
 		// join
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		for (int i = 0; i < lower.size(); i++) {
 			hull.add(lower.get(i));
 		}

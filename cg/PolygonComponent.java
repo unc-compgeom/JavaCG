@@ -1,6 +1,7 @@
 package cg;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Iterator;
@@ -14,17 +15,20 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 
 	@Override
 	public void paint(Graphics g) {
-		if (isInvisible())
-			return;
-		// draw edges, then points
 		synchronized (this) {
+			if (isInvisible())
+				return;
+			Color oldG = g.getColor(), c = super.getColor();
+			if (c != null) {
+				g.setColor(c);
+			}
+			// draw edges, then points
 			Iterator<Point> it = super.iterator();
 			Point p, q;
 			if (super.size() > 1) {
 				p = it.next();
 				Graphics2D g2D = (Graphics2D) g;
 				g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-				g2D.setColor(super.getColor());
 				while (it.hasNext()) {
 					q = it.next();
 					g2D.drawLine((int) p.getX(), (int) p.getY(),
@@ -34,6 +38,7 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 				g2D.setStroke(new BasicStroke());
 			}
 			super.paint(g);
+			g.setColor(oldG);
 		}
 	}
 

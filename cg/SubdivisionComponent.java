@@ -22,6 +22,10 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	private final List<Edge> edges;
 
 	public SubdivisionComponent(Point a, Point b, Point c) {
+		GeometryManager.destroy(a);
+		GeometryManager.destroy(b);
+		GeometryManager.destroy(c);
+
 		Edge ea = QuadEdge.makeEdge();
 		ea.setOrig(a);
 		ea.setDest(b);
@@ -65,18 +69,15 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		this.startingEdge = base;
 		// for drawing:
 		edges.add(base);
-		base.setColor(getColor());
 		// add edges
 		do {
-
 			base = QuadEdge.connect(e, base.sym());
-
 			e = base.oPrev();
 			// for drawing:
 			edges.add(base);
-			base.setColor(getColor());
-			if (base.isInvisible())
+			if (base.isInvisible()) {
 				base.setInvisible(true);
+			}
 		} while (e.lNext() != startingEdge);
 		// examine suspect edges and ensure that the Delaunay condition is
 		// satisfied
@@ -129,16 +130,13 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	public void paint(Graphics g) {
 		if (isInvisible())
 			return;
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
+		}
 		for (Edge e : edges) {
 			e.paint(g);
 		}
-	}
-
-	@Override
-	public void setColor(Color c) {
-		super.setColor(c);
-		for (Edge e : edges) {
-			e.setColor(c);
-		}
+		g.setColor(oldG);
 	}
 }

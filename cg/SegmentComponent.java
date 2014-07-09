@@ -98,27 +98,18 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		if (isInvisible()) {
 			return;
 		}
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
+		}
 		Graphics2D g2D = (Graphics2D) g;
 		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-		g2D.setColor(super.getColor());
 		g2D.drawLine((int) tail.getX(), (int) tail.getY(), (int) head.getX(),
 				(int) head.getY());
 		g2D.setStroke(new BasicStroke());
-		Color oldHead = head.getColor();
-		Color oldTail = tail.getColor();
-		head.setColor(getColor());
-		tail.setColor(getColor());
 		head.paint(g);
 		tail.paint(g);
-		head.setColor(oldHead);
-		tail.setColor(oldTail);
-	}
-
-	@Override
-	public void setColor(Color c) {
-		super.setColor(c);
-		head.setColor(c);
-		tail.setColor(c);
+		g.setColor(oldG);
 	}
 
 	@Override

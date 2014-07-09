@@ -30,7 +30,11 @@ public class Welzl {
 			c.setColor(Color.PINK);
 		} else {
 			Point s = S.remove(0);
-			s.setColor(s.getColor().darker());
+			if (s.getColor() == null) {
+				s.setColor(ColorSpecial.SMALT);
+			} else {
+				s.setColor(s.getColor().darker());
+			}
 			c = SEC(S, P);
 			if (!Predicate.isPointInCircle(s, c)) {
 				P.add(s);
@@ -39,7 +43,7 @@ public class Welzl {
 				c = SEC(S, P);
 				GeometryManager.destroy(tmp);
 			}
-			s.setColor(s.getColor().brighter());
+			s.setColor(null);
 		}
 
 		GeometryManager.destroy(S);

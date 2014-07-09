@@ -20,7 +20,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public void add(int index, Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		synchronized (this) {
 			points.add(index, p);
 		}
@@ -29,7 +29,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean add(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		boolean b;
 		synchronized (this) {
 			b = points.add(p);
@@ -40,8 +40,10 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean addAll(Collection<? extends Point> c) {
-		for (Point p : c) {
-			p.setColor(getColor());
+		synchronized (c) {
+			for (Point point : c) {
+				GeometryManager.destroy(point);
+			}
 		}
 		boolean b;
 		synchronized (this) {
@@ -53,8 +55,10 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends Point> c) {
-		for (Point p : c) {
-			p.setColor(getColor());
+		synchronized (c) {
+			for (Point point : c) {
+				GeometryManager.destroy(point);
+			}
 		}
 		boolean b;
 		synchronized (this) {
@@ -66,7 +70,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public void addFirst(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		synchronized (this) {
 			points.addFirst(p);
 		}
@@ -75,7 +79,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public void addLast(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		synchronized (this) {
 			points.addLast(p);
 		}
@@ -83,8 +87,13 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
+	public void addNoDelay(int x, int y) {
+		addNoDelay(new PointComponent(x, y));
+	}
+
+	@Override
 	public void addNoDelay(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		synchronized (this) {
 			points.addLast(p);
 		}
@@ -153,7 +162,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public Point getSecond() throws NoSuchElementException {
 		synchronized (this) {
-			if (this.size() < 2) {
+			if (size() < 2) {
 				throw new NoSuchElementException();
 			}
 			return points.get(1);
@@ -211,7 +220,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean offer(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		boolean b;
 		synchronized (this) {
 			b = points.offer(p);
@@ -222,7 +231,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean offerFirst(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		boolean b;
 		synchronized (this) {
 			b = points.offerFirst(p);
@@ -233,7 +242,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public boolean offerLast(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		boolean b;
 		synchronized (this) {
 			b = points.offerLast(p);
@@ -247,11 +256,16 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		if (isInvisible()) {
 			return;
 		}
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
+		}
 		synchronized (this) {
 			for (Point p : this) {
 				p.paint(g);
 			}
 		}
+		g.setColor(oldG);
 	}
 
 	@Override
@@ -339,7 +353,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public void push(Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		synchronized (this) {
 			points.push(p);
 		}
@@ -432,23 +446,13 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 
 	@Override
 	public Point set(int index, Point p) {
-		p.setColor(getColor());
+		GeometryManager.destroy(p);
 		Point pt;
 		synchronized (this) {
 			pt = points.set(index, p);
 		}
 		notifyObservers();
 		return pt;
-	}
-
-	@Override
-	public void setColor(Color c) {
-		super.setColor(c);
-		synchronized (points) {
-			for (Point p : points) {
-				p.setColor(c);
-			}
-		}
 	}
 
 	@Override

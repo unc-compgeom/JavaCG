@@ -66,7 +66,10 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		if (isInvisible()) {
 			return;
 		}
-		g.setColor(getColor());
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
+		}
 		Graphics2D g2D = (Graphics2D) g;
 		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
 		g2D.drawLine((int) orig().getX(), (int) orig().getY(), (int) dest()
@@ -74,6 +77,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		g2D.setStroke(new BasicStroke());
 		orig().paint(g);
 		dest().paint(g);
+		g.setColor(oldG);
 	}
 
 	@Override
@@ -92,14 +96,8 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public void setColor(Color c) {
-		super.setColor(c);
-		o.setColor(c);
-		sym().orig().setColor(c);
-	}
-
-	@Override
 	public void setDest(Point d) {
+		GeometryManager.destroy(d);
 		sym().setOrig(d);
 	}
 
@@ -117,6 +115,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public void setOrig(Point o) {
+		GeometryManager.destroy(o);
 		this.o = o;
 	}
 

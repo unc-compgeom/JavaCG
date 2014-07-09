@@ -11,16 +11,15 @@ import java.awt.Graphics;
  * 
  */
 public abstract class AbstractGeometry implements Drawable {
-	private Color c;
+	Color color;
 	private boolean invisible;
 
 	AbstractGeometry() {
-		c = Color.BLACK;
 	}
 
 	@Override
 	public Color getColor() {
-		return c;
+		return color;
 	}
 
 	protected void notifyObserversNoDelay() {
@@ -36,8 +35,10 @@ public abstract class AbstractGeometry implements Drawable {
 
 	@Override
 	public void setColor(Color c) {
-		this.c = c;
-		notifyObserversNoDelay();
+		synchronized (this) {
+			this.color = c;
+			notifyObservers();
+		}
 	}
 
 	@Override

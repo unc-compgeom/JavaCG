@@ -46,7 +46,7 @@ public class Chan {
 		}
 		// compute the convex hull of each partition
 		for (int i = 0; i < partitions.length; i++) {
-			hulls[i] = GrahmScan.findConvexHull(partitions[i]);
+			hulls[i] = GrahamScan.findConvexHull(partitions[i]);
 		}
 		// initialize the convex hull
 		int[] hullAndPoint = getLeftmostHullAndPoint(hulls);

@@ -19,8 +19,6 @@ public class BentleyFaustPreparata {
 	 * @return the convex hull
 	 */
 	public static Polygon findConvexHull(PointSet points) {
-		Polygon hull = GeometryManager.newPolygon();
-		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		ListIterator<Point> it = points.listIterator();
 		Point v = it.next();
 		int minX = (int) v.getX(), maxX = (int) v.getX();
@@ -124,6 +122,8 @@ public class BentleyFaustPreparata {
 			upper.addLast(buckets[i].getMax());
 		}
 		// join
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		for (Point vt : lower) {
 			hull.add(vt);
 		}

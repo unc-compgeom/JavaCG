@@ -38,9 +38,9 @@ public class Predicate {
 	 *            point 1
 	 * @param b
 	 *            point 2
-	 * @param c
+	 * @param color
 	 *            point 3
-	 * @return true iff a, b, and c are oriented counterclockwise.
+	 * @return true iff a, b, and color are oriented counterclockwise.
 	 */
 	public static boolean ccw(Point a, Point b, Point c) {
 		return triArea(a, b, c) > 0;
@@ -80,11 +80,11 @@ public class Predicate {
 
 	/**
 	 * Tests if {@link Point} s is inside of or on the circumference of
-	 * {@link Circle} c.
+	 * {@link Circle} color.
 	 * 
 	 * @param s
 	 *            the point
-	 * @param c
+	 * @param color
 	 *            the circle
 	 * @return true iff s is inside or on the boundary of the circle
 	 */
@@ -137,7 +137,7 @@ public class Predicate {
 
 	/**
 	 * Tests if a {@link Point} is inside the {@link Circle} defined by points
-	 * <tt>a</tt>, <tt>b</tt>, and <tt>c</tt>. Points must be oriented
+	 * <tt>a</tt>, <tt>b</tt>, and <tt>color</tt>. Points must be oriented
 	 * counterclockwise.
 	 * 
 	 * @param test
@@ -146,7 +146,7 @@ public class Predicate {
 	 *            Point on circle
 	 * @param b
 	 *            Point on circle
-	 * @param c
+	 * @param color
 	 *            Point on circle
 	 * 
 	 * @return true iff <tt>test</tt> is in the circle
@@ -202,8 +202,8 @@ public class Predicate {
 		return isInCircle;
 	}
 
-	// public static boolean isVertexInCircleByPoints(Point s, Circle c) {
-	// // find three points, a, b, c, in the circle
+	// public static boolean isVertexInCircleByPoints(Point s, Circle color) {
+	// // find three points, a, b, color, in the circle
 	// // find the determinant of the matrix:
 	// // [[a_x, a_y, a_x^2 + a_y^2, 1]
 	// // [b_x, b_y, b_x^2 + b_y^2, 1]
@@ -213,9 +213,9 @@ public class Predicate {
 	// // [[a_x - s_x, a_y - s_y, (a_x - s_x)^2 + (a_y - s_y)^2]
 	// // [b_x - s_x, b_y - s_y, (b_x - s_x)^2 + (b_y - s_y)^2]
 	// // [c_x - s_x, c_y - s_y, (c_x - s_x)^2 + (c_y - s_y)^2]]
-	// int x = c.getOrigin().getX();
-	// int y = c.getOrigin().getY();
-	// int radius = (int) Math.sqrt(c.getRadiusSquared());
+	// int x = color.getOrigin().getX();
+	// int y = color.getOrigin().getY();
+	// int radius = (int) Math.sqrt(color.getRadiusSquared());
 	// int ax = x, ay = y + radius;
 	// int bx = x, by = y - radius;
 	// int cx = x + radius, cy = y;
@@ -262,7 +262,7 @@ public class Predicate {
 
 	/**
 	 * Calculates twice the signed area of the triangle defined by
-	 * {@link Points} a, b, and c. If a, b, and c are in counterclockwise order,
+	 * {@link Points} a, b, and color. If a, b, and color are in counterclockwise order,
 	 * the area is positive, if they are co-linear the area is zero, else the
 	 * area is negative.
 	 * 
@@ -270,7 +270,7 @@ public class Predicate {
 	 *            a Point
 	 * @param b
 	 *            a Point
-	 * @param c
+	 * @param color
 	 *            a Point
 	 * @return twice the signed area
 	 */
