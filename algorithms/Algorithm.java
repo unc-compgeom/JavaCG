@@ -8,7 +8,8 @@ public enum Algorithm {
 	BENTLEY_FAUST_PREPARATA("Bentley Faust Preparata"), CALIPERS("Calipers"), CHAN(
 			"Chan"), DELAUNAY_TRIANGULATION("Delaunay Triangulation"), GRAHAM_SCAN(
 			"Graham scan"), JARVIS_MARCH("Jarvis march"), MELKMAN("Melkman"), MONOTONE_CHAIN(
-			"Monotone chain"), QUICKHULL("Quickhull"), WELZL("Welzl");
+			"Monotone chain"), QUICKHULL("Quickhull"), VORONI_DIAGRAM(
+			"Voroni Diagram"), WELZL("Welzl");
 
 	private String s;
 
@@ -43,7 +44,7 @@ public enum Algorithm {
 		case CHAN:
 			return Chan.findConvexHull(points);
 		case DELAUNAY_TRIANGULATION:
-			return DelaunayTriangulation.doDelaunay(points);
+			return DelaunayTriangulation.triangulate(points);
 		case GRAHAM_SCAN:
 			return GrahamScan.findConvexHull(points);
 		case JARVIS_MARCH:
@@ -54,11 +55,13 @@ public enum Algorithm {
 			return MonotoneChain.findConvexHull(points);
 		case QUICKHULL:
 			return QuickHull.findConvexHull(points);
+		case VORONI_DIAGRAM:
+			return VoronoiDiagram.makeVoroniDiagram(points);
 		case WELZL:
 			return Welzl.findSmallestEnclosingCircle(points);
 		default:
-			System.out
-					.println(algorithm + " not yet implemented in ViewModel.");
+			System.out.println(algorithm
+					+ " not yet implemented in enum Algorithm run().");
 			return null;
 		}
 	}

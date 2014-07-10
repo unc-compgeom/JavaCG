@@ -10,6 +10,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	private Edge next;
 	private Point o;
 	private Edge rot; // the dual of this edge (counterclockwise)
+	private boolean visited;
 
 	EdgeComponent() {
 		super();
@@ -29,6 +30,16 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public Edge dPrev() {
 		return invRot().oNext().invRot();
+	}
+
+	@Override
+	public boolean visited() {
+		return visited;
+	}
+
+	@Override
+	public void setVisited() {
+		visited = !visited;
 	}
 
 	@Override

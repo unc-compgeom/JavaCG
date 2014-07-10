@@ -3,16 +3,6 @@ package cg;
 public interface Point extends Comparable<Point>, Cloneable, Drawable {
 
 	/**
-	 * Adds this point's coordinates to another point's coordinates. Returns a
-	 * new point at location (this.x + p.x, this.y + p.y).
-	 * 
-	 * @param p
-	 *            the point to add
-	 * @return a new point at location (this.x + p.x, this.y + p.y).
-	 */
-	public Point add(Point p);
-
-	/**
 	 * Computes the distance squared from this point to point p.
 	 * 
 	 * @param p
@@ -63,6 +53,16 @@ public interface Point extends Comparable<Point>, Cloneable, Drawable {
 	 * @return a new point at location (this.x*i, this.y*i).
 	 */
 	public Point mult(float i);
+
+	/**
+	 * Adds this point's coordinates to another point's coordinates. Returns a
+	 * new point at location (this.x + p.x, this.y + p.y).
+	 * 
+	 * @param p
+	 *            the point to add
+	 * @return a new point at location (this.x + p.x, this.y + p.y).
+	 */
+	public Point plus(Point p);
 
 	/**
 	 * Sets the x-coordinate.

@@ -116,7 +116,7 @@ public class Predicate {
 			return s.compareTo(points.get(0)) == 0;
 		} else if (points.size() == 2) {
 			Point origin = GeometryManager.newPoint(points.get(1)
-					.sub(points.get(0)).div(2).add(points.get(0)));
+					.sub(points.get(0)).div(2).plus(points.get(0)));
 			double radiusSquared = points.get(0).distanceSquared(origin);
 			boolean isInCircle = CG.distSquared(s, origin) <= radiusSquared;
 			// animation code
@@ -196,10 +196,10 @@ public class Predicate {
 		double qx = q.getX(), qy = q.getY();
 		double rx = r.getX(), ry = r.getY();
 		double det2 = (px - qx) * (py - ry) - (py - qy) * (px - rx);
-		float x = (float) ((p.add(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
-				* (p.add(r).div(2).dot(p.sub(r)))) / det2);
-		float y = (float) (((px - qx) * p.add(r).div(2).dot(p.sub(r)) - p
-				.add(q).div(2).dot(p.sub(q))
+		float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
+				* (p.plus(r).div(2).dot(p.sub(r)))) / det2);
+		float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
+				.plus(q).div(2).dot(p.sub(q))
 				* (px - rx)) / det2);
 		Point origin = GeometryManager.newPoint(x, y);
 		Segment rad = GeometryManager.newSegment(origin, test);

@@ -9,7 +9,7 @@ import cg.PointSet;
 import cg.Subdivision;
 
 public class DelaunayTriangulation {
-	public static Subdivision doDelaunay(PointSet points) {
+	public static Subdivision triangulate(PointSet points) {
 		// TODO find a triangle large enough to encompass <tt>points</tt>
 		int scale = 16364;
 		Subdivision s = GeometryManager.newSubdivision(

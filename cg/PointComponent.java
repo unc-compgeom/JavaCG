@@ -20,7 +20,7 @@ public class PointComponent extends AbstractGeometry implements Point {
 	}
 
 	@Override
-	public Point add(Point p1) {
+	public Point plus(Point p1) {
 		return new PointComponent(x + p1.getX(), y + p1.getY());
 	}
 

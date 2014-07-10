@@ -38,4 +38,6 @@ public interface Subdivision extends Drawable {
 	 */
 	public Edge locate(Point q) throws DuplicatePointException,
 			MalformedTriangulationException;
+
+	public void getDual();
 }

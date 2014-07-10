@@ -34,6 +34,8 @@ public interface Edge extends Drawable {
 	 */
 	public Point dest();
 
+	public boolean visited();
+
 	/**
 	 * Gets the dual of this edge, directed from its left to its right
 	 * 
@@ -135,4 +137,6 @@ public interface Edge extends Drawable {
 	 * @return the sym of this edge
 	 */
 	public Edge sym();
+
+	void setVisited();
 }
