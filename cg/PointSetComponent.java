@@ -45,6 +45,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 				GeometryManager.destroy(point);
 			}
 		}
+		if (c instanceof PointSet) {
+			GeometryManager.destroy((PointSet) c);
+		}
 		boolean b;
 		synchronized (this) {
 			b = points.addAll(c);
@@ -84,11 +87,6 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 			points.addLast(p);
 		}
 		notifyObservers();
-	}
-
-	@Override
-	public void addNoDelay(int x, int y) {
-		addNoDelay(new PointComponent(x, y));
 	}
 
 	@Override

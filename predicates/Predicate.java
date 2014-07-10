@@ -16,6 +16,18 @@ public class Predicate {
 		CLOCKWISE, COLINEAR, COUNTERCLOCKWISE
 	};
 
+	public static int ahead = 0;
+	public static int ccw = 0;
+	public static int findOrientation = 0;
+	public static int isLeftOrInside = 0;
+	public static int isPointInCircle = 0;
+	public static int leftOf = 0;
+	public static int leftOrAhead = 0;
+	public static int onEdge = 0;
+	public static int rightOf = 0;
+	public static int rightOrAhead = 0;
+	public static int triArea = 0;
+
 	/**
 	 * Tests if {@link Point} p is ahead of the segment from q to r.
 	 * 
@@ -28,6 +40,7 @@ public class Predicate {
 	 * @return true iff <tt>p</tt> is ahead of <tt>qr</tt>.
 	 */
 	public static boolean ahead(Point p, Point q, Point r) {
+		ahead++;
 		return p.sub(q).dot(r.sub(q)) > CG.distSquared(q, r);
 	}
 
@@ -43,10 +56,12 @@ public class Predicate {
 	 * @return true iff a, b, and color are oriented counterclockwise.
 	 */
 	public static boolean ccw(Point a, Point b, Point c) {
+		ccw++;
 		return triArea(a, b, c) > 0;
 	}
 
 	public static Orientation findOrientation(Point p, Point q, Point r) {
+		findOrientation++;
 		// find the determinant of the matrix
 		// [[px, py, 1]
 		// [qx, qy, 1]
@@ -68,6 +83,7 @@ public class Predicate {
 	}
 
 	public static boolean isLeftOrInside(Point p, Point q, Point r) {
+		isLeftOrInside++;
 		/* test = (qx-px)*(ry-py) - (qy-py)*(rx-px); */
 		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
@@ -89,6 +105,7 @@ public class Predicate {
 	 * @return true iff s is inside or on the boundary of the circle
 	 */
 	public static boolean isPointInCircle(Point s, Circle c) {
+		isPointInCircle++;
 		// correctly handles the case of the null circle (no points).
 		// correctly handles the case of the one-point circle (one point).
 		// correctly handles the case of the two-point circle (diameter).
@@ -124,6 +141,7 @@ public class Predicate {
 			GeometryManager.destroy(tmp);
 			return isInCircle;
 		} else {
+			isPointInCircle--;
 			Point p0 = points.get(0), p1 = points.get(1), p2 = points.get(2);
 			if (ccw(p0, p1, p2)) {
 				return isPointInCircle(s, points.get(0), points.get(1),
@@ -152,6 +170,7 @@ public class Predicate {
 	 * @return true iff <tt>test</tt> is in the circle
 	 */
 	public static boolean isPointInCircle(Point test, Point a, Point b, Point c) {
+		isPointInCircle++;
 		float ax = a.getX(), ay = a.getY();
 		float bx = b.getX(), by = b.getY();
 		float cx = c.getX(), cy = c.getY();
@@ -170,6 +189,7 @@ public class Predicate {
 		points.add(b);
 		points.add(c);
 		Circle tmp = GeometryManager.newCircle(points);
+		tmp.setColor(Color.YELLOW);
 		// compute circle's origin
 		Point p = points.get(0), q = points.get(1), r = points.get(2);
 		double px = p.getX(), py = p.getY();
@@ -185,7 +205,6 @@ public class Predicate {
 		Segment rad = GeometryManager.newSegment(origin, test);
 		Color old = test.getColor();
 		rad.setColor(Color.YELLOW);
-		tmp.setColor(Color.YELLOW);
 		CG.animationDelay();
 		if (isInCircle) {
 			tmp.setColor(Color.GREEN);
@@ -202,44 +221,19 @@ public class Predicate {
 		return isInCircle;
 	}
 
-	// public static boolean isVertexInCircleByPoints(Point s, Circle color) {
-	// // find three points, a, b, color, in the circle
-	// // find the determinant of the matrix:
-	// // [[a_x, a_y, a_x^2 + a_y^2, 1]
-	// // [b_x, b_y, b_x^2 + b_y^2, 1]
-	// // [c_x, c_y, c_x^2 + c_y^2, 1]
-	// // [s_x, s_y, s_x^2 + s_y^2, 1]]
-	// // ==
-	// // [[a_x - s_x, a_y - s_y, (a_x - s_x)^2 + (a_y - s_y)^2]
-	// // [b_x - s_x, b_y - s_y, (b_x - s_x)^2 + (b_y - s_y)^2]
-	// // [c_x - s_x, c_y - s_y, (c_x - s_x)^2 + (c_y - s_y)^2]]
-	// int x = color.getOrigin().getX();
-	// int y = color.getOrigin().getY();
-	// int radius = (int) Math.sqrt(color.getRadiusSquared());
-	// int ax = x, ay = y + radius;
-	// int bx = x, by = y - radius;
-	// int cx = x + radius, cy = y;
-	// int sx = s.getX(), sy = s.getY();
-	//
-	// long result = ((ax - sx) * (ax - sx) + (ay - sy) * (ay - sy))
-	// * ((bx - sx) * (cy - sy) - (by - sy) * (cx - sx))
-	// - ((bx - sx) * (bx - sx) + (by - sy) * (by - sy))
-	// * ((ax - sx) * (cy - sy) - (ay - sy) * (cx - sx))
-	// + ((cx - sx) * (cx - sx) + (cy - sy) * (cy - sy))
-	// * ((ax - sx) * (by - sy) - (ay - sy) * (bx - sx));
-	// return (result < 0) ? false : true;
-	// }
-
 	public static boolean leftOf(Point p, Edge e) {
+		leftOf++;
 		return triArea(p, e.orig(), e.dest()) > 0;
 	}
 
 	public static boolean leftOrAhead(Point p, Point q, Point r) {
+		leftOrAhead++;
 		double tmp = triArea(p, q, r);
 		return tmp > 0 || (tmp == 0 && ahead(p, q, r));
 	}
 
 	public static boolean onEdge(Point p, Edge e) {
+		onEdge++;
 		Point a = e.orig();
 		Point b = e.dest();
 		if (triArea(a, b, p) == 0) {
@@ -252,19 +246,21 @@ public class Predicate {
 	}
 
 	public static boolean rightOf(Point p, Edge e) {
+		rightOf++;
 		return triArea(p, e.orig(), e.dest()) < 0;
 	}
 
 	public static boolean rightOrAhead(Point p, Point q, Point r) {
+		rightOrAhead++;
 		double tmp = triArea(p, q, r);
 		return tmp < 0 || (tmp == 0 && ahead(p, q, r));
 	}
 
 	/**
 	 * Calculates twice the signed area of the triangle defined by
-	 * {@link Points} a, b, and color. If a, b, and color are in counterclockwise order,
-	 * the area is positive, if they are co-linear the area is zero, else the
-	 * area is negative.
+	 * {@link Points} a, b, and color. If a, b, and color are in
+	 * counterclockwise order, the area is positive, if they are co-linear the
+	 * area is zero, else the area is negative.
 	 * 
 	 * @param a
 	 *            a Point
@@ -275,6 +271,7 @@ public class Predicate {
 	 * @return twice the signed area
 	 */
 	public static double triArea(Point a, Point b, Point c) {
+		triArea++;
 		return b.sub(a).getX() * c.sub(a).getY() - b.sub(a).getY()
 				* c.sub(a).getX();
 	}

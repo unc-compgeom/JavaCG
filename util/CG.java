@@ -82,26 +82,25 @@ public class CG {
 	}
 
 	/**
-	 * Sort the points of <code>points</code> by x-coordinate (in case of a tie,
-	 * sort by y-coordinate).
+	 * Sort {@link PointSet} by x-coordinate (in case of a tie, sort by
+	 * y-coordinate).
 	 * 
 	 * @param points
-	 * @return A PointSet of the sorted points
+	 *            the point set to sort
 	 */
-	public static PointSet lexicographicalSort(PointSet points) {
+	public static void lexicographicalSort(PointSet points) {
 		// increment the call counter
 		lexicographicalSort++;
 		// do work
 		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
 		sorter.addAll(points);
 		PointSet sorted = GeometryManager.newPointSet();
-		Color c = sorted.getColor();
 		sorted.setColor(ColorSpecial.CYAN);
 		while (!sorter.isEmpty()) {
 			sorted.add(sorter.remove());
 		}
-		sorted.setColor(c);
-		return sorted;
+		points.removeAll(points);
+		points.addAll(sorted);
 	}
 
 	public static Color randomColor() {

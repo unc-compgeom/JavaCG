@@ -163,7 +163,8 @@ public class ViewModel {
 		Random Ayn = new Random();
 		int numPoints = (int) Math.sqrt(width * height) / 16;
 		for (int i = 0; i < numPoints; i++) {
-			pointSet.addNoDelay(Ayn.nextInt(width), Ayn.nextInt(height));
+			pointSet.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
+					Ayn.nextInt(height)));
 		}
 		return pointSet;
 	}
