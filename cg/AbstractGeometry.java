@@ -65,9 +65,6 @@ public abstract class AbstractGeometry implements Drawable {
 		double dr = (newColor.getRed() - tmp.getRed()) / (delay * 1.0);
 		double dg = (newColor.getGreen() - tmp.getGreen()) / (delay * 1.0);
 		double db = (newColor.getBlue() - tmp.getBlue()) / (delay * 1.0);
-		System.out
-				.println("transitioning from " + oldColor + " to " + newColor);
-		System.out.println(dr + ", " + dg + ", " + db);
 		for (int i = 0; i < delay; i++) {
 			tmp = new Color(oldColor.getRed() + (int) (dr * i),
 					oldColor.getGreen() + (int) (dg * i), oldColor.getBlue()

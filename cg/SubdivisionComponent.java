@@ -9,7 +9,6 @@ import predicates.Predicate;
 import util.CG;
 import util.ColorSpecial;
 import util.DuplicatePointException;
-import util.MalformedTriangulationException;
 
 /**
  * This class can be used to represent a Delaunay Triangulation. It uses the
@@ -31,34 +30,31 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		Point c = new PointComponent(2 * scale, -1 * scale);
 
 		Edge ea = QuadEdge.makeEdge();
-		ea.setOrig(a);
-		ea.setDest(b);
+		ea.setCoordinates(a, b);
 
 		Edge eb = QuadEdge.makeEdge();
 		QuadEdge.splice(ea.sym(), eb);
-		eb.setOrig(b);
-		eb.setDest(c);
+		eb.setCoordinates(b, c);
 
 		Edge ec = QuadEdge.makeEdge();
 		QuadEdge.splice(eb.sym(), ec);
-		ec.setOrig(c);
-		ec.setDest(a);
+		ec.setCoordinates(c, a);
 
 		QuadEdge.splice(ec.sym(), ea);
 		this.startingEdge = ea;
 		edges = new ArrayList<Edge>();
-		ea.setInvisible(true);
-		eb.setInvisible(true);
-		ec.setInvisible(true);
+		// ea.setInvisible(true);
+		// eb.setInvisible(true);
+		// ec.setInvisible(true);
 		edges.add(ea);
 		edges.add(eb);
 		edges.add(ec);
+
 		notifyObservers();
 	}
 
 	@Override
-	public void insertSite(Point p) throws DuplicatePointException,
-			MalformedTriangulationException {
+	public void insertSite(Point p) throws DuplicatePointException {
 		Edge e = locate(p);
 		if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
@@ -67,8 +63,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		}
 		// connect the new point to the vertices of the containing triangle
 		Edge base = QuadEdge.makeEdge();
-		base.setOrig(e.orig());
-		base.setDest(GeometryManager.newPoint(p));
+		base.setCoordinates(e.orig(), GeometryManager.newPoint(p));
 		QuadEdge.splice(base, e);
 		this.startingEdge = base;
 		// for drawing:
@@ -102,8 +97,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public Edge locate(Point q) throws DuplicatePointException,
-			MalformedTriangulationException {
+	public Edge locate(Point q) throws DuplicatePointException {
 		Edge e = startingEdge;
 		if (!Predicate.rightOrAhead(e.dest(), e.orig(), q)) {
 			e = e.sym();
@@ -136,42 +130,70 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		if (c != null) {
 			g.setColor(c);
 		}
-		for (Edge e : edges) {
-			e.paint(g);
-			Color o = g.getColor();
-			g.setColor(ColorSpecial.AZURE);
-			try {
-				e.rot().paint(g);
-			} catch (NullPointerException ex) {
-
+		// for (Edge e : edges) {
+		// e.paint(g);
+		// Color o = g.getColor();
+		// g.setColor(ColorSpecial.AZURE);
+		// try {
+		// e.rot().paint(g);
+		// } catch (NullPointerException ex) {
+		//
+		// }
+		// g.setColor(o);
+		// }
+		Edge e = edges.get(2);
+		do {
+			if (isWall(e) || isWall(e.sym())) {
+				g.setColor(g.getColor().darker());
+				e.paint(g);
+				g.setColor(g.getColor().brighter());
+				e = e.rPrev();
+			} else {
+				e.paint(g);
+				e = e.oNext();
 			}
-			g.setColor(o);
-		}
+
+		} while (e != edges.get(2));
 		g.setColor(oldG);
 	}
 
 	@Override
 	public void getDual() {
 		// iterate over each triangle
-		Edge e = startingEdge;
-		fixTriangle(e.lNext(), e.lNext().lNext(), e.oNext());
-		e.setVisited();
+		// traverse(edges.get(0));
+		// fixTriangle(e.lNext(), e.lNext().lNext(), e.oNext());
+		// e.setVisited();
+		// for (Edge e : edges) {
+		// if (isWall(e) || isWall(e.sym())) {
+		// e.setColor(ColorSpecial.BLACK_LEATHER_JACKET);
+		// } else {
+		// e.setColor(ColorSpecial.PALE_CERULEAN);
+		// }
+		// }
+		traverse(edges.get(2));
+	}
+
+	private boolean isWall(Edge e) {
+		try {
+			return e.orig().compareTo(e.lNext().orig()) >= 0
+					&& e.lNext().orig().compareTo(e.lPrev().orig()) > 0;
+		} catch (NullPointerException ee) {
+			System.out.println(e + " " + e.sym());
+			ee.printStackTrace();
+			return true;
+		}
 	}
 
 	private void traverse(Edge start) {
 		Edge e = start;
 		do {
+			// something to e
 			if (isWall(e) || isWall(e.sym())) {
-				e = e.lNext();
+				e = e.rPrev();
 			} else {
 				e = e.oNext();
 			}
 		} while (e != start);
-	}
-
-	private boolean isWall(Edge e) {
-		return e.dest().compareTo(e.orig()) < 0
-				&& e.orig().compareTo(e.lNext().dest()) < 0;
 	}
 
 	private void fixTriangle(Edge e1, Edge e2, Edge e3) {

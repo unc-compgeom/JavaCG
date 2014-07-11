@@ -26,8 +26,7 @@ class QuadEdge {
 		Edge e = makeEdge();
 		splice(e, a.lNext());
 		splice(e.sym(), b);
-		e.setOrig(a.dest());
-		e.setDest(b.orig());
+		e.setCoordinates(a.dest(), b.orig());
 		return e;
 	}
 
@@ -94,7 +93,6 @@ class QuadEdge {
 		splice(e.sym(), b);
 		splice(e, a.lNext());
 		splice(e.sym(), b.lNext());
-		e.setOrig(a.dest());
-		e.setDest(b.dest());
+		e.setCoordinates(a.dest(), b.dest());
 	}
 }

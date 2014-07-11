@@ -14,6 +14,13 @@ package cg;
  */
 public interface Edge extends Drawable {
 	/**
+	 * Gets the {@link Point} for the edge's destination
+	 * 
+	 * @return the destination point
+	 */
+	public Point dest();
+
+	/**
 	 * Gets the next CCW {@link Edge} around (into) the destination of this edge
 	 * 
 	 * @return the next destination edge
@@ -26,15 +33,6 @@ public interface Edge extends Drawable {
 	 * @return the previous destination edge
 	 */
 	public Edge dPrev();
-
-	/**
-	 * Gets the {@link Point} for the edge's destination
-	 * 
-	 * @return the destination point
-	 */
-	public Point dest();
-
-	public boolean visited();
 
 	/**
 	 * Gets the dual of this edge, directed from its left to its right
@@ -100,6 +98,24 @@ public interface Edge extends Drawable {
 	public Edge rPrev();
 
 	/**
+	 * Sets the coordinates of this edge.
+	 * 
+	 * @param origin
+	 *            the new origin
+	 * @param destination
+	 *            the new destination
+	 */
+	public void setCoordinates(Point origin, Point destination);
+
+	/**
+	 * Sets the {@link Point} for this edge's destination
+	 * 
+	 * @param d
+	 *            the destination point
+	 */
+	public void setDest(Point d);
+
+	/**
 	 * Sets the connected {@link Edge}
 	 * 
 	 * @param next
@@ -116,14 +132,6 @@ public interface Edge extends Drawable {
 	public void setOrig(Point o);
 
 	/**
-	 * Sets the {@link Point} for this edge's destination
-	 * 
-	 * @param d
-	 *            the destination point
-	 */
-	public void setDest(Point d);
-
-	/**
 	 * Sets the dual of this edge, directed from its right to its left
 	 * 
 	 * @param rot
@@ -137,6 +145,4 @@ public interface Edge extends Drawable {
 	 * @return the sym of this edge
 	 */
 	public Edge sym();
-
-	void setVisited();
 }

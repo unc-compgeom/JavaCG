@@ -12,7 +12,6 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	private Edge next;
 	private Point o;
 	private Edge rot; // the dual of this edge (counterclockwise)
-	private boolean visited;
 
 	EdgeComponent() {
 		super();
@@ -32,16 +31,6 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public Edge dPrev() {
 		return invRot().oNext().invRot();
-	}
-
-	@Override
-	public boolean visited() {
-		return visited;
-	}
-
-	@Override
-	public void setVisited() {
-		visited = !visited;
 	}
 
 	@Override
@@ -109,9 +98,41 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
+	public void setCoordinates(Point origin, Point destination) {
+		if (this.o == null || this.dest() == null) {
+			setOrig(origin);
+			setDest(destination);
+			return;
+		} else {
+			final Point oldO = new PointComponent(this.o), newO = new PointComponent(
+					origin);
+			final Point oldD = new PointComponent(this.dest()), newD = new PointComponent(
+					destination);
+			setInvisible(true);
+
+			final int delay = GeometryManager.getDelay();
+			final Point oChange = oldO.sub(newO).div(delay);
+			final Point dChange = oldD.sub(newD).div(delay);
+			for (int i = 0; i < delay; i++) {
+				Segment anim = GeometryManager.newSegment(
+						oldO.sub(oChange.mult(i)), oldD.sub(dChange.mult(i)));
+				anim.setColorNoAnim(ColorSpecial.YELLOW_ROSE);
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+				}
+				GeometryManager.destroy(anim);
+			}
+			setOrig(origin);
+			setDest(destination);
+			setInvisible(false);
+		}
+
+	}
+
+	@Override
 	public void setDest(Point d) {
 		GeometryManager.destroy(d);
-		animateChange(this.dest(), d);
 		sym().setOrig(d);
 	}
 
@@ -130,8 +151,6 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public void setOrig(Point o) {
 		GeometryManager.destroy(o);
-		animateChange(this.o, o);
-		// set state
 		this.o = o;
 	}
 
@@ -148,26 +167,5 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public String toString() {
 		return orig() + "-" + dest();
-	}
-
-	private void animateChange(Point from, Point to) {
-		if (from == null) {
-			return;
-		}
-		// animateChange
-		Point tmp = new PointComponent(from);
-		Point change = from.sub(to).div(GeometryManager.getDelay());
-		for (int i = 0; i < GeometryManager.getDelay(); i++) {
-			tmp = tmp.sub(change);
-			Segment anim = GeometryManager.newSegment(tmp, dest());
-			anim.setColorNoAnim(ColorSpecial.YELLOW_ROSE);
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			GeometryManager.destroy(anim);
-		}
 	}
 }
