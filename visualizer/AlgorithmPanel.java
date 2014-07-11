@@ -2,6 +2,8 @@ package visualizer;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -39,6 +41,8 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.translate(0, this.getHeight());
+		((Graphics2D) g).scale(1, -1);
 		List<Drawable> geometry = GeometryManager.getAllGeometry();
 		synchronized (geometry) {
 			for (Drawable d : geometry) {
@@ -59,7 +63,10 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		a.actionPerformed(new ActionEvent(e.getPoint(),
+		Point location = e.getPoint();
+		location.setLocation(location.getX(),
+				this.getHeight() - location.getY());
+		a.actionPerformed(new ActionEvent(location,
 				ActionEvent.ACTION_PERFORMED, "viewAddPoint"));
 	}
 
