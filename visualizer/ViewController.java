@@ -1,9 +1,9 @@
 package visualizer;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.SwingWorker;
 
@@ -42,12 +42,13 @@ public class ViewController implements ActionListener {
 				case "makeRandom":
 					model.setInsertionMode(InsertionMode.RANDOM);
 					break;
-				case "mouseMoved":
-					MouseEvent me = (MouseEvent) e.getSource();
-					int x = me.getX();
-					int y = me.getY();
+				case "mouseMoved": {
+					Point p = (Point) e.getSource();
+					int x = p.x;
+					int y = p.y;
 					model.preview(x, y);
 					break;
+				}
 				case "reset":
 					model.reset();
 					break;
@@ -55,16 +56,17 @@ public class ViewController implements ActionListener {
 					GeometryManager.setSmallLarge();
 					break;
 				case "speedSet":
-					GeometryManager.setDelay((int) (Math.pow(10,
-							e.getModifiers() / 10.0) - 1));
+					GeometryManager.setDelay((int) (Math.pow(10.0,
+							e.getModifiers() / 10.0) - 1.0));
 					break;
 				case "viewResized":
 					model.setSize((Dimension) e.getSource());
 					break;
-				case "viewAddPoint":
+				case "viewAddPoint": {
 					java.awt.Point p = (java.awt.Point) e.getSource();
 					model.draw(p.x, p.y);
 					break;
+				}
 				default:
 					try {
 						model.runAlgorithm(Algorithm.fromString(e

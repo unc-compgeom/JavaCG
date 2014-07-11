@@ -123,8 +123,8 @@ public class Predicate {
 			Circle tmp = GeometryManager.newCircle(points);
 			Segment rad = GeometryManager.newSegment(s, origin);
 			Color old = s.getColor();
-			rad.setColor(Color.YELLOW);
-			tmp.setColor(Color.YELLOW);
+			rad.setColorNoAnim(Color.YELLOW);
+			tmp.setColorNoAnim(Color.YELLOW);
 			origin.setColor(Color.YELLOW);
 			CG.animationDelay();
 			if (isInCircle) {
@@ -189,7 +189,7 @@ public class Predicate {
 		points.add(b);
 		points.add(c);
 		Circle tmp = GeometryManager.newCircle(points);
-		tmp.setColor(Color.YELLOW);
+		tmp.setColorNoAnim(Color.YELLOW);
 		// compute circle's origin
 		Point p = points.get(0), q = points.get(1), r = points.get(2);
 		double px = p.getX(), py = p.getY();
@@ -204,7 +204,7 @@ public class Predicate {
 		Point origin = GeometryManager.newPoint(x, y);
 		Segment rad = GeometryManager.newSegment(origin, test);
 		Color old = test.getColor();
-		rad.setColor(Color.YELLOW);
+		rad.setColorNoAnim(Color.YELLOW);
 		CG.animationDelay();
 		if (isInCircle) {
 			tmp.setColor(Color.GREEN);

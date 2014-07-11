@@ -36,12 +36,21 @@ public interface Drawable {
 
 	/**
 	 * Sets the color of this object. The object will be painted with this
-	 * color.
+	 * color. The color transition is animated.
 	 * 
 	 * @param c
 	 *            the color
 	 */
 	public void setColor(Color c);
+
+	/**
+	 * Sets the color of this object. The object will be painted with this
+	 * color. The color transition is not animated.
+	 * 
+	 * @param c
+	 *            the color
+	 */
+	public void setColorNoAnim(Color c);
 
 	/**
 	 * Sets the visibility of this object. The object will not be painted if it

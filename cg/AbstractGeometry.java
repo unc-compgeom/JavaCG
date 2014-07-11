@@ -11,7 +11,7 @@ import java.awt.Graphics;
  * 
  */
 public abstract class AbstractGeometry implements Drawable {
-	Color color;
+	private Color c;
 	private boolean invisible;
 
 	AbstractGeometry() {
@@ -19,7 +19,7 @@ public abstract class AbstractGeometry implements Drawable {
 
 	@Override
 	public Color getColor() {
-		return color;
+		return c;
 	}
 
 	protected void notifyObserversNoDelay() {
@@ -36,8 +36,49 @@ public abstract class AbstractGeometry implements Drawable {
 	@Override
 	public void setColor(Color c) {
 		synchronized (this) {
-			this.color = c;
-			notifyObservers();
+			animateChange(this.c, c);
+			this.c = c;
+		}
+	}
+
+	@Override
+	public void setColorNoAnim(Color c) {
+		synchronized (this) {
+			this.c = c;
+			notifyObserversNoDelay();
+		}
+	}
+
+	private void animateChange(Color oldColor, Color newColor) {
+		if (newColor == null) {
+			return;
+		}
+		if (oldColor == null) {
+			oldColor = Color.BLACK;
+		}
+		if (oldColor == newColor) {
+			return;
+		}
+		// animateChange
+		Color tmp = new Color(oldColor.getRGB());
+		final int delay = GeometryManager.getDelay();
+		double dr = (newColor.getRed() - tmp.getRed()) / (delay * 1.0);
+		double dg = (newColor.getGreen() - tmp.getGreen()) / (delay * 1.0);
+		double db = (newColor.getBlue() - tmp.getBlue()) / (delay * 1.0);
+		System.out
+				.println("transitioning from " + oldColor + " to " + newColor);
+		System.out.println(dr + ", " + dg + ", " + db);
+		for (int i = 0; i < delay; i++) {
+			tmp = new Color(oldColor.getRed() + (int) (dr * i),
+					oldColor.getGreen() + (int) (dg * i), oldColor.getBlue()
+							+ (int) (db * i));
+			this.c = tmp;
+			notifyObserversNoDelay();
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

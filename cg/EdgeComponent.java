@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import util.ColorSpecial;
+
 class EdgeComponent extends AbstractGeometry implements Edge {
 
 	private Edge next;
@@ -109,6 +111,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public void setDest(Point d) {
 		GeometryManager.destroy(d);
+		animateChange(this.dest(), d);
 		sym().setOrig(d);
 	}
 
@@ -127,6 +130,8 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	@Override
 	public void setOrig(Point o) {
 		GeometryManager.destroy(o);
+		animateChange(this.o, o);
+		// set state
 		this.o = o;
 	}
 
@@ -145,4 +150,24 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		return orig() + "-" + dest();
 	}
 
+	private void animateChange(Point from, Point to) {
+		if (from == null) {
+			return;
+		}
+		// animateChange
+		Point tmp = new PointComponent(from);
+		Point change = from.sub(to).div(GeometryManager.getDelay());
+		for (int i = 0; i < GeometryManager.getDelay(); i++) {
+			tmp = tmp.sub(change);
+			Segment anim = GeometryManager.newSegment(tmp, dest());
+			anim.setColorNoAnim(ColorSpecial.YELLOW_ROSE);
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			GeometryManager.destroy(anim);
+		}
+	}
 }

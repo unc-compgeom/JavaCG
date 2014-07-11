@@ -249,8 +249,8 @@ public class GeometryManager {
 	 *            a vertex
 	 * @return a <tt>Subdivision</tt> object
 	 */
-	public static Subdivision newSubdivision(Point p1, Point p2, Point p3) {
-		Subdivision s = new SubdivisionComponent(p1, p2, p3);
+	public static Subdivision newSubdivision() {
+		Subdivision s = new SubdivisionComponent();
 		return (Subdivision) buildGeometry(s);
 	}
 

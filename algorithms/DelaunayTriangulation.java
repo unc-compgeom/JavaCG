@@ -10,12 +10,7 @@ import cg.Subdivision;
 
 public class DelaunayTriangulation {
 	public static Subdivision triangulate(PointSet points) {
-		// TODO find a triangle large enough to encompass <tt>points</tt>
-		int scale = 16364;
-		Subdivision s = GeometryManager.newSubdivision(
-				GeometryManager.newPoint(-1 * scale, -1 * scale),
-				GeometryManager.newPoint(2 * scale, -1 * scale),
-				GeometryManager.newPoint(-1 * scale, 2 * scale));
+		Subdivision s = GeometryManager.newSubdivision();
 		s.setColor(ColorSpecial.PASTEL_GREEN);
 		for (Point p : points) {
 			try {
