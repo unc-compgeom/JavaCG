@@ -96,13 +96,19 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		a.actionPerformed(new ActionEvent(e, ActionEvent.ACTION_PERFORMED,
-				"mouseMoved"));
+		Point location = e.getPoint();
+		location.setLocation(location.getX(),
+				this.getHeight() - location.getY());
+		a.actionPerformed(new ActionEvent(location,
+				ActionEvent.ACTION_PERFORMED, "mouseMoved"));
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		a.actionPerformed(new ActionEvent(e, ActionEvent.ACTION_PERFORMED,
-				"mouseMoved"));
+		Point location = e.getPoint();
+		location.setLocation(location.getX(),
+				this.getHeight() - location.getY());
+		a.actionPerformed(new ActionEvent(location,
+				ActionEvent.ACTION_PERFORMED, "mouseMoved"));
 	}
 }
