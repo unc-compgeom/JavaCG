@@ -23,10 +23,12 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	private Edge startingEdge;
 	private final List<Edge> edges;
 
-	public SubdivisionComponent(Point a, Point b, Point c) {
-		GeometryManager.destroy(a);
-		GeometryManager.destroy(b);
-		GeometryManager.destroy(c);
+	public SubdivisionComponent() {
+		// TODO find a triangle large enough to encompass <tt>points</tt>
+		int scale = 16364;
+		Point a = new PointComponent(-1 * scale - 1, 2 * scale);
+		Point b = new PointComponent(-1 * scale, -1 * scale);
+		Point c = new PointComponent(2 * scale, -1 * scale);
 
 		Edge ea = QuadEdge.makeEdge();
 		ea.setOrig(a);
