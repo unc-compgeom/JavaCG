@@ -3,7 +3,7 @@ package algorithms;
 import cg.PointSet;
 import cg.Subdivision;
 
-public class VoronoiDiagram {
+class VoronoiDiagram {
 	public static Subdivision makeVoroniDiagram(PointSet points) {
 		Subdivision t = DelaunayTriangulation.triangulate(points);
 		makeVoroniDiagram(t);

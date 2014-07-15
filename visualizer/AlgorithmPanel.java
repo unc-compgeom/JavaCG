@@ -45,7 +45,7 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
-	};
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {

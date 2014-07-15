@@ -20,12 +20,10 @@ import util.CGObserver;
 import cg.Drawable;
 
 public class View implements CGObserver {
-	private final JFrame f;
 	private final AlgorithmPanel p;
-	private final ButtonPanel b;
 
 	public View(ActionListener a) {
-		f = new JFrame("Algorithm Visualizer");
+		JFrame f = new JFrame("Algorithm Visualizer");
 		try {
 			Image image = ImageIO.read(getClass().getResource("icon.gif"));
 			f.setIconImage(image);
@@ -35,7 +33,7 @@ public class View implements CGObserver {
 		f.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
 
-		b = new ButtonPanel(a);
+		ButtonPanel b = new ButtonPanel(a);
 		gc.gridx = 0;
 		gc.gridy = 0;
 		gc.gridheight = 1;
@@ -69,7 +67,7 @@ public class View implements CGObserver {
 		f.setJMenuBar(menuBar);
 
 		f.pack();
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		f.setVisible(true);
 	}
 

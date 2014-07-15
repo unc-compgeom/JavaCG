@@ -24,9 +24,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	 */
 	CircleComponent(List<Point> points) {
 		this.points = points;
-		for (Point point : points) {
-			GeometryManager.destroy(point);
-		}
+		points.forEach(GeometryManager::destroy);
 		// do computations for drawing
 		origin = new PointComponent(0, 0);
 		radiusSquared = -1;

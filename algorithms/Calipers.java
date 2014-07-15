@@ -8,7 +8,7 @@ import cg.PointSet;
 import cg.Polygon;
 import cg.Segment;
 
-public class Calipers {
+class Calipers {
 
 	/**
 	 * This method measures the squared distance between vertices i and j. If
@@ -25,8 +25,8 @@ public class Calipers {
 	 * @param diamSupport2
 	 * @return
 	 */
-	public static double checkDiameter(double diam, int i, int j, Polygon hull,
-			Segment diamline, Segment diamSupport1, Segment diamSupport2) {
+	private static double checkDiameter(double diam, int i, int j, Polygon hull,
+	                                    Segment diamline, Segment diamSupport1, Segment diamSupport2) {
 		Point pi = get(hull, i);
 		Point pj = get(hull, j);
 		double tempdiam = pi.distanceSquared(pj);
@@ -76,8 +76,8 @@ public class Calipers {
 	 * @param widthSupport2
 	 * @return
 	 */
-	public static double checkWidth(double width, int i, int j, Polygon hull,
-			Segment widthline, Segment widthSupport1, Segment widthSupport2) {
+	private static double checkWidth(double width, int i, int j, Polygon hull,
+	                                 Segment widthline, Segment widthSupport1, Segment widthSupport2) {
 		int r, p, q;
 		double tempwidth;
 		// If the cwIntersection test returns true, then i has a tangent

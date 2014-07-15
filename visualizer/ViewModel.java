@@ -108,7 +108,7 @@ public class ViewModel {
 		return size;
 	}
 
-	public PointSet makeCirclePoints(int origX, int origY, int radX, int radY) {
+	PointSet makeCirclePoints(int origX, int origY, int radX, int radY) {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double radius = Math.hypot(radX - origX, radY - origY);
 		int numPoints = radius / 4 > 5 ? (int) (radius / 4) : 5;
@@ -122,7 +122,7 @@ public class ViewModel {
 		return pointSet;
 	}
 
-	public Polygon makeCirclePolygon(int origX, int origY, int radX, int radY) {
+	Polygon makeCirclePolygon(int origX, int origY, int radX, int radY) {
 		Polygon polygon = GeometryManager.newPolygon();
 		double radius = Math.hypot(radX - origX, radY - origY);
 		int numPoints = radius / 4 > 5 ? (int) (radius / 4) : 5;
@@ -136,7 +136,7 @@ public class ViewModel {
 		return polygon;
 	}
 
-	public PointSet makeLinePoints(int x1, int y1, int x2, int y2) {
+	PointSet makeLinePoints(int x1, int y1, int x2, int y2) {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double x = x1;
 		double y = y1;
@@ -152,7 +152,7 @@ public class ViewModel {
 		return pointSet;
 	}
 
-	public Polygon makeLinePolygon(int x1, int y1, int x2, int y2) {
+	Polygon makeLinePolygon(int x1, int y1, int x2, int y2) {
 		Polygon polygon = GeometryManager.newPolygon();
 		double x = x1;
 		double y = y1;
@@ -168,7 +168,7 @@ public class ViewModel {
 		return polygon;
 	}
 
-	public float[] makeRandomCoordinates() {
+	float[] makeRandomCoordinates() {
 		int width = size.width;
 		int height = size.height;
 		int numPoints = (int) Math.sqrt(width * height) / 16;
@@ -237,7 +237,7 @@ public class ViewModel {
 	/**
 	 * Choose how the points should be drawn onto the screen.
 	 * 
-	 * @param mode
+	 * @param mode the insertion mode
 	 */
 	public void setInsertionMode(InsertionMode mode) {
 		if (mode == InsertionMode.RANDOM) {

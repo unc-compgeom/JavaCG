@@ -7,7 +7,7 @@ import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
-public class Melkman {
+class Melkman {
 
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();

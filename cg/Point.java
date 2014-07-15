@@ -5,7 +5,7 @@ public interface Point extends Comparable<Point>, Cloneable, Drawable {
 	/**
 	 * Computes the distance squared from this point to point p.
 	 * 
-	 * @param p
+	 * @param p a point
 	 * @return the distance squared from this point to point p.
 	 */
 	public double distanceSquared(Point p);

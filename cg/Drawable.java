@@ -56,7 +56,7 @@ public interface Drawable {
 	 * Sets the visibility of this object. The object will not be painted if it
 	 * is invisible.
 	 * 
-	 * @param isInvisible
+	 * @param isInvisible is the object invisible
 	 */
 	public void setInvisible(boolean isInvisible);
 }

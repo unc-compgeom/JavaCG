@@ -7,7 +7,7 @@ import cg.Point;
 import cg.PointSet;
 import cg.Subdivision;
 
-public class DelaunayTriangulation {
+class DelaunayTriangulation {
 	public static Subdivision triangulate(PointSet points) {
 		Subdivision s = GeometryManager.newSubdivision();
 		s.setColor(ColorSpecial.PASTEL_GREEN);

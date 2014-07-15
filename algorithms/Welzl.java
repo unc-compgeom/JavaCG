@@ -9,7 +9,7 @@ import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 
-public class Welzl {
+class Welzl {
 	public static Circle findSmallestEnclosingCircle(PointSet points) {
 		Circle result;
 		PointSet s = GeometryManager.newPointSet(points);

@@ -14,19 +14,19 @@ import cg.Segment;
 public class Predicate {
 	public enum Orientation {
 		CLOCKWISE, COLINEAR, COUNTERCLOCKWISE
-	};
+	}
 
-	public static int ahead = 0;
-	public static int ccw = 0;
-	public static int findOrientation = 0;
-	public static int isLeftOrInside = 0;
-	public static int isPointInCircle = 0;
-	public static int leftOf = 0;
-	public static int leftOrAhead = 0;
-	public static int onEdge = 0;
-	public static int rightOf = 0;
-	public static int rightOrAhead = 0;
-	public static int triArea = 0;
+	private static int ahead = 0;
+	private static int ccw = 0;
+	private static int findOrientation = 0;
+	private static int isLeftOrInside = 0;
+	private static int isPointInCircle = 0;
+	private static int leftOf = 0;
+	private static int leftOrAhead = 0;
+	private static int onEdge = 0;
+	private static int rightOf = 0;
+	private static int rightOrAhead = 0;
+	private static int triArea = 0;
 
 	/**
 	 * Tests if {@link Point} p is ahead of the segment from q to r.
@@ -39,7 +39,7 @@ public class Predicate {
 	 *            segment endpoint
 	 * @return true iff <tt>p</tt> is ahead of <tt>qr</tt>.
 	 */
-	public static boolean ahead(Point p, Point q, Point r) {
+	private static boolean ahead(Point p, Point q, Point r) {
 		ahead++;
 		return p.sub(q).dot(r.sub(q)) > CG.distSquared(q, r);
 	}
@@ -51,11 +51,11 @@ public class Predicate {
 	 *            point 1
 	 * @param b
 	 *            point 2
-	 * @param color
+	 * @param c
 	 *            point 3
 	 * @return true iff a, b, and color are oriented counterclockwise.
 	 */
-	public static boolean ccw(Point a, Point b, Point c) {
+	private static boolean ccw(Point a, Point b, Point c) {
 		ccw++;
 		return triArea(a, b, c) > 0;
 	}
@@ -100,7 +100,7 @@ public class Predicate {
 	 * 
 	 * @param s
 	 *            the point
-	 * @param color
+	 * @param c
 	 *            the circle
 	 * @return true iff s is inside or on the boundary of the circle
 	 */
@@ -164,7 +164,7 @@ public class Predicate {
 	 *            Point on circle
 	 * @param b
 	 *            Point on circle
-	 * @param color
+	 * @param c
 	 *            Point on circle
 	 * 
 	 * @return true iff <tt>test</tt> is in the circle
@@ -266,11 +266,11 @@ public class Predicate {
 	 *            a Point
 	 * @param b
 	 *            a Point
-	 * @param color
+	 * @param c
 	 *            a Point
 	 * @return twice the signed area
 	 */
-	public static double triArea(Point a, Point b, Point c) {
+	private static double triArea(Point a, Point b, Point c) {
 		triArea++;
 		return b.sub(a).getX() * c.sub(a).getY() - b.sub(a).getY()
 				* c.sub(a).getX();

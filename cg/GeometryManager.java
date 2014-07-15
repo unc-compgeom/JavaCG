@@ -17,10 +17,10 @@ import util.CGObserver;
  */
 public class GeometryManager {
 	private static int delay = 150;
-	private static List<Drawable> dispersedObjects = Collections
+	private static final List<Drawable> dispersedObjects = Collections
 			.synchronizedList(new LinkedList<Drawable>());
 	private static final int LARGESIZE = 5;
-	private static List<CGObserver> observers = Collections
+	private static final List<CGObserver> observers = Collections
 			.synchronizedList(new LinkedList<CGObserver>());
 	private static int size = 1;
 	private static final int SMALLSIZE = 1;
@@ -57,7 +57,6 @@ public class GeometryManager {
 		synchronized (dispersedObjects) {
 			dispersedObjects.remove(d);
 		}
-		d = null;
 		notifyAllObservers();
 	}
 
@@ -102,10 +101,10 @@ public class GeometryManager {
 
 	/**
 	 * Creates a new {@link Circle} initialized with the same properties as
-	 * <code>Circle color</code>. This factory constructor automatically
+	 * <code>Circle c</code>. This factory constructor automatically
 	 * registers observers with the object and sets its draw size.
 	 * 
-	 * @param points
+	 * @param c the circle to clone
 	 *            Points on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
@@ -183,9 +182,7 @@ public class GeometryManager {
 	public static PointSet newPointSet(PointSet points) {
 		PointSet s = new PointSetComponent();
 		s.setColor(points.getColor());
-		for (Point point : points) {
-			s.addNoDelay(point);
-		}
+		points.forEach(s::addNoDelay);
 		return (PointSet) buildGeometry(s);
 	}
 
@@ -251,13 +248,7 @@ public class GeometryManager {
 	 * Creates a new {@link Subdivision} for a triangulation. The Subdivision is
 	 * initialized with three vertices. This factory constructor automatically
 	 * registers observers with the object and sets its draw size
-	 * 
-	 * @param p1
-	 *            a vertex
-	 * @param p2
-	 *            a vertex
-	 * @param p3
-	 *            a vertex
+	 *
 	 * @return a <tt>Subdivision</tt> object
 	 */
 	public static Subdivision newSubdivision() {
@@ -280,7 +271,7 @@ public class GeometryManager {
 	 * Notifies all observers of dispersed geometry. This method should be
 	 * called by geometry objects when their observable parameters are modified.
 	 */
-	protected static void notifyObservers() {
+	static void notifyObservers() {
 		notifyAllObservers();
 		try {
 			Thread.sleep(delay);
@@ -295,7 +286,7 @@ public class GeometryManager {
 	 * and the respective update should not be accompanied by an animation
 	 * delay.
 	 */
-	protected static void notifyObserversNoDelay() {
+	static void notifyObserversNoDelay() {
 		notifyAllObservers();
 	}
 

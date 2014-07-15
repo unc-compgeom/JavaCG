@@ -13,7 +13,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	private static final long serialVersionUID = -1545417749354389726L;
 	private final LinkedList<Point> points;
 
-	protected PointSetComponent() {
+	PointSetComponent() {
 		super();
 		points = new LinkedList<Point>();
 	}
@@ -41,9 +41,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public boolean addAll(Collection<? extends Point> c) {
 		synchronized (c) {
-			for (Point point : c) {
-				GeometryManager.destroy(point);
-			}
+			c.forEach(GeometryManager::destroy);
 		}
 		if (c instanceof PointSet) {
 			GeometryManager.destroy((PointSet) c);
@@ -59,9 +57,7 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public boolean addAll(int index, Collection<? extends Point> c) {
 		synchronized (c) {
-			for (Point point : c) {
-				GeometryManager.destroy(point);
-			}
+			c.forEach(GeometryManager::destroy);
 		}
 		boolean b;
 		synchronized (this) {

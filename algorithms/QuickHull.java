@@ -9,7 +9,7 @@ import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
-public class QuickHull {
+class QuickHull {
 	private static double distance(Point A, Point B, Point C) {
 		float ABx = B.getX() - A.getX();
 		float ABy = B.getY() - A.getY();

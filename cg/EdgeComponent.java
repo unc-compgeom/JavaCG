@@ -102,7 +102,6 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		if (o == null || dest() == null) {
 			setOrig(origin);
 			setDest(destination);
-			return;
 		} else {
 			final Point oldO = new PointComponent(o), newO = new PointComponent(
 					origin);
@@ -119,7 +118,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 				anim.setColorNoAnim(ColorSpecial.YELLOW_ROSE);
 				try {
 					Thread.sleep(1);
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ignored) {
 				}
 				GeometryManager.destroy(anim);
 			}

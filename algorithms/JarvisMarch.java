@@ -9,7 +9,7 @@ import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
-public class JarvisMarch {
+class JarvisMarch {
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);

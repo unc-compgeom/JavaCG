@@ -57,11 +57,11 @@ public abstract class AbstractGeometry implements Drawable {
 		return invisible;
 	}
 
-	protected void notifyObservers() {
+	void notifyObservers() {
 		GeometryManager.notifyObservers();
 	}
 
-	protected void notifyObserversNoDelay() {
+	void notifyObserversNoDelay() {
 		GeometryManager.notifyObserversNoDelay();
 	}
 

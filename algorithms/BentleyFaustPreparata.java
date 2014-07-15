@@ -1,6 +1,7 @@
 package algorithms;
 
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
@@ -10,12 +11,12 @@ import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
-public class BentleyFaustPreparata {
+class BentleyFaustPreparata {
 	/**
 	 * Computes the convex hull using the Bentley Faust Preparata. Precondition:
 	 * all points are at integer coordinates.
 	 * 
-	 * @param points
+	 * @param points the raw points
 	 * @return the convex hull
 	 */
 	public static Polygon findConvexHull(PointSet points) {
@@ -124,12 +125,8 @@ public class BentleyFaustPreparata {
 		// join
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
-		for (Point vt : lower) {
-			hull.add(vt);
-		}
-		for (Point vt : upper) {
-			hull.add(vt);
-		}
+		hull.addAll(lower.stream().collect(Collectors.toList()));
+		hull.addAll(upper.stream().collect(Collectors.toList()));
 		// connect the first and last edges
 		hull.add(hull.getFirst());
 		// clean up

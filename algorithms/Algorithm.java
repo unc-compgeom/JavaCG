@@ -55,7 +55,7 @@ public enum Algorithm {
 		}
 	}
 
-	private String s;
+	private final String s;
 
 	private Algorithm(String s) {
 		this.s = s;

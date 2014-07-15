@@ -35,13 +35,13 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 
 	private Point tail, head;
 
-	protected SegmentComponent(float x1, float y1, float x2, float y2) {
+	SegmentComponent(float x1, float y1, float x2, float y2) {
 		tail = new PointComponent(x1, y1);
 		head = new PointComponent(x2, y2);
 
 	}
 
-	protected SegmentComponent(Point v1, Point v2) {
+	SegmentComponent(Point v1, Point v2) {
 		this(v1.getX(), v1.getY(), v2.getX(), v2.getY());
 	}
 

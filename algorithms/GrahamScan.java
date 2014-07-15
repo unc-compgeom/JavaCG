@@ -9,7 +9,7 @@ import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
 
-public class GrahamScan {
+class GrahamScan {
 
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
@@ -23,7 +23,7 @@ public class GrahamScan {
 				return hull;
 			}
 		}
-		// Grahm Scan
+		// Graham Scan
 		Point smallest = CG.findSmallestYX(points);
 		PointSet sorted = CG.sortByAngle(points, smallest);
 		hull = GeometryManager.newPolygon();

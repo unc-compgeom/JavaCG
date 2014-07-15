@@ -135,8 +135,8 @@ public class ColorSpecial {
 	public static final Color CADMIUM_ORANGE = new Color(237, 135, 45);
 	public static final Color CADMIUM_RED = new Color(227, 0, 34);
 	public static final Color CADMIUM_YELLOW = new Color(255, 246, 0);
-	public static final Color CAFé_AU_LAIT = new Color(166, 123, 91);
-	public static final Color CAFé_NOIR = new Color(75, 54, 33);
+	public static final Color CAF_AU_LAIT = new Color(166, 123, 91);
+	public static final Color CAF_NOIR = new Color(75, 54, 33);
 	public static final Color CAL_POLY_POMONA_GREEN = new Color(30, 77, 43);
 	public static final Color CAMBRIDGE_BLUE = new Color(163, 193, 173);
 	public static final Color CAMEL = new Color(193, 154, 107);
@@ -415,7 +415,6 @@ public class ColorSpecial {
 	public static final Color GRIZZLY = new Color(136, 88, 24);
 	public static final Color GRULLO = new Color(169, 154, 134);
 	public static final Color GUPPIE_GREEN = new Color(0, 255, 127);
-	public static final Color HALAYà_úBE = new Color(102, 55, 84);
 	public static final Color HAN_BLUE = new Color(68, 108, 207);
 	public static final Color HAN_PURPLE = new Color(82, 24, 250);
 	public static final Color HANSA_YELLOW = new Color(233, 214, 107);
@@ -924,7 +923,7 @@ public class ColorSpecial {
 	public static final Color TEAL_DEER = new Color(153, 230, 179);
 	public static final Color TEAL_GREEN = new Color(0, 130, 127);
 	public static final Color TELEMAGENTA = new Color(207, 52, 118);
-	public static final Color TENNé = new Color(205, 87, 0);
+	public static final Color TENN = new Color(205, 87, 0);
 	public static final Color TERRA_COTTA = new Color(226, 114, 91);
 	public static final Color THISTLE = new Color(216, 191, 216);
 	public static final Color THULIAN_PINK = new Color(222, 111, 161);

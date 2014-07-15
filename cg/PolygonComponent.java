@@ -9,14 +9,8 @@ import java.util.Iterator;
 public class PolygonComponent extends PointSetComponent implements Polygon {
 	private static final long serialVersionUID = -1523644503244611934L;
 
-	protected PolygonComponent() {
+	PolygonComponent() {
 		super();
-	}
-
-	@Override
-	public Point get(int i) {
-		// this method should throw an exception if i is out of bounds
-		return super.get(i);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import cg.GeometryManager;
 import cg.PointSet;
 import cg.Polygon;
 
-public class Chan {
+class Chan {
 
 	public static Polygon findConvexHull(PointSet points) {
 		int t = 1;
