@@ -101,6 +101,20 @@ public class GeometryManager {
 	}
 
 	/**
+	 * Creates a new {@link Circle} initialized with the same properties as
+	 * <code>Circle color</code>. This factory constructor automatically
+	 * registers observers with the object and sets its draw size.
+	 * 
+	 * @param points
+	 *            Points on the circumference of the circle.
+	 * @return <tt>Circle</tt> object
+	 */
+	public static Circle newCircle(Circle c) {
+		Circle ci = new CircleComponent(c);
+		return (Circle) buildGeometry(ci);
+	}
+
+	/**
 	 * Creates a new {@link Circle} initialized with the
 	 * <code>PointSet points</code> that are on the circumference of the circle.
 	 * This factory constructor automatically registers observers with the
@@ -113,20 +127,6 @@ public class GeometryManager {
 	public static Circle newCircle(List<Point> points) {
 		Circle c = new CircleComponent(points);
 		return (Circle) buildGeometry(c);
-	}
-
-	/**
-	 * Creates a new {@link Circle} initialized with the same properties as
-	 * <code>Circle color</code>. This factory constructor automatically
-	 * registers observers with the object and sets its draw size.
-	 * 
-	 * @param points
-	 *            Points on the circumference of the circle.
-	 * @return <tt>Circle</tt> object
-	 */
-	public static Circle newCircle(Circle c) {
-		Circle ci = new CircleComponent(c);
-		return (Circle) buildGeometry(ci);
 	}
 
 	/**
@@ -198,6 +198,17 @@ public class GeometryManager {
 	public static Polygon newPolygon() {
 		Polygon p = new PolygonComponent();
 		return (Polygon) buildGeometry(p);
+	}
+
+	/**
+	 * Creates a new empty {@link QuadEdge}. This factory constructor
+	 * automatically registers observers with the object and sets its draw size.
+	 * 
+	 * @return an empty <tt>QuadEdge</tt> object
+	 */
+	public static QuadEdge newQuadEdge() {
+		QuadEdge q = new QuadEdgeComponent();
+		return (QuadEdge) buildGeometry(q);
 	}
 
 	/**

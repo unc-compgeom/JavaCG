@@ -25,7 +25,7 @@ public class View implements CGObserver {
 	private final ButtonPanel b;
 
 	public View(ActionListener a) {
-		this.f = new JFrame("Algorithm Visualizer");
+		f = new JFrame("Algorithm Visualizer");
 		try {
 			Image image = ImageIO.read(getClass().getResource("icon.gif"));
 			f.setIconImage(image);

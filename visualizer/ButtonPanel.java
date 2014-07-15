@@ -180,14 +180,14 @@ class ButtonPanel extends JPanel implements ActionListener, ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource().equals(elements.get("speed"))) {
 			final int s = ((JSlider) e.getSource()).getValue();
-			(new SwingWorker<Void, Void>() {
+			new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
 					a.actionPerformed(new ActionEvent(this,
 							ActionEvent.ACTION_PERFORMED, "speedSet", s));
 					return null;
 				}
-			}).execute();
+			}.execute();
 		}
 	}
 }

@@ -39,9 +39,49 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		mouseMoved(e);
+	};
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		Point location = e.getPoint();
+		location.setLocation(location.getX(), getHeight() - location.getY());
+		a.actionPerformed(new ActionEvent(location,
+				ActionEvent.ACTION_PERFORMED, "mouseMoved"));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	/**
+	 * Mouse listener methods
+	 */
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		Point location = e.getPoint();
+		location.setLocation(location.getX(), getHeight() - location.getY());
+		a.actionPerformed(new ActionEvent(location,
+				ActionEvent.ACTION_PERFORMED, "viewAddPoint"));
+	}
+
+	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.translate(0, this.getHeight());
+		g.translate(0, getHeight());
 		((Graphics2D) g).scale(1, -1);
 		List<Drawable> geometry = GeometryManager.getAllGeometry();
 		synchronized (geometry) {
@@ -56,34 +96,6 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 		super.setBounds(x, y, width, height);
 		a.actionPerformed(new ActionEvent(getSize(),
 				ActionEvent.ACTION_PERFORMED, "viewResized"));
-	};
-
-	/**
-	 * Mouse listener methods
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		Point location = e.getPoint();
-		location.setLocation(location.getX(),
-				this.getHeight() - location.getY());
-		a.actionPerformed(new ActionEvent(location,
-				ActionEvent.ACTION_PERFORMED, "viewAddPoint"));
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
 	}
 
 	/**
@@ -92,19 +104,5 @@ class AlgorithmPanel extends JPanel implements MouseListener,
 	@Override
 	public void update(Drawable o) {
 		repaint();
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		mouseMoved(e);
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		Point location = e.getPoint();
-		location.setLocation(location.getX(),
-				this.getHeight() - location.getY());
-		a.actionPerformed(new ActionEvent(location,
-				ActionEvent.ACTION_PERFORMED, "mouseMoved"));
 	}
 }

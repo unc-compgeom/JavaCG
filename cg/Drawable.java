@@ -12,14 +12,6 @@ import java.awt.Graphics;
 public interface Drawable {
 
 	/**
-	 * Forces this object to paint itself.
-	 * 
-	 * @param g
-	 *            Graphics context
-	 */
-	public void paint(Graphics g);
-
-	/**
 	 * Returns the current color of this object.
 	 * 
 	 * @return a color
@@ -33,6 +25,14 @@ public interface Drawable {
 	 * @return true iff the object is invisible
 	 */
 	public boolean isInvisible();
+
+	/**
+	 * Forces this object to paint itself.
+	 * 
+	 * @param g
+	 *            Graphics context
+	 */
+	public void paint(Graphics g);
 
 	/**
 	 * Sets the color of this object. The object will be painted with this

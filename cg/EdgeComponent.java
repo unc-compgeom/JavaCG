@@ -99,14 +99,14 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	@Override
 	public void setCoordinates(Point origin, Point destination) {
-		if (this.o == null || this.dest() == null) {
+		if (o == null || dest() == null) {
 			setOrig(origin);
 			setDest(destination);
 			return;
 		} else {
-			final Point oldO = new PointComponent(this.o), newO = new PointComponent(
+			final Point oldO = new PointComponent(o), newO = new PointComponent(
 					origin);
-			final Point oldD = new PointComponent(this.dest()), newD = new PointComponent(
+			final Point oldD = new PointComponent(dest()), newD = new PointComponent(
 					destination);
 			setInvisible(true);
 

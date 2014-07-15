@@ -21,6 +21,14 @@ public class CG {
 	public static int randomColor = 0;
 	public static int sortByAngle = 0;
 
+	public static void animationDelay() {
+		try {
+			Thread.sleep(GeometryManager.getDelay());
+		} catch (InterruptedException e) {
+
+		}
+	}
+
 	/**
 	 * Computes the distance squared between points p and q
 	 * 
@@ -67,7 +75,7 @@ public class CG {
 					min.setColor(ColorSpecial.GREEN);
 				} else {
 					min.setColor(oldLooking);
-					min = (min.getX() < lookingAt.getX()) ? min : lookingAt;
+					min = min.getX() < lookingAt.getX() ? min : lookingAt;
 					minY = min.getY();
 					min.setColor(ColorSpecial.GREEN);
 				}
@@ -160,13 +168,5 @@ public class CG {
 		}
 		sorted.setColor(c);
 		return sorted;
-	}
-
-	public static void animationDelay() {
-		try {
-			Thread.sleep(GeometryManager.getDelay());
-		} catch (InterruptedException e) {
-
-		}
 	}
 }

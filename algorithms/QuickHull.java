@@ -10,6 +10,18 @@ import cg.PointSet;
 import cg.Polygon;
 
 public class QuickHull {
+	private static double distance(Point A, Point B, Point C) {
+		float ABx = B.getX() - A.getX();
+		float ABy = B.getY() - A.getY();
+		float ACx = A.getX() - C.getX();
+		float ACy = A.getY() - C.getY();
+		double num = ABx * ACy - ABy * ACx;
+		if (num < 0) {
+			num = -num;
+		}
+		return num;
+	}
+
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
@@ -55,17 +67,6 @@ public class QuickHull {
 		findHull(sub, hull, c, b);
 		// clean up
 		GeometryManager.destroy(sub);
-	}
-
-	private static double distance(Point A, Point B, Point C) {
-		float ABx = B.getX() - A.getX();
-		float ABy = B.getY() - A.getY();
-		float ACx = A.getX() - C.getX();
-		float ACy = A.getY() - C.getY();
-		double num = ABx * ACy - ABy * ACx;
-		if (num < 0)
-			num = -num;
-		return num;
 	}
 
 	private static Point[] findMinMaxX(PointSet points) {

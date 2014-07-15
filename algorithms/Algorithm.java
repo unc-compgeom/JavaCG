@@ -11,17 +11,6 @@ public enum Algorithm {
 			"Monotone chain"), QUICKHULL("Quickhull"), VORONI_DIAGRAM(
 			"Voroni Diagram"), WELZL("Welzl");
 
-	private String s;
-
-	private Algorithm(String s) {
-		this.s = s;
-	}
-
-	@Override
-	public String toString() {
-		return s;
-	}
-
 	public static Algorithm fromString(String s) {
 		if (s != null) {
 			for (Algorithm a : Algorithm.values()) {
@@ -64,5 +53,16 @@ public enum Algorithm {
 					+ " not yet implemented in enum Algorithm run().");
 			return null;
 		}
+	}
+
+	private String s;
+
+	private Algorithm(String s) {
+		this.s = s;
+	}
+
+	@Override
+	public String toString() {
+		return s;
 	}
 }

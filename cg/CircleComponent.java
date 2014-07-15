@@ -51,12 +51,12 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 
 			double det = (px - qx) * (py - ry) - (py - qy) * (px - rx);
 			float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
-					* (p.plus(r).div(2).dot(p.sub(r)))) / det);
+					* p.plus(r).div(2).dot(p.sub(r))) / det);
 			float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
 					.plus(q).div(2).dot(p.sub(q))
 					* (px - rx)) / det);
 			origin = new PointComponent(x, y);
-			radiusSquared = (p.sub(origin).dot(p.sub(origin)));
+			radiusSquared = p.sub(origin).dot(p.sub(origin));
 		}
 	}
 

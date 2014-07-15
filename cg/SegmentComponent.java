@@ -27,7 +27,7 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		float x2 = s.getHead().getX();
 		float y1 = s.getTail().getY();
 		float y2 = s.getHead().getY();
-		homogeneous[0] = (x1 * y2) - (y1 * x2);
+		homogeneous[0] = x1 * y2 - y1 * x2;
 		homogeneous[1] = y1 - y2;
 		homogeneous[2] = x2 - x1;
 		return homogeneous;
@@ -36,8 +36,8 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	private Point tail, head;
 
 	protected SegmentComponent(float x1, float y1, float x2, float y2) {
-		this.tail = new PointComponent(x1, y1);
-		this.head = new PointComponent(x2, y2);
+		tail = new PointComponent(x1, y1);
+		head = new PointComponent(x2, y2);
 
 	}
 

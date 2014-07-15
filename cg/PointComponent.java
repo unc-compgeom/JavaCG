@@ -15,20 +15,15 @@ public class PointComponent extends AbstractGeometry implements Point {
 
 	PointComponent(Point p) {
 		super();
-		this.x = p.getX();
-		this.y = p.getY();
-	}
-
-	@Override
-	public Point plus(Point p1) {
-		return new PointComponent(x + p1.getX(), y + p1.getY());
+		x = p.getX();
+		y = p.getY();
 	}
 
 	@Override
 	public int compareTo(Point p) {
 		// lexicographical comparison
-		return (x < p.getX()) ? -1 : (x > p.getX()) ? 1 : (y < p.getY()) ? -1
-				: (y > p.getY()) ? 1 : 0;
+		return x < p.getX() ? -1 : x > p.getX() ? 1 : y < p.getY() ? -1 : y > p
+				.getY() ? 1 : 0;
 	}
 
 	@Override
@@ -65,19 +60,25 @@ public class PointComponent extends AbstractGeometry implements Point {
 
 	@Override
 	public void paint(Graphics g) {
-		if (isInvisible())
+		if (isInvisible()) {
 			return;
+		}
 		Color oldG = g.getColor(), c = super.getColor();
 		if (c != null) {
 			g.setColor(c);
 		}
-		int size = (GeometryManager.getSize() > 2) ? GeometryManager.getSize()
+		int size = GeometryManager.getSize() > 2 ? GeometryManager.getSize()
 				: 2;
 		g.fillOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
-		g.setColor((c == null || c == Color.BLACK) ? Color.LIGHT_GRAY
+		g.setColor(c == null || c == Color.BLACK ? Color.LIGHT_GRAY
 				: Color.BLACK);
 		g.drawOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
 		g.setColor(oldG);
+	}
+
+	@Override
+	public Point plus(Point p1) {
+		return new PointComponent(x + p1.getX(), y + p1.getY());
 	}
 
 	@Override

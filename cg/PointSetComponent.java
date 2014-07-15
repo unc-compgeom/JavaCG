@@ -99,6 +99,14 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
+	public void addNoDelay(float x, float y) {
+		synchronized (this) {
+			points.addLast(new PointComponent(x, y));
+		}
+		notifyObserversNoDelay();
+	}
+
+	@Override
 	public void clear() {
 		synchronized (this) {
 			points.clear();

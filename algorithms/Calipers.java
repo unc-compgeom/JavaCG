@@ -11,78 +11,6 @@ import cg.Segment;
 public class Calipers {
 
 	/**
-	 * The rotating caliper algorithm calculates the maximum diameter of the
-	 * convex hull and minimum width of the convex hull given a point set.
-	 * 
-	 * @param points
-	 *            the point set
-	 * @param hull
-	 *            the convex hull to be drawn by the algorithm (initially empty)
-	 * @param widthLine
-	 *            the line segment to be calculated by the algorithm (initially
-	 *            empty);
-	 * 
-	 * @param diameterLine
-	 *            the line segment to be calculated by the algorithm (initially
-	 *            empty);
-	 * 
-	 * @return the convex hull
-	 */
-	public static Polygon doCalipers(PointSet points) {
-		Polygon hull = GeometryManager.newPolygon();
-		hull.setColor(ColorSpecial.PASTEL_GREEN);
-		Segment widthLine = GeometryManager.newSegment(-1, -1, -1, -1);
-		Segment diameterLine = GeometryManager.newSegment(-1, -1, -1, -1);
-		int i = 0;
-		int j = 1;
-		double diam = -1;
-		double width = Double.POSITIVE_INFINITY;
-
-		// Visualization Variables
-		Segment diamSupport1 = GeometryManager.newSegment(-1, -1, -1, -1);
-		Segment diamSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
-		Segment widthSupport1 = GeometryManager.newSegment(-1, -1, -1, -1);
-		Segment widthSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
-
-		diamSupport1.setColor(ColorSpecial.BLUE);
-		diamSupport2.setColor(ColorSpecial.BLUE);
-		widthSupport1.setColor(ColorSpecial.BLUE);
-		widthSupport2.setColor(ColorSpecial.BLUE);
-		diameterLine.setColor(ColorSpecial.GREEN);
-		widthLine.setColor(ColorSpecial.ORANGE);
-
-		// Jarvis march is used to find the convex hull
-		hull = JarvisMarch.findConvexHull(points);
-
-		// Initialization Step
-		while (cwIntersection(0, j, hull)) {
-			j++;
-		}
-
-		// Rotation Step
-		while (j < hull.size()) {
-			// check if new max diameter or minimum width at points i and j
-			diam = checkDiameter(diam, i, j, hull, diameterLine, diamSupport1,
-					diamSupport2);
-			width = checkWidth(width, i, j, hull, widthLine, widthSupport1,
-					widthSupport2);
-			if (cwIntersection(i + 1, j, hull)) {
-				j++;
-			} else if (cwIntersection(j + 1, i, hull)) {
-				i++;
-			} else {
-				j++;
-				i++;
-			}
-		}
-		GeometryManager.destroy(diamSupport1);
-		GeometryManager.destroy(diamSupport2);
-		GeometryManager.destroy(widthSupport1);
-		GeometryManager.destroy(widthSupport2);
-		return hull;
-	}
-
-	/**
 	 * This method measures the squared distance between vertices i and j. If
 	 * the squared distance is less than the current squared distance, then
 	 * <tt>diamline</tt>'s endpoints become i and j. The parallel support lines
@@ -220,6 +148,78 @@ public class Calipers {
 		Pd.setX(Pd.getX() - get(hull, j).getX() + Pb.getX());
 		Pd.setY(Pd.getY() - get(hull, j).getY() + Pb.getY());
 		return Predicate.findOrientation(Pa, Pb, Pd) == Predicate.Orientation.CLOCKWISE;
+	}
+
+	/**
+	 * The rotating caliper algorithm calculates the maximum diameter of the
+	 * convex hull and minimum width of the convex hull given a point set.
+	 * 
+	 * @param points
+	 *            the point set
+	 * @param hull
+	 *            the convex hull to be drawn by the algorithm (initially empty)
+	 * @param widthLine
+	 *            the line segment to be calculated by the algorithm (initially
+	 *            empty);
+	 * 
+	 * @param diameterLine
+	 *            the line segment to be calculated by the algorithm (initially
+	 *            empty);
+	 * 
+	 * @return the convex hull
+	 */
+	public static Polygon doCalipers(PointSet points) {
+		Polygon hull = GeometryManager.newPolygon();
+		hull.setColor(ColorSpecial.PASTEL_GREEN);
+		Segment widthLine = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment diameterLine = GeometryManager.newSegment(-1, -1, -1, -1);
+		int i = 0;
+		int j = 1;
+		double diam = -1;
+		double width = Double.POSITIVE_INFINITY;
+
+		// Visualization Variables
+		Segment diamSupport1 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment diamSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment widthSupport1 = GeometryManager.newSegment(-1, -1, -1, -1);
+		Segment widthSupport2 = GeometryManager.newSegment(-1, -1, -1, -1);
+
+		diamSupport1.setColor(ColorSpecial.BLUE);
+		diamSupport2.setColor(ColorSpecial.BLUE);
+		widthSupport1.setColor(ColorSpecial.BLUE);
+		widthSupport2.setColor(ColorSpecial.BLUE);
+		diameterLine.setColor(ColorSpecial.GREEN);
+		widthLine.setColor(ColorSpecial.ORANGE);
+
+		// Jarvis march is used to find the convex hull
+		hull = JarvisMarch.findConvexHull(points);
+
+		// Initialization Step
+		while (cwIntersection(0, j, hull)) {
+			j++;
+		}
+
+		// Rotation Step
+		while (j < hull.size()) {
+			// check if new max diameter or minimum width at points i and j
+			diam = checkDiameter(diam, i, j, hull, diameterLine, diamSupport1,
+					diamSupport2);
+			width = checkWidth(width, i, j, hull, widthLine, widthSupport1,
+					widthSupport2);
+			if (cwIntersection(i + 1, j, hull)) {
+				j++;
+			} else if (cwIntersection(j + 1, i, hull)) {
+				i++;
+			} else {
+				j++;
+				i++;
+			}
+		}
+		GeometryManager.destroy(diamSupport1);
+		GeometryManager.destroy(diamSupport2);
+		GeometryManager.destroy(widthSupport1);
+		GeometryManager.destroy(widthSupport2);
+		return hull;
 	}
 
 	private static Point get(PointSet points, int index) {

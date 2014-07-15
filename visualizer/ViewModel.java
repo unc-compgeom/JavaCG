@@ -28,6 +28,8 @@ public class ViewModel {
 	private Point firstPoint;
 	private Dimension size;
 
+	private Drawable preview;
+
 	public ViewModel() {
 		pointSet = GeometryManager.newPointSet();
 		polygon = GeometryManager.newPolygon();
@@ -78,9 +80,15 @@ public class ViewModel {
 				break;
 			case RANDOM:
 				if (!polygonEnabled) {
-					pointSet.addAll(makeRandomPoints());
+					float[] points = makeRandomCoordinates();
+					for (int i = 0; i < points.length; i += 2) {
+						pointSet.addNoDelay(points[i], points[i + 1]);
+					}
 				} else {
-					polygon.addAll(makeRandomPolygon());
+					float[] points = makeRandomCoordinates();
+					for (int i = 0; i < points.length; i += 2) {
+						polygon.addNoDelay(points[i], points[i + 1]);
+					}
 				}
 				break;
 			default:
@@ -90,6 +98,10 @@ public class ViewModel {
 				break;
 			}
 		}
+	}
+
+	public void enablePolygon(boolean b) {
+		polygonEnabled = b;
 	}
 
 	public Dimension getSize() {
@@ -156,33 +168,18 @@ public class ViewModel {
 		return polygon;
 	}
 
-	public PointSet makeRandomPoints() {
-		PointSet pointSet = GeometryManager.newPointSet();
+	public float[] makeRandomCoordinates() {
 		int width = size.width;
 		int height = size.height;
-		Random Ayn = new Random();
 		int numPoints = (int) Math.sqrt(width * height) / 16;
-		for (int i = 0; i < numPoints; i++) {
-			pointSet.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
-					Ayn.nextInt(height)));
+		float[] pointSet = new float[numPoints * 2];
+		Random Ayn = new Random();
+		for (int i = 0; i < pointSet.length; i += 2) {
+			pointSet[i] = Ayn.nextFloat() * width;
+			pointSet[i + 1] = Ayn.nextFloat() * height;
 		}
 		return pointSet;
 	}
-
-	public Polygon makeRandomPolygon() {
-		Polygon polygon = GeometryManager.newPolygon();
-		int width = size.width;
-		int height = size.height;
-		Random Ayn = new Random();
-		int numPoints = (int) Math.sqrt(width * height) / 16;
-		for (int i = 0; i < numPoints; i++) {
-			polygon.addNoDelay(GeometryManager.newPoint(Ayn.nextInt(width),
-					Ayn.nextInt(height)));
-		}
-		return polygon;
-	}
-
-	private Drawable preview;
 
 	public void preview(int x, int y) {
 		if (firstPoint == null) {
@@ -223,7 +220,7 @@ public class ViewModel {
 	}
 
 	public void runAlgorithm(final Algorithm algorithm) {
-		final PointSet points = (polygonEnabled) ? polygon : pointSet;
+		final PointSet points = polygonEnabled ? polygon : pointSet;
 		if (polygonEnabled) {
 			polygon = GeometryManager.newPolygon();
 		} else {
@@ -255,9 +252,5 @@ public class ViewModel {
 
 	public void setSize(Dimension size) {
 		this.size = size;
-	}
-
-	public void enablePolygon(boolean b) {
-		polygonEnabled = b;
 	}
 }

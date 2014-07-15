@@ -14,10 +14,17 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 	}
 
 	@Override
+	public Point get(int i) {
+		// this method should throw an exception if i is out of bounds
+		return super.get(i);
+	}
+
+	@Override
 	public void paint(Graphics g) {
 		synchronized (this) {
-			if (isInvisible())
+			if (isInvisible()) {
 				return;
+			}
 			Color oldG = g.getColor(), c = super.getColor();
 			if (c != null) {
 				g.setColor(c);
@@ -40,11 +47,5 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 			super.paint(g);
 			g.setColor(oldG);
 		}
-	}
-
-	@Override
-	public Point get(int i) {
-		// this method should throw an exception if i is out of bounds
-		return super.get(i);
 	}
 }

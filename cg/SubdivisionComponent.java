@@ -20,36 +20,12 @@ import util.DuplicatePointException;
 public class SubdivisionComponent extends AbstractGeometry implements
 		Subdivision {
 	private Edge startingEdge;
-	private final List<Edge> edges;
+	private final QuadEdge qe;
 
 	public SubdivisionComponent() {
 		// TODO find a triangle large enough to encompass <tt>points</tt>
-		int scale = 16364;
-		Point a = new PointComponent(-1 * scale - 1, 2 * scale);
-		Point b = new PointComponent(-1 * scale, -1 * scale);
-		Point c = new PointComponent(2 * scale, -1 * scale);
-
-		Edge ea = QuadEdge.makeEdge();
-		ea.setCoordinates(a, b);
-
-		Edge eb = QuadEdge.makeEdge();
-		QuadEdge.splice(ea.sym(), eb);
-		eb.setCoordinates(b, c);
-
-		Edge ec = QuadEdge.makeEdge();
-		QuadEdge.splice(eb.sym(), ec);
-		ec.setCoordinates(c, a);
-
-		QuadEdge.splice(ec.sym(), ea);
-		this.startingEdge = ea;
-		edges = new ArrayList<Edge>();
-		// ea.setInvisible(true);
-		// eb.setInvisible(true);
-		// ec.setInvisible(true);
-		edges.add(ea);
-		edges.add(eb);
-		edges.add(ec);
-
+		qe = GeometryManager.newQuadEdge();
+		startingEdge = qe.get(0);
 		notifyObservers();
 	}
 
@@ -58,25 +34,18 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		Edge e = locate(p);
 		if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
-			QuadEdge.deleteEdge(e.oNext());
+			qe.deleteEdge(e.oNext());
 			notifyObservers();
 		}
 		// connect the new point to the vertices of the containing triangle
-		Edge base = QuadEdge.makeEdge();
+		Edge base = qe.makeEdge();
 		base.setCoordinates(e.orig(), GeometryManager.newPoint(p));
-		QuadEdge.splice(base, e);
+		qe.splice(base, e);
 		this.startingEdge = base;
-		// for drawing:
-		edges.add(base);
 		// add edges
 		do {
-			base = QuadEdge.connect(e, base.sym());
+			base = qe.connect(e, base.sym());
 			e = base.oPrev();
-			// for drawing:
-			edges.add(base);
-			if (base.isInvisible()) {
-				base.setInvisible(true);
-			}
 		} while (e.lNext() != startingEdge);
 		// examine suspect edges and ensure that the Delaunay condition is
 		// satisfied
@@ -85,7 +54,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			if (Predicate.rightOf(t.dest(), e)
 					&& Predicate.isPointInCircle(p, e.orig(), t.dest(),
 							e.dest())) {
-				QuadEdge.swap(e);
+				qe.swap(e);
 				notifyObservers();
 				e = e.oPrev();
 			} else if (e.oNext() == startingEdge) {
@@ -124,53 +93,21 @@ public class SubdivisionComponent extends AbstractGeometry implements
 
 	@Override
 	public void paint(Graphics g) {
-		if (isInvisible())
-			return;
-		Color oldG = g.getColor(), c = super.getColor();
-		if (c != null) {
-			g.setColor(c);
-		}
-		// for (Edge e : edges) {
-		// e.paint(g);
-		// Color o = g.getColor();
-		// g.setColor(ColorSpecial.AZURE);
-		// try {
-		// e.rot().paint(g);
-		// } catch (NullPointerException ex) {
-		//
-		// }
-		// g.setColor(o);
-		// }
-		Edge e = edges.get(2);
-		do {
-			if (isWall(e) || isWall(e.sym())) {
-				g.setColor(g.getColor().darker());
-				e.paint(g);
-				g.setColor(g.getColor().brighter());
-				e = e.rPrev();
-			} else {
-				e.paint(g);
-				e = e.oNext();
+		synchronized (this) {
+			if (isInvisible())
+				return;
+			Color oldG = g.getColor(), c = super.getColor();
+			if (c != null) {
+				g.setColor(c);
 			}
-
-		} while (e != edges.get(2));
-		g.setColor(oldG);
+			qe.paint(g);
+			g.setColor(oldG);
+		}
 	}
 
 	@Override
 	public void getDual() {
-		// iterate over each triangle
-		// traverse(edges.get(0));
-		// fixTriangle(e.lNext(), e.lNext().lNext(), e.oNext());
-		// e.setVisited();
-		// for (Edge e : edges) {
-		// if (isWall(e) || isWall(e.sym())) {
-		// e.setColor(ColorSpecial.BLACK_LEATHER_JACKET);
-		// } else {
-		// e.setColor(ColorSpecial.PALE_CERULEAN);
-		// }
-		// }
-		traverse(edges.get(2));
+
 	}
 
 	private boolean isWall(Edge e) {

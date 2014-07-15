@@ -143,19 +143,19 @@ class VertexHolder {
 	private Point min;
 	private Point max;
 
-	public Point getMin() {
-		return this.min;
-	}
-
-	public void setMin(Point min) {
-		this.min = min;
-	}
-
 	public Point getMax() {
-		return this.max;
+		return max;
+	}
+
+	public Point getMin() {
+		return min;
 	}
 
 	public void setMax(Point max) {
 		this.max = max;
+	}
+
+	public void setMin(Point min) {
+		this.min = min;
 	}
 }

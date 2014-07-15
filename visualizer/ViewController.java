@@ -20,7 +20,7 @@ public class ViewController implements ActionListener {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		SwingWorker<Void, Void> w = (new SwingWorker<Void, Void>() {
+		SwingWorker<Void, Void> w = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() {
 				switch (e.getActionCommand()) {
@@ -79,7 +79,7 @@ public class ViewController implements ActionListener {
 				}
 				return null;
 			}
-		});
+		};
 		w.execute();
 	}
 }

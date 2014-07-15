@@ -197,7 +197,7 @@ public class Predicate {
 		double rx = r.getX(), ry = r.getY();
 		double det2 = (px - qx) * (py - ry) - (py - qy) * (px - rx);
 		float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
-				* (p.plus(r).div(2).dot(p.sub(r)))) / det2);
+				* p.plus(r).div(2).dot(p.sub(r))) / det2);
 		float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
 				.plus(q).div(2).dot(p.sub(q))
 				* (px - rx)) / det2);
@@ -229,7 +229,7 @@ public class Predicate {
 	public static boolean leftOrAhead(Point p, Point q, Point r) {
 		leftOrAhead++;
 		double tmp = triArea(p, q, r);
-		return tmp > 0 || (tmp == 0 && ahead(p, q, r));
+		return tmp > 0 || tmp == 0 && ahead(p, q, r);
 	}
 
 	public static boolean onEdge(Point p, Edge e) {
@@ -253,7 +253,7 @@ public class Predicate {
 	public static boolean rightOrAhead(Point p, Point q, Point r) {
 		rightOrAhead++;
 		double tmp = triArea(p, q, r);
-		return tmp < 0 || (tmp == 0 && ahead(p, q, r));
+		return tmp < 0 || tmp == 0 && ahead(p, q, r);
 	}
 
 	/**

@@ -10,6 +10,8 @@ import util.DuplicatePointException;
  * 
  */
 public interface Subdivision extends Drawable {
+	public void getDual();
+
 	/**
 	 * Inserts {@link Point} p into the subdivision.
 	 * 
@@ -32,6 +34,4 @@ public interface Subdivision extends Drawable {
 	 * 
 	 */
 	public Edge locate(Point q) throws DuplicatePointException;
-
-	public void getDual();
 }

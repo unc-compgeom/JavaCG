@@ -17,38 +17,6 @@ public abstract class AbstractGeometry implements Drawable {
 	AbstractGeometry() {
 	}
 
-	@Override
-	public Color getColor() {
-		return c;
-	}
-
-	protected void notifyObserversNoDelay() {
-		GeometryManager.notifyObserversNoDelay();
-	}
-
-	protected void notifyObservers() {
-		GeometryManager.notifyObservers();
-	}
-
-	@Override
-	public abstract void paint(Graphics g);
-
-	@Override
-	public void setColor(Color c) {
-		synchronized (this) {
-			animateChange(this.c, c);
-			this.c = c;
-		}
-	}
-
-	@Override
-	public void setColorNoAnim(Color c) {
-		synchronized (this) {
-			this.c = c;
-			notifyObserversNoDelay();
-		}
-	}
-
 	private void animateChange(Color oldColor, Color newColor) {
 		if (newColor == null) {
 			return;
@@ -69,7 +37,7 @@ public abstract class AbstractGeometry implements Drawable {
 			tmp = new Color(oldColor.getRed() + (int) (dr * i),
 					oldColor.getGreen() + (int) (dg * i), oldColor.getBlue()
 							+ (int) (db * i));
-			this.c = tmp;
+			c = tmp;
 			notifyObserversNoDelay();
 			try {
 				Thread.sleep(1);
@@ -80,8 +48,40 @@ public abstract class AbstractGeometry implements Drawable {
 	}
 
 	@Override
+	public Color getColor() {
+		return c;
+	}
+
+	@Override
 	public boolean isInvisible() {
 		return invisible;
+	}
+
+	protected void notifyObservers() {
+		GeometryManager.notifyObservers();
+	}
+
+	protected void notifyObserversNoDelay() {
+		GeometryManager.notifyObserversNoDelay();
+	}
+
+	@Override
+	public abstract void paint(Graphics g);
+
+	@Override
+	public void setColor(Color c) {
+		synchronized (this) {
+			animateChange(this.c, c);
+			this.c = c;
+		}
+	}
+
+	@Override
+	public void setColorNoAnim(Color c) {
+		synchronized (this) {
+			this.c = c;
+			notifyObserversNoDelay();
+		}
 	}
 
 	@Override
