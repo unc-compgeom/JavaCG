@@ -41,7 +41,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public boolean addAll(Collection<? extends Point> c) {
 		synchronized (c) {
-			c.forEach(GeometryManager::destroy);
+			for (Point point : c) {
+				GeometryManager.destroy(point);
+			}
 		}
 		if (c instanceof PointSet) {
 			GeometryManager.destroy((PointSet) c);
@@ -57,7 +59,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	@Override
 	public boolean addAll(int index, Collection<? extends Point> c) {
 		synchronized (c) {
-			c.forEach(GeometryManager::destroy);
+			for (Point point : c) {
+				GeometryManager.destroy(point);
+			}
 		}
 		boolean b;
 		synchronized (this) {

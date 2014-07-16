@@ -92,19 +92,17 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 			g.setColor(c);
 		}
 		Edge e = first;
-		synchronized (this) {
-			do {
-				if (isWall(e) || isWall(e.sym())) {
-					g.setColor(g.getColor().darker());
-					e.paint(g);
-					g.setColor(g.getColor().brighter());
-					e = e.rPrev();
-				} else {
-					e.paint(g);
-					e = e.oNext();
-				}
-			} while (e != first);
-		}
+		do {
+			if (isWall(e) || isWall(e.sym())) {
+				g.setColor(g.getColor().darker());
+				e.paint(g);
+				g.setColor(g.getColor().brighter());
+				e = e.rPrev();
+			} else {
+				e.paint(g);
+				e = e.oNext();
+			}
+		} while (e != first);
 		g.setColor(oldG);
 	}
 

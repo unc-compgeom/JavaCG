@@ -101,11 +101,11 @@ public class GeometryManager {
 
 	/**
 	 * Creates a new {@link Circle} initialized with the same properties as
-	 * <code>Circle c</code>. This factory constructor automatically
-	 * registers observers with the object and sets its draw size.
+	 * <code>Circle c</code>. This factory constructor automatically registers
+	 * observers with the object and sets its draw size.
 	 * 
-	 * @param c the circle to clone
-	 *            Points on the circumference of the circle.
+	 * @param c
+	 *            the circle to clone Points on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
 	public static Circle newCircle(Circle c) {
@@ -182,7 +182,9 @@ public class GeometryManager {
 	public static PointSet newPointSet(PointSet points) {
 		PointSet s = new PointSetComponent();
 		s.setColor(points.getColor());
-		points.forEach(s::addNoDelay);
+		for (Point point : points) {
+			s.addNoDelay(point);
+		}
 		return (PointSet) buildGeometry(s);
 	}
 
@@ -248,7 +250,7 @@ public class GeometryManager {
 	 * Creates a new {@link Subdivision} for a triangulation. The Subdivision is
 	 * initialized with three vertices. This factory constructor automatically
 	 * registers observers with the object and sets its draw size
-	 *
+	 * 
 	 * @return a <tt>Subdivision</tt> object
 	 */
 	public static Subdivision newSubdivision() {

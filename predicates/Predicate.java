@@ -16,17 +16,17 @@ public class Predicate {
 		CLOCKWISE, COLINEAR, COUNTERCLOCKWISE
 	}
 
-	private static int ahead = 0;
-	private static int ccw = 0;
-	private static int findOrientation = 0;
-	private static int isLeftOrInside = 0;
-	private static int isPointInCircle = 0;
-	private static int leftOf = 0;
-	private static int leftOrAhead = 0;
-	private static int onEdge = 0;
-	private static int rightOf = 0;
-	private static int rightOrAhead = 0;
-	private static int triArea = 0;
+	public static int ahead = 0;
+	public static int ccw = 0;
+	public static int findOrientation = 0;
+	public static int isLeftOrInside = 0;
+	public static int isPointInCircle = 0;
+	public static int leftOf = 0;
+	public static int leftOrAhead = 0;
+	public static int onEdge = 0;
+	public static int rightOf = 0;
+	public static int rightOrAhead = 0;
+	public static int triArea = 0;
 
 	/**
 	 * Tests if {@link Point} p is ahead of the segment from q to r.

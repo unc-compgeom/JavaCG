@@ -15,11 +15,11 @@ public class CG {
 
 	// method call counters
 	public static int cross = 0;
-	private static int distSquared = 0;
-	private static int findSmallestYX = 0;
-	private static int lexicographicalSort = 0;
-	private static int randomColor = 0;
-	private static int sortByAngle = 0;
+	public static int distSquared = 0;
+	public static int findSmallestYX = 0;
+	public static int lexicographicalSort = 0;
+	public static int randomColor = 0;
+	public static int sortByAngle = 0;
 
 	public static void animationDelay() {
 		try {
@@ -32,8 +32,10 @@ public class CG {
 	/**
 	 * Computes the distance squared between points p and q
 	 * 
-	 * @param p a point
-	 * @param q a point
+	 * @param p
+	 *            a point
+	 * @param q
+	 *            a point
 	 * @return distance squared between points p and q.
 	 */
 	public static double distSquared(Point p, Point q) {
@@ -49,7 +51,8 @@ public class CG {
 	 * smallest Y value. If there is a tie, it finds the point with the smallest
 	 * Y and X value.
 	 * 
-	 * @param points the set of points
+	 * @param points
+	 *            the set of points
 	 * @return the point with the lowest Y, X value.
 	 */
 	public static Point findSmallestYX(PointSet points) {

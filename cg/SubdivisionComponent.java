@@ -35,7 +35,6 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
 			qe.deleteEdge(e.oNext());
-			notifyObservers();
 		}
 		// connect the new point to the vertices of the containing triangle
 		Edge base = qe.makeEdge();
@@ -55,7 +54,6 @@ public class SubdivisionComponent extends AbstractGeometry implements
 					&& Predicate.isPointInCircle(p, e.orig(), t.dest(),
 							e.dest())) {
 				qe.swap(e);
-				notifyObservers();
 				e = e.oPrev();
 			} else if (e.oNext() == startingEdge) {
 				return;
@@ -93,16 +91,14 @@ public class SubdivisionComponent extends AbstractGeometry implements
 
 	@Override
 	public void paint(Graphics g) {
-		synchronized (this) {
-			if (isInvisible())
-				return;
-			Color oldG = g.getColor(), c = super.getColor();
-			if (c != null) {
-				g.setColor(c);
-			}
-			qe.paint(g);
-			g.setColor(oldG);
+		if (isInvisible())
+			return;
+		Color oldG = g.getColor(), c = super.getColor();
+		if (c != null) {
+			g.setColor(c);
 		}
+		qe.paint(g);
+		g.setColor(oldG);
 	}
 
 	@Override
