@@ -1,78 +1,89 @@
 package visualizer;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-
-import util.CGObserver;
 import cg.Drawable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventType;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.ArcType;
+import javafx.stage.Stage;
+import util.CGObserver;
+
+import java.awt.event.ActionEvent;
 
 public class View implements CGObserver {
-	private final AlgorithmPanel p;
+	//private final AlgorithmCanvas c;
+	private final Canvas canvas;
 
-	public View(ActionListener a) {
-		JFrame f = new JFrame("Algorithm Visualizer");
-		try {
-			Image image = ImageIO.read(getClass().getResource("icon.gif"));
-			f.setIconImage(image);
-		} catch (IOException e) {
-			// use default image
-		}
-		f.setLayout(new GridBagLayout());
-		GridBagConstraints gc = new GridBagConstraints();
+	public View(Stage primaryStage, ViewController a) {
+		primaryStage.setTitle("Algorithm Visualizer 2.0");
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("icon.gif")));
 
-		ButtonPanel b = new ButtonPanel(a);
-		gc.gridx = 0;
-		gc.gridy = 0;
-		gc.gridheight = 1;
-		gc.gridwidth = 1;
-		gc.weightx = 1;
-		gc.weighty = 0;
-		f.add(b, gc);
+		Group root = new Group();
+		canvas = new Canvas(400, 300);
+		canvas.addEventHandler(EventType.ROOT, (event) -> {
+			System.out.println("change");
+		});
+		root.getChildren().add(canvas);
 
-		p = new AlgorithmPanel(a);
-		JPanel algHolder = new JPanel(new BorderLayout());
-		algHolder.setBorder(BorderFactory.createTitledBorder(""));
-		algHolder.add(p, BorderLayout.CENTER);
-		gc.gridy = -1;
-		gc.fill = GridBagConstraints.BOTH;
-		gc.weighty = 1;
-		gc.weightx = 1;
-		f.add(algHolder, gc);
+		ToolBar tb = CGToolBar.makeToolBar(a);
 
-		// build menu
-		JMenuBar menuBar = new JMenuBar();
-		JMenu view = new JMenu("View");
-		view.setMnemonic(KeyEvent.VK_V);
-		view.getAccessibleContext().setAccessibleDescription(
-				"Set the display properties of this visualizer");
-		menuBar.add(view);
-		JCheckBoxMenuItem large = new JCheckBoxMenuItem("Large");
-		large.setMnemonic(KeyEvent.VK_L);
-		large.addActionListener(a);
-		large.setActionCommand("setLarge");
-		view.add(large);
-		f.setJMenuBar(menuBar);
+		BorderPane borderPane = new BorderPane();
+		borderPane.setTop(tb);
+		borderPane.setCenter(root);
 
-		f.pack();
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f.setVisible(true);
+		Scene scene = new Scene(borderPane, 300, 300);
+		scene.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+				a.actionPerformed(new ActionEvent(newSceneWidth, ActionEvent.ACTION_PERFORMED, "viewWidthResized"));
+			}
+		});
+		scene.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+				a.actionPerformed(new ActionEvent(newSceneHeight, ActionEvent.ACTION_PERFORMED, "viewHeightResized"));
+			}
+		});
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 
 	@Override
 	public void update(Drawable o) {
-		p.update(o);
+		System.out.print("updating..");
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		drawShapes(gc);
+		//p.update(o);
+		System.out.println("  updated");
+	}
+
+	private void drawShapes(GraphicsContext gc) {
+		gc.setFill(javafx.scene.paint.Color.GREEN);
+		gc.setStroke(javafx.scene.paint.Color.BLUE);
+		gc.setLineWidth(5);
+		gc.strokeLine(40, 10, 10, 40);
+		gc.fillOval(10, 60, 30, 30);
+		gc.strokeOval(60, 60, 30, 30);
+		gc.fillRoundRect(110, 60, 30, 30, 10, 10);
+		gc.strokeRoundRect(160, 60, 30, 30, 10, 10);
+		gc.fillArc(10, 110, 30, 30, 45, 240, ArcType.OPEN);
+		gc.fillArc(60, 110, 30, 30, 45, 240, ArcType.CHORD);
+		gc.fillArc(110, 110, 30, 30, 45, 240, ArcType.ROUND);
+		gc.strokeArc(10, 160, 30, 30, 45, 240, ArcType.OPEN);
+		gc.strokeArc(60, 160, 30, 30, 45, 240, ArcType.CHORD);
+		gc.strokeArc(110, 160, 30, 30, 45, 240, ArcType.ROUND);
+		gc.fillPolygon(new double[] {10, 40, 10, 40},
+				new double[] {210, 210, 240, 240}, 4);
+		gc.strokePolygon(new double[] {60, 90, 60, 90},
+				new double[] {210, 210, 240, 240}, 4);
+		gc.strokePolyline(new double[] {110, 140, 110, 140},
+				new double[] {210, 210, 240, 240}, 4);
 	}
 }

@@ -4,17 +4,20 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import cg.GeometryManager;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-class Main {
+public class Main extends Application {
 	public static void main(String[] args) {
-		try {
-			// Set System L&F
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			// handle exception
-		}
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 		// set up and start the view;
-		GeometryManager.addObserver(new View(
-				new ViewController(new ViewModel())));
+		ViewModel m = new ViewModel();
+		ViewController c = new ViewController(m);
+		View v = new View(primaryStage, c);
+		GeometryManager.addObserver(v);
 	}
 }

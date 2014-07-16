@@ -26,7 +26,7 @@ public class ViewModel {
 	private PointSet pointSet;
 	private Polygon polygon;
 	private Point firstPoint;
-	private Dimension size;
+	private int width, height;
 
 	private Drawable preview;
 
@@ -104,10 +104,6 @@ public class ViewModel {
 		polygonEnabled = b;
 	}
 
-	public Dimension getSize() {
-		return size;
-	}
-
 	PointSet makeCirclePoints(int origX, int origY, int radX, int radY) {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double radius = Math.hypot(radX - origX, radY - origY);
@@ -169,8 +165,6 @@ public class ViewModel {
 	}
 
 	float[] makeRandomCoordinates() {
-		int width = size.width;
-		int height = size.height;
 		int numPoints = (int) Math.sqrt(width * height) / 16;
 		float[] pointSet = new float[numPoints * 2];
 		Random Ayn = new Random();
@@ -250,7 +244,10 @@ public class ViewModel {
 		}
 	}
 
-	public void setSize(Dimension size) {
-		this.size = size;
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	public void setHeight(int height) {
+		this.height = height;
 	}
 }
