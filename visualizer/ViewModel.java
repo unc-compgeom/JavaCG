@@ -1,15 +1,14 @@
 package visualizer;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.util.Random;
-
 import algorithms.Algorithm;
-import cg.Drawable;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import javafx.scene.paint.Color;
+import util.Drawable;
+
+import java.util.Random;
 
 public class ViewModel {
 	enum InsertionMode {
@@ -35,9 +34,11 @@ public class ViewModel {
 		polygon = GeometryManager.newPolygon();
 		mode = InsertionMode.INCREMENTAL;
 		polygonEnabled = false;
+		width = 1000;
+		height = 1000;
 	}
 
-	public void draw(int x, int y) {
+	public void draw(double x, double y) {
 		if (firstPoint != null) {
 			int x1 = (int) firstPoint.getX();
 			int y1 = (int) firstPoint.getY();
@@ -46,56 +47,56 @@ public class ViewModel {
 			GeometryManager.destroy(preview);
 			preview = null;
 			switch (mode) {
-			case CIRCLE:
-				if (!polygonEnabled) {
-					pointSet.addAll(makeCirclePoints(x1, y1, x, y));
-				} else {
-					polygon.addAll(makeCirclePolygon(x1, y1, x, y));
-				}
-				break;
-			case LINE:
-				if (!polygonEnabled) {
-					pointSet.addAll(makeLinePoints(x1, y1, x, y));
-				} else {
-					polygon.addAll(makeLinePolygon(x1, y1, x, y));
-				}
-				break;
-			default:
-				System.out
-						.println("Unhandled insertion mode in ViewModel.draw(): "
-								+ mode);
-				break;
+				case CIRCLE:
+					if (!polygonEnabled) {
+						pointSet.addAll(makeCirclePoints(x1, y1, x, y));
+					} else {
+						polygon.addAll(makeCirclePolygon(x1, y1, x, y));
+					}
+					break;
+				case LINE:
+					if (!polygonEnabled) {
+						pointSet.addAll(makeLinePoints(x1, y1, x, y));
+					} else {
+						polygon.addAll(makeLinePolygon(x1, y1, x, y));
+					}
+					break;
+				default:
+					System.out
+							.println("Unhandled insertion mode in ViewModel.draw(): "
+									+ mode);
+					break;
 			}
 		} else if (mode.isTwoClick) {
-			firstPoint = GeometryManager.newPoint(x, y);
+			firstPoint = GeometryManager.newPoint((float) x, (float) y);
 			firstPoint.setColor(Color.CYAN);
 		} else {
 			switch (mode) {
-			case INCREMENTAL:
-				if (!polygonEnabled) {
-					pointSet.addNoDelay(GeometryManager.newPoint(x, y));
-				} else {
-					polygon.addNoDelay(GeometryManager.newPoint(x, y));
-				}
-				break;
-			case RANDOM:
-				if (!polygonEnabled) {
-					float[] points = makeRandomCoordinates();
-					for (int i = 0; i < points.length; i += 2) {
-						pointSet.addNoDelay(points[i], points[i + 1]);
+				case INCREMENTAL:
+					if (!polygonEnabled) {
+						pointSet.addNoDelay(GeometryManager.newPoint((float) x, (float) y));
+					} else {
+						polygon.addNoDelay(GeometryManager.newPoint((float) x, (float) y));
 					}
-				} else {
-					float[] points = makeRandomCoordinates();
-					for (int i = 0; i < points.length; i += 2) {
-						polygon.addNoDelay(points[i], points[i + 1]);
+					break;
+				case RANDOM:
+					if (!polygonEnabled) {
+						float[] points = makeRandomCoordinates();
+						for (int i = 0; i < points.length; i += 2) {
+							pointSet.addNoDelay(points[i], points[i + 1]);
+						}
+					} else {
+						float[] points = makeRandomCoordinates();
+						for (int i = 0; i < points.length; i += 2) {
+							polygon.addNoDelay(points[i], points[i + 1]);
+						}
 					}
-				}
-				break;
-			default:
-				System.out
-						.println("Unhandled insertion mode in ViewModel.draw(): "
-								+ mode);
-				break;
+					break;
+				default:
+					System.out
+							.println("Unhandled insertion mode in ViewModel.draw(): "
+									+ mode);
+					break;
 			}
 		}
 	}
@@ -104,62 +105,62 @@ public class ViewModel {
 		polygonEnabled = b;
 	}
 
-	PointSet makeCirclePoints(int origX, int origY, int radX, int radY) {
+	private PointSet makeCirclePoints(double origX, double origY, double radX, double radY) {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double radius = Math.hypot(radX - origX, radY - origY);
 		int numPoints = radius / 4 > 5 ? (int) (radius / 4) : 5;
 		for (int i = 0; i < numPoints; i++) {
 			pointSet.addNoDelay(GeometryManager.newPoint(
-					origX
-							+ (int) (Math.cos(2 * Math.PI * i / numPoints) * radius),
-					origY
-							+ (int) (Math.sin(2 * Math.PI * i / numPoints) * radius)));
+					(float) (origX
+							+ Math.cos(2 * Math.PI * i / numPoints) * radius),
+					(float) (origY
+							+ Math.sin(2 * Math.PI * i / numPoints) * radius)));
 		}
 		return pointSet;
 	}
 
-	Polygon makeCirclePolygon(int origX, int origY, int radX, int radY) {
+	private Polygon makeCirclePolygon(double origX, double origY, double radX, double radY) {
 		Polygon polygon = GeometryManager.newPolygon();
 		double radius = Math.hypot(radX - origX, radY - origY);
 		int numPoints = radius / 4 > 5 ? (int) (radius / 4) : 5;
 		for (int i = 0; i < numPoints; i++) {
 			polygon.addNoDelay(GeometryManager.newPoint(
-					origX
-							+ (int) (Math.cos(2 * Math.PI * i / numPoints) * radius),
-					origY
-							+ (int) (Math.sin(2 * Math.PI * i / numPoints) * radius)));
+					(float) (origX
+							+ Math.cos(2 * Math.PI * i / numPoints) * radius),
+					(float) (origY
+							+ Math.sin(2 * Math.PI * i / numPoints) * radius)));
 		}
 		return polygon;
 	}
 
-	PointSet makeLinePoints(int x1, int y1, int x2, int y2) {
+	private PointSet makeLinePoints(double x1, double y1, double x2, double y2) {
 		PointSet pointSet = GeometryManager.newPointSet();
 		double x = x1;
 		double y = y1;
 		int numPoints = (int) Math.hypot(x2 - x1, y2 - y1) / 16;
 		double dx = (x2 - x1) / (double) numPoints;
 		double dy = (y2 - y1) / (double) numPoints;
-		pointSet.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+		pointSet.addNoDelay(GeometryManager.newPoint((float) x, (float) y));
 		for (int i = 0; i < numPoints; i++) {
 			x += dx;
 			y += dy;
-			pointSet.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+			pointSet.addNoDelay(GeometryManager.newPoint((float) x, (float) y));
 		}
 		return pointSet;
 	}
 
-	Polygon makeLinePolygon(int x1, int y1, int x2, int y2) {
+	private Polygon makeLinePolygon(double x1, double y1, double x2, double y2) {
 		Polygon polygon = GeometryManager.newPolygon();
 		double x = x1;
 		double y = y1;
 		int numPoints = (int) Math.hypot(x2 - x1, y2 - y1) / 16;
 		double dx = (x2 - x1) / (double) numPoints;
 		double dy = (y2 - y1) / (double) numPoints;
-		polygon.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+		polygon.addNoDelay(GeometryManager.newPoint((float) x, (float) y));
 		for (int i = 0; i < numPoints; i++) {
 			x += dx;
 			y += dy;
-			polygon.addNoDelay(GeometryManager.newPoint((int) x, (int) y));
+			polygon.addNoDelay(GeometryManager.newPoint((float) x, (float) y));
 		}
 		return polygon;
 	}
@@ -182,28 +183,28 @@ public class ViewModel {
 		GeometryManager.destroy(preview);
 		preview = null;
 		switch (mode) {
-		case CIRCLE:
-			if (!polygonEnabled) {
-				preview = makeCirclePoints((int) firstPoint.getX(),
-						(int) firstPoint.getY(), x, y);
-			} else {
-				preview = makeCirclePolygon((int) firstPoint.getX(),
-						(int) firstPoint.getY(), x, y);
-			}
-			break;
-		case LINE:
-			if (!polygonEnabled) {
-				preview = makeLinePoints((int) firstPoint.getX(),
-						(int) firstPoint.getY(), x, y);
-			} else {
-				preview = makeLinePolygon((int) firstPoint.getX(),
-						(int) firstPoint.getY(), x, y);
-			}
-			break;
-		default:
-			System.out
-					.println("Unhandled insertion mode in ViewModel.preview(): "
-							+ mode);
+			case CIRCLE:
+				if (!polygonEnabled) {
+					preview = makeCirclePoints((int) firstPoint.getX(),
+							(int) firstPoint.getY(), x, y);
+				} else {
+					preview = makeCirclePolygon((int) firstPoint.getX(),
+							(int) firstPoint.getY(), x, y);
+				}
+				break;
+			case LINE:
+				if (!polygonEnabled) {
+					preview = makeLinePoints((int) firstPoint.getX(),
+							(int) firstPoint.getY(), x, y);
+				} else {
+					preview = makeLinePolygon((int) firstPoint.getX(),
+							(int) firstPoint.getY(), x, y);
+				}
+				break;
+			default:
+				System.out
+						.println("Unhandled insertion mode in ViewModel.preview(): "
+								+ mode);
 		}
 	}
 
@@ -230,7 +231,7 @@ public class ViewModel {
 
 	/**
 	 * Choose how the points should be drawn onto the screen.
-	 * 
+	 *
 	 * @param mode the insertion mode
 	 */
 	public void setInsertionMode(InsertionMode mode) {
@@ -247,6 +248,7 @@ public class ViewModel {
 	public void setWidth(int width) {
 		this.width = width;
 	}
+
 	public void setHeight(int height) {
 		this.height = height;
 	}

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import util.CGObserver;
+import util.Drawable;
 
 /**
  * This class consists of many static methods that enable an algorithm designer
@@ -264,7 +265,7 @@ public class GeometryManager {
 	private static void notifyAllObservers() {
 		synchronized (observers) {
 			for (CGObserver o : observers) {
-				o.update(null);
+				o.tellToDraw();
 			}
 		}
 	}
@@ -285,7 +286,7 @@ public class GeometryManager {
 	/**
 	 * Notifies all observers of dispersed geometry. This method should be
 	 * called by geometry objects when their observable parameters are modified
-	 * and the respective update should not be accompanied by an animation
+	 * and the respective tellToDraw should not be accompanied by an animation
 	 * delay.
 	 */
 	static void notifyObserversNoDelay() {

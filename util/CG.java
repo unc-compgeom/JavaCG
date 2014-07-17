@@ -1,15 +1,15 @@
 package util;
 
-import java.awt.Color;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Random;
-
-import predicates.Predicate;
-import predicates.Predicate.Orientation;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
+import javafx.scene.paint.Color;
+import predicates.Predicate;
+import predicates.Predicate.Orientation;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Random;
 
 public class CG {
 
@@ -31,11 +31,9 @@ public class CG {
 
 	/**
 	 * Computes the distance squared between points p and q
-	 * 
-	 * @param p
-	 *            a point
-	 * @param q
-	 *            a point
+	 *
+	 * @param p a point
+	 * @param q a point
 	 * @return distance squared between points p and q.
 	 */
 	public static double distSquared(Point p, Point q) {
@@ -50,9 +48,8 @@ public class CG {
 	 * This method finds the point in the set <code>points</code> that has the
 	 * smallest Y value. If there is a tie, it finds the point with the smallest
 	 * Y and X value.
-	 * 
-	 * @param points
-	 *            the set of points
+	 *
+	 * @param points the set of points
 	 * @return the point with the lowest Y, X value.
 	 */
 	public static Point findSmallestYX(PointSet points) {
@@ -95,9 +92,8 @@ public class CG {
 	/**
 	 * Sort {@link PointSet} by x-coordinate (in case of a tie, sort by
 	 * y-coordinate).
-	 * 
-	 * @param points
-	 *            the point set to sort
+	 *
+	 * @param points the point set to sort
 	 */
 	public static void lexicographicalSort(PointSet points) {
 		// increment the call counter
@@ -119,18 +115,15 @@ public class CG {
 		randomColor++;
 		// do work
 		Random Ayn = new Random();
-		return new Color(100 + Ayn.nextInt(156), 100 + Ayn.nextInt(156),
-				100 + Ayn.nextInt(156));
+		return new Color(Ayn.nextDouble(), Ayn.nextDouble(), Ayn.nextDouble(), 1);
 	}
 
 	/**
 	 * This method sorts <code>points</code> in increasing order by the angle
 	 * they make with the point <code>compare</code>.
-	 * 
-	 * @param points
-	 *            the points to sort
-	 * @param compare
-	 *            the point from which all angles originate
+	 *
+	 * @param points  the points to sort
+	 * @param compare the point from which all angles originate
 	 * @return A set of points sorted by angle
 	 */
 	public static PointSet sortByAngle(PointSet points, final Point compare) {

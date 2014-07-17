@@ -1,5 +1,8 @@
 package cg;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collection;
@@ -258,20 +261,22 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
-		Color oldG = g.getColor(), c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		Paint oldFill = gc.getFill();
+		javafx.scene.paint.Color c = super.getColor();
 		if (c != null) {
-			g.setColor(c);
+			gc.setStroke(c);
+			gc.setFill(c);
 		}
-		synchronized (this) {
-			for (Point p : this) {
-				p.paint(g);
-			}
+		for (Point p : points) {
+			p.paint(gc);
 		}
-		g.setColor(oldG);
+		gc.setStroke(oldStroke);
+		gc.setFill(oldFill);
 	}
 
 	@Override

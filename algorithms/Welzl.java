@@ -1,7 +1,6 @@
 package algorithms;
 
-import java.awt.Color;
-
+import javafx.scene.paint.Color;
 import predicates.Predicate;
 import util.ColorSpecial;
 import cg.Circle;
@@ -38,7 +37,7 @@ class Welzl {
 			c = SEC(S, P);
 			if (!Predicate.isPointInCircle(s, c)) {
 				P.add(s);
-				c.setColor(new Color(220, 220, 220));
+				c.setColor(ColorSpecial.LAVENDER_GRAY);
 				Circle tmp = c;
 				c = SEC(S, P);
 				GeometryManager.destroy(tmp);

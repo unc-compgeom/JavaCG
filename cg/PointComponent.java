@@ -1,7 +1,9 @@
 package cg;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 
 public class PointComponent extends AbstractGeometry implements Point {
 	private float x;
@@ -59,21 +61,28 @@ public class PointComponent extends AbstractGeometry implements Point {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
-		Color oldG = g.getColor(), c = super.getColor();
+		Paint oldFill = gc.getFill();
+		Paint oldStroke = gc.getStroke();
+		Color c = super.getColor();
 		if (c != null) {
-			g.setColor(c);
+			gc.setFill(c);
+			gc.setStroke(c.darker());
+		}
+		if (oldFill == null || oldFill == Color.BLACK) {
+			gc.setFill(Color.BLACK);
+			gc.setStroke(Color.BLACK.brighter());
 		}
 		int size = GeometryManager.getSize() > 2 ? GeometryManager.getSize()
 				: 2;
-		g.fillOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
-		g.setColor(c == null || c == Color.BLACK ? Color.LIGHT_GRAY
-				: Color.BLACK);
-		g.drawOval((int) (x - size), (int) (y - size), 2 * size, 2 * size);
-		g.setColor(oldG);
+		gc.fillOval((x - size), (y - size), 2 * size, 2 * size);
+		gc.strokeOval((x - size), (y - size), 2 * size, 2 * size);
+
+		gc.setFill(oldFill);
+		gc.setStroke(oldStroke);
 	}
 
 	@Override

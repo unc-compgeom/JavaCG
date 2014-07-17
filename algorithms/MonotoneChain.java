@@ -1,7 +1,8 @@
 package algorithms;
 
-import java.awt.Color;
 
+
+import javafx.scene.paint.Color;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
@@ -17,7 +18,7 @@ class MonotoneChain {
 		CG.lexicographicalSort(points);
 		// lower hull
 		Polygon lower = GeometryManager.newPolygon();
-		lower.setColor(Color.green);
+		lower.setColor(Color.GREEN);
 		for (int i = 0; i < points.size(); i++) {
 			Point p = points.get(i);
 			while (lower.size() > 1
@@ -29,7 +30,7 @@ class MonotoneChain {
 		}
 		// upper hull
 		Polygon upper = GeometryManager.newPolygon();
-		upper.setColor(Color.blue);
+		upper.setColor(Color.BLUE);
 		for (int i = points.size() - 1; i >= 0; i--) {
 			Point p = points.get(i);
 			while (upper.size() > 1

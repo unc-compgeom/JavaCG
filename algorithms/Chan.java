@@ -1,7 +1,6 @@
 package algorithms;
 
-import java.awt.Color;
-
+import javafx.scene.paint.Color;
 import util.CG;
 import util.ColorSpecial;
 import cg.GeometryManager;

@@ -1,5 +1,7 @@
 package cg;
 
+import util.Drawable;
+
 /**
  * An interface that specifies the edge data structure which implements the
  * quadedge algebra. The quadedge algebra was described in a paper by Guibas and

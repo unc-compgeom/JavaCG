@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
 import predicates.Predicate;
 import util.CG;
 import util.ColorSpecial;
@@ -90,15 +92,20 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		if (isInvisible())
+	public void paint(GraphicsContext gc) {
+		if (isInvisible()) {
 			return;
-		Color oldG = g.getColor(), c = super.getColor();
-		if (c != null) {
-			g.setColor(c);
 		}
-		qe.paint(g);
-		g.setColor(oldG);
+		Paint oldStroke = gc.getStroke();
+		Paint oldFill = gc.getFill();
+		javafx.scene.paint.Color c = super.getColor();
+		if (c != null) {
+			gc.setStroke(c);
+			gc.setFill(c);
+		}
+		qe.paint(gc);
+		gc.setStroke(oldStroke);
+		gc.setFill(oldFill);
 	}
 
 	@Override
@@ -129,45 +136,45 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		} while (e != start);
 	}
 
-	private void fixTriangle(Edge e1, Edge e2, Edge e3) {
-		Point center = getCenter(e1, e2, e3);
-		System.out
-				.println("e1.rot() dest " + e1.rot().dest() + " -> " + center);
-		System.out
-				.println("e2.rot() dest " + e2.rot().dest() + " -> " + center);
-		System.out
-				.println("e3.rot() dest " + e3.rot().dest() + " -> " + center);
-		e1.rot().setDest(center);
-		e2.rot().setDest(center);
-		e3.rot().setDest(center);
-	}
-
-	private Point getCenter(Edge e1, Edge e2, Edge e3) {
-		Point p = e1.orig(), q = e2.orig(), r = e3.orig();
-		Color o1 = p.getColor(), o2 = q.getColor(), o3 = r.getColor();
-		p.setColor(ColorSpecial.AMARANTH);
-		q.setColor(ColorSpecial.AMARANTH);
-		r.setColor(ColorSpecial.AMARANTH);
-		List<Point> points = new ArrayList<Point>(3);
-		points.add(p);
-		points.add(q);
-		points.add(r);
-		Circle c = GeometryManager.newCircle(points);
-		CG.animationDelay();
-		GeometryManager.destroy(c);
-		p.setColor(o1);
-		q.setColor(o2);
-		r.setColor(o3);
-		double px = p.getX(), py = p.getY();
-		double qx = q.getX(), qy = q.getY();
-		double rx = r.getX(), ry = r.getY();
-
-		double det = (px - qx) * (py - ry) - (py - qy) * (px - rx);
-		float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
-				* (p.plus(r).div(2).dot(p.sub(r)))) / det);
-		float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
-				.plus(q).div(2).dot(p.sub(q))
-				* (px - rx)) / det);
-		return new PointComponent(x, y);
-	}
+//	private void fixTriangle(Edge e1, Edge e2, Edge e3) {
+//		Point center = getCenter(e1, e2, e3);
+//		System.out
+//				.println("e1.rot() dest " + e1.rot().dest() + " -> " + center);
+//		System.out
+//				.println("e2.rot() dest " + e2.rot().dest() + " -> " + center);
+//		System.out
+//				.println("e3.rot() dest " + e3.rot().dest() + " -> " + center);
+//		e1.rot().setDest(center);
+//		e2.rot().setDest(center);
+//		e3.rot().setDest(center);
+//	}
+//
+//	private Point getCenter(Edge e1, Edge e2, Edge e3) {
+//		Point p = e1.orig(), q = e2.orig(), r = e3.orig();
+//		Color o1 = p.getColor(), o2 = q.getColor(), o3 = r.getColor();
+//		p.setColor(ColorSpecial.AMARANTH);
+//		q.setColor(ColorSpecial.AMARANTH);
+//		r.setColor(ColorSpecial.AMARANTH);
+//		List<Point> points = new ArrayList<Point>(3);
+//		points.add(p);
+//		points.add(q);
+//		points.add(r);
+//		Circle c = GeometryManager.newCircle(points);
+//		CG.animationDelay();
+//		GeometryManager.destroy(c);
+//		p.setColor(o1);
+//		q.setColor(o2);
+//		r.setColor(o3);
+//		double px = p.getX(), py = p.getY();
+//		double qx = q.getX(), qy = q.getY();
+//		double rx = r.getX(), ry = r.getY();
+//
+//		double det = (px - qx) * (py - ry) - (py - qy) * (px - rx);
+//		float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
+//				* (p.plus(r).div(2).dot(p.sub(r)))) / det);
+//		float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
+//				.plus(q).div(2).dot(p.sub(q))
+//				* (px - rx)) / det);
+//		return new PointComponent(x, y);
+//	}
 }

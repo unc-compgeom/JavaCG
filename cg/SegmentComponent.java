@@ -1,5 +1,8 @@
 package cg;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -94,22 +97,21 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
-		Color oldG = g.getColor(), c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		javafx.scene.paint.Color c = super.getColor();
 		if (c != null) {
-			g.setColor(c);
+			gc.setStroke(c);
 		}
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-		g2D.drawLine((int) tail.getX(), (int) tail.getY(), (int) head.getX(),
-				(int) head.getY());
-		g2D.setStroke(new BasicStroke());
-		head.paint(g);
-		tail.paint(g);
-		g.setColor(oldG);
+		int size = GeometryManager.getSize();
+		gc.setLineWidth(size);
+		gc.strokeLine(head.getX(), head.getY(), tail.getX(), tail.getY());
+		head.paint(gc);
+		tail.paint(gc);
+		gc.setStroke(oldStroke);
 	}
 
 	@Override

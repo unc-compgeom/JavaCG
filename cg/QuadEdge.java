@@ -1,5 +1,7 @@
 package cg;
 
+import util.Drawable;
+
 /**
  * A collection of four directed edges designed for representing general
  * subdivisions of orientable manifolds. This data structure is described in a

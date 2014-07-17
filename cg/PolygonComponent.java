@@ -1,9 +1,9 @@
 package cg;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 import java.util.Iterator;
 
 public class PolygonComponent extends PointSetComponent implements Polygon {
@@ -14,32 +14,31 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		synchronized (this) {
-			if (isInvisible()) {
-				return;
-			}
-			Color oldG = g.getColor(), c = super.getColor();
-			if (c != null) {
-				g.setColor(c);
-			}
-			// draw edges, then points
-			Iterator<Point> it = super.iterator();
-			Point p, q;
-			if (super.size() > 1) {
-				p = it.next();
-				Graphics2D g2D = (Graphics2D) g;
-				g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-				while (it.hasNext()) {
-					q = it.next();
-					g2D.drawLine((int) p.getX(), (int) p.getY(),
-							(int) q.getX(), (int) q.getY());
-					p = q;
-				}
-				g2D.setStroke(new BasicStroke());
-			}
-			super.paint(g);
-			g.setColor(oldG);
+	public void paint(GraphicsContext gc) {
+		if (isInvisible()) {
+			return;
 		}
+		Paint oldStroke = gc.getStroke();
+		Paint oldFill = gc.getFill();
+		Color c = super.getColor();
+		if (c != null) {
+			gc.setStroke(c);
+			gc.setFill(c);
+		}
+		Iterator<Point> it = super.iterator();
+		Point p, q;
+		if (super.size() > 1) {
+			p = it.next();
+			gc.setLineWidth(GeometryManager.getSize());
+			while (it.hasNext()) {
+				q = it.next();
+				gc.strokeLine(p.getX(), p.getY(),
+						q.getX(), q.getY());
+				p = q;
+			}
+		}
+		super.paint(gc);
+		gc.setStroke(oldStroke);
+		gc.setFill(oldFill);
 	}
 }

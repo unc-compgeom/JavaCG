@@ -1,7 +1,7 @@
-package cg;
+package util;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This interface specifies the requirements for an object to be visualized.
@@ -29,10 +29,10 @@ public interface Drawable {
 	/**
 	 * Forces this object to paint itself.
 	 * 
-	 * @param g
+	 * @param gc
 	 *            Graphics context
 	 */
-	public void paint(Graphics g);
+	public void paint(GraphicsContext gc);
 
 	/**
 	 * Sets the color of this object. The object will be painted with this

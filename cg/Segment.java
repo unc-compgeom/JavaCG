@@ -1,5 +1,7 @@
 package cg;
 
+import util.Drawable;
+
 public interface Segment extends Drawable {
 
 	public Segment add(Segment v);

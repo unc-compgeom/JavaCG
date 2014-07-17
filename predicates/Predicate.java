@@ -1,15 +1,11 @@
 package predicates;
 
-import java.awt.Color;
+import cg.*;
+import javafx.scene.paint.Color;
+import util.CG;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import util.CG;
-import cg.Circle;
-import cg.Edge;
-import cg.GeometryManager;
-import cg.Point;
-import cg.Segment;
 
 public class Predicate {
 	public enum Orientation {
@@ -30,13 +26,10 @@ public class Predicate {
 
 	/**
 	 * Tests if {@link Point} p is ahead of the segment from q to r.
-	 * 
-	 * @param p
-	 *            a point
-	 * @param q
-	 *            segment endpoint
-	 * @param r
-	 *            segment endpoint
+	 *
+	 * @param p a point
+	 * @param q segment endpoint
+	 * @param r segment endpoint
 	 * @return true iff <tt>p</tt> is ahead of <tt>qr</tt>.
 	 */
 	private static boolean ahead(Point p, Point q, Point r) {
@@ -46,13 +39,10 @@ public class Predicate {
 
 	/**
 	 * Tests if ordered points are part of a counterclockwise curve.
-	 * 
-	 * @param a
-	 *            point 1
-	 * @param b
-	 *            point 2
-	 * @param c
-	 *            point 3
+	 *
+	 * @param a point 1
+	 * @param b point 2
+	 * @param c point 3
 	 * @return true iff a, b, and color are oriented counterclockwise.
 	 */
 	private static boolean ccw(Point a, Point b, Point c) {
@@ -97,11 +87,9 @@ public class Predicate {
 	/**
 	 * Tests if {@link Point} s is inside of or on the circumference of
 	 * {@link Circle} color.
-	 * 
-	 * @param s
-	 *            the point
-	 * @param c
-	 *            the circle
+	 *
+	 * @param s the point
+	 * @param c the circle
 	 * @return true iff s is inside or on the boundary of the circle
 	 */
 	public static boolean isPointInCircle(Point s, Circle c) {
@@ -157,16 +145,11 @@ public class Predicate {
 	 * Tests if a {@link Point} is inside the {@link Circle} defined by points
 	 * <tt>a</tt>, <tt>b</tt>, and <tt>color</tt>. Points must be oriented
 	 * counterclockwise.
-	 * 
-	 * @param test
-	 *            Point to be tested
-	 * @param a
-	 *            Point on circle
-	 * @param b
-	 *            Point on circle
-	 * @param c
-	 *            Point on circle
-	 * 
+	 *
+	 * @param test Point to be tested
+	 * @param a    Point on circle
+	 * @param b    Point on circle
+	 * @param c    Point on circle
 	 * @return true iff <tt>test</tt> is in the circle
 	 */
 	public static boolean isPointInCircle(Point test, Point a, Point b, Point c) {
@@ -258,16 +241,13 @@ public class Predicate {
 
 	/**
 	 * Calculates twice the signed area of the triangle defined by
-	 * {@link Points} a, b, and color. If a, b, and color are in
+	 * {@link Point}s a, b, and color. If a, b, and color are in
 	 * counterclockwise order, the area is positive, if they are co-linear the
 	 * area is zero, else the area is negative.
-	 * 
-	 * @param a
-	 *            a Point
-	 * @param b
-	 *            a Point
-	 * @param c
-	 *            a Point
+	 *
+	 * @param a a Point
+	 * @param b a Point
+	 * @param c a Point
 	 * @return twice the signed area
 	 */
 	private static double triArea(Point a, Point b, Point c) {

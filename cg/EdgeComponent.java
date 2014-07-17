@@ -1,11 +1,9 @@
 package cg;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
 import util.ColorSpecial;
+
 
 class EdgeComponent extends AbstractGeometry implements Edge {
 
@@ -64,22 +62,21 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
-		Color oldG = g.getColor(), c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		javafx.scene.paint.Color c = super.getColor();
 		if (c != null) {
-			g.setColor(c);
+			gc.setStroke(c);
 		}
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-		g2D.drawLine((int) orig().getX(), (int) orig().getY(), (int) dest()
-				.getX(), (int) dest().getY());
-		g2D.setStroke(new BasicStroke());
-		orig().paint(g);
-		dest().paint(g);
-		g.setColor(oldG);
+		int size = GeometryManager.getSize();
+		gc.setLineWidth(size);
+		gc.strokeLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
+		orig().paint(gc);
+		dest().paint(gc);
+		gc.setStroke(oldStroke);
 	}
 
 	@Override

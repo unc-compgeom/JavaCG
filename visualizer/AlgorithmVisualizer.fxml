@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualizer.ViewController">
+   <top>
+      <ToolBar minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+        <items>
+            <ToggleButton mnemonicParsing="false" onAction="#pointsFired" selected="true" text="Points">
+               <toggleGroup>
+                  <ToggleGroup fx:id="pointsPolygon" />
+               </toggleGroup>
+            </ToggleButton>
+            <ToggleButton mnemonicParsing="false" onAction="#polygonFired" text="Polygon" toggleGroup="$pointsPolygon" />
+            <Separator orientation="VERTICAL" />
+            <ToggleButton mnemonicParsing="false" onAction="#pointFired" selected="true" text="p">
+               <toggleGroup>
+                  <ToggleGroup fx:id="drawMode" />
+               </toggleGroup>
+            </ToggleButton>
+            <ToggleButton mnemonicParsing="false" onAction="#circleFired" text="c" toggleGroup="$drawMode" />
+            <ToggleButton mnemonicParsing="false" onAction="#lineFired" text="l" toggleGroup="$drawMode" />
+            <Button mnemonicParsing="false" onAction="#randomFired" text="r" />
+            <Separator orientation="VERTICAL" />
+            <ComboBox fx:id="algorithms" prefWidth="150.0" />
+            <Button mnemonicParsing="false" onAction="#runFired" text="Run" />
+            <Button mnemonicParsing="false" onAction="#resetFired" text="Reset" />
+            <Separator orientation="VERTICAL" />
+            <Slider fx:id="speed" blockIncrement="0.0" majorTickUnit="1.0" max="2.0" minorTickCount="9" onMouseDragged="#sliderDragFired" showTickLabels="true" showTickMarks="true" value="0.25" />
+        </items>
+      </ToolBar>
+   </top>
+   <center>
+      <ScrollPane focusTraversable="false" pickOnBounds="false">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" pickOnBounds="false">
+               <children>
+                  <Canvas fx:id="canvas" height="1000.0" onMouseClicked="#mouseClickFired" pickOnBounds="true" width="1000.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </center>
+</BorderPane>

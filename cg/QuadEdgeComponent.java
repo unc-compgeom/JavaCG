@@ -1,5 +1,8 @@
 package cg;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
+
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -84,26 +87,29 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		if (isInvisible())
+	public void paint(GraphicsContext gc) {
+		if (isInvisible()) {
 			return;
-		Color oldG = g.getColor(), c = super.getColor();
+		}
+		Paint oldStroke = gc.getStroke();
+		Paint oldFill = gc.getFill();
+		javafx.scene.paint.Color c = super.getColor();
 		if (c != null) {
-			g.setColor(c);
+			gc.setStroke(c);
+			gc.setFill(c);
 		}
 		Edge e = first;
 		do {
 			if (isWall(e) || isWall(e.sym())) {
-				g.setColor(g.getColor().darker());
-				e.paint(g);
-				g.setColor(g.getColor().brighter());
+				e.paint(gc);
 				e = e.rPrev();
 			} else {
-				e.paint(g);
+				e.paint(gc);
 				e = e.oNext();
 			}
 		} while (e != first);
-		g.setColor(oldG);
+		gc.setStroke(oldStroke);
+		gc.setFill(oldFill);
 	}
 
 	private boolean isWall(Edge e) {

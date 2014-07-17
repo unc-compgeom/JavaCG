@@ -1,7 +1,7 @@
 package algorithms;
 
 import util.ColorSpecial;
-import cg.Drawable;
+import util.Drawable;
 import cg.PointSet;
 
 public enum Algorithm {

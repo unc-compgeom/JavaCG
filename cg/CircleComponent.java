@@ -1,5 +1,8 @@
 package cg;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,7 +12,7 @@ import java.util.List;
 public class CircleComponent extends AbstractGeometry implements Circle {
 	private Point origin;
 	private final List<Point> points;
-	private double radiusSquared;
+	private double radius;
 
 	CircleComponent(Circle c) {
 		this(c.getPoints());
@@ -29,10 +32,10 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 		}
 		// do computations for drawing
 		origin = new PointComponent(0, 0);
-		radiusSquared = -1;
+		radius = -1;
 		if (points.size() == 1) {
 			origin = points.get(0);
-			radiusSquared = 0;
+			radius = 0;
 		} else if (points.size() == 2) {
 			// we have a diameter
 			Point a = points.get(0);
@@ -41,7 +44,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			float dY = a.getY() - b.getY();
 			double dXSq = dX * dX;
 			double dYSq = dY * dY;
-			radiusSquared = (dXSq + dYSq) / 4;
+			radius = Math.sqrt((dXSq + dYSq) / 4);
 			origin = new PointComponent(a.getX() - dX / 2, a.getY() - dY / 2);
 		} else if (points.size() > 2) {
 			Point p = points.get(0), q = points.get(1), r = points.get(2);
@@ -56,7 +59,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 					.plus(q).div(2).dot(p.sub(q))
 					* (px - rx)) / det);
 			origin = new PointComponent(x, y);
-			radiusSquared = p.sub(origin).dot(p.sub(origin));
+			radius = Math.sqrt(p.sub(origin).dot(p.sub(origin)));
 		}
 	}
 
@@ -66,30 +69,23 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
-		Color oldG = g.getColor(), c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		javafx.scene.paint.Color c = super.getColor();
 		if (c != null) {
-			g.setColor(c);
+			gc.setStroke(c);
 		}
-		int radius = (int) Math.sqrt(radiusSquared);
-		double x = origin.getX();
-		double y = origin.getY();
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setStroke(new BasicStroke(GeometryManager.getSize()));
-		g2D.drawOval((int) (x - radius), (int) (y - radius), radius * 2,
-				radius * 2);
-		g2D.setStroke(new BasicStroke());
-		for (Point p : points) {
-			p.paint(g);
-		}
-		g.setColor(oldG);
+		int size = GeometryManager.getSize();
+		gc.setLineWidth(size);
+		gc.strokeOval(origin.getX(),origin.getY(),radius, radius);
+		gc.setStroke(oldStroke);
 	}
 
 	@Override
 	public String toString() {
-		return "Circle: o = " + origin + " r^2 = " + radiusSquared;
+		return "Circle: o = " + origin + " r = " + radius;
 	}
 }

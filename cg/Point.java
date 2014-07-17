@@ -1,5 +1,7 @@
 package cg;
 
+import util.Drawable;
+
 public interface Point extends Comparable<Point>, Cloneable, Drawable {
 
 	/**
