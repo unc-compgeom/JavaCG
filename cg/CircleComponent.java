@@ -3,16 +3,12 @@ package cg;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.List;
 
 public class CircleComponent extends AbstractGeometry implements Circle {
-	private Point origin;
+	private Point topLeft;
 	private final List<Point> points;
-	private double radius;
+	private double diameter;
 
 	CircleComponent(Circle c) {
 		this(c.getPoints());
@@ -31,11 +27,11 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			GeometryManager.destroy(point);
 		}
 		// do computations for drawing
-		origin = new PointComponent(0, 0);
-		radius = -1;
+		topLeft = new PointComponent(0, 0);
+		diameter = -1;
 		if (points.size() == 1) {
-			origin = points.get(0);
-			radius = 0;
+			topLeft = points.get(0);
+			diameter = 0;
 		} else if (points.size() == 2) {
 			// we have a diameter
 			Point a = points.get(0);
@@ -44,8 +40,9 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			float dY = a.getY() - b.getY();
 			double dXSq = dX * dX;
 			double dYSq = dY * dY;
-			radius = Math.sqrt((dXSq + dYSq) / 4);
-			origin = new PointComponent(a.getX() - dX / 2, a.getY() - dY / 2);
+			double radius = Math.sqrt((dXSq + dYSq) / 4);
+			diameter = radius*2;
+			topLeft = new PointComponent((float) (a.getX() - (dX / 2) - radius), (float) (a.getY() - dY/2-radius));
 		} else if (points.size() > 2) {
 			Point p = points.get(0), q = points.get(1), r = points.get(2);
 			double px = p.getX(), py = p.getY();
@@ -58,8 +55,10 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
 					.plus(q).div(2).dot(p.sub(q))
 					* (px - rx)) / det);
-			origin = new PointComponent(x, y);
-			radius = Math.sqrt(p.sub(origin).dot(p.sub(origin)));
+			Point origin = new PointComponent(x, y); // tmp topLeft
+			double radius = Math.sqrt(p.sub(origin).dot(p.sub(origin)));
+			diameter = radius*2;
+			topLeft = new PointComponent((float)(x-radius), (float)(y-radius));
 		}
 	}
 
@@ -80,12 +79,13 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 		}
 		int size = GeometryManager.getSize();
 		gc.setLineWidth(size);
-		gc.strokeOval(origin.getX(),origin.getY(),radius, radius);
+		gc.strokeOval(topLeft.getX(), topLeft.getY(), diameter, diameter);
 		gc.setStroke(oldStroke);
+		gc.setLineWidth(1);
 	}
 
 	@Override
 	public String toString() {
-		return "Circle: o = " + origin + " r = " + radius;
+		return "Circle: o = " + topLeft + " r = " + diameter;
 	}
 }

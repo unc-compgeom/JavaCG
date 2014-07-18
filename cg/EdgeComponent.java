@@ -77,6 +77,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 		orig().paint(gc);
 		dest().paint(gc);
 		gc.setStroke(oldStroke);
+		gc.setLineWidth(1);
 	}
 
 	@Override

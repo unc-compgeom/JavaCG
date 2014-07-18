@@ -5,9 +5,9 @@
 package visualizer;
 
 import algorithms.Algorithm;
-import javafx.scene.input.MouseEvent;
-import util.Drawable;
 import cg.GeometryManager;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -15,7 +15,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import util.CGObserver;
+import util.Drawable;
 
 import java.net.URL;
 import java.util.List;
@@ -47,7 +49,26 @@ public class ViewController implements CGObserver {
 
 	@FXML
 	void mouseClickFired(MouseEvent event) {
-		model.draw(event.getX(),event.getY());
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.draw(event.getX(), event.getY());
+				return null;
+			}
+		};
+		new Thread(t).start();
+	}
+
+	@FXML
+	void mouseMoveFired(MouseEvent event) {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.preview(event.getX(), event.getY());
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
@@ -82,7 +103,14 @@ public class ViewController implements CGObserver {
 
 	@FXML
 	void runFired(ActionEvent event) {
-		model.runAlgorithm(algorithms.getSelectionModel().getSelectedItem());
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.runAlgorithm(algorithms.getSelectionModel().getSelectedItem());
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
@@ -93,6 +121,12 @@ public class ViewController implements CGObserver {
 	@FXML
 	void sliderDragFired() {
 		GeometryManager.setDelay((int) (speed.getValue() * 1000));
+	}
+
+	@FXML
+	void sizeFired(ActionEvent event) {
+		System.out.println("size toggled");
+		GeometryManager.sizeToggle();
 	}
 
 
@@ -112,11 +146,20 @@ public class ViewController implements CGObserver {
 
 	@Override
 	public void tellToDraw() {
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		List<Drawable> geometry = GeometryManager.getAllGeometry();
-		for (Drawable d : geometry) {
-			d.paint(gc);
-		}
-
+		Platform.runLater(
+				new Runnable() {
+					@Override
+					public void run() {
+						GraphicsContext gc = canvas.getGraphicsContext2D();
+						gc.clearRect(0, 0, 1000, 1000);
+						List<Drawable> geometry = GeometryManager.getAllGeometry();
+						synchronized (geometry) {
+							for (Drawable d : geometry) {
+								d.paint(gc);
+							}
+						}
+					}
+				}
+		);
 	}
 }

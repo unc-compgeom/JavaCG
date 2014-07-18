@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
@@ -9,7 +10,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualizer.ViewController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualizer.ViewController">
    <top>
       <ToolBar minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
         <items>
@@ -33,7 +34,9 @@
             <Button mnemonicParsing="false" onAction="#runFired" text="Run" />
             <Button mnemonicParsing="false" onAction="#resetFired" text="Reset" />
             <Separator orientation="VERTICAL" />
-            <Slider fx:id="speed" blockIncrement="0.0" majorTickUnit="1.0" max="2.0" minorTickCount="9" onMouseDragged="#sliderDragFired" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Slider fx:id="speed" blockIncrement="0.0" majorTickUnit=".5" max="1.0" minorTickCount="9" onMouseDragged="#sliderDragFired" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Separator orientation="VERTICAL" />
+            <ToggleButton mnemonicParsing="false" onAction="#sizeFired" text="S" />
         </items>
       </ToolBar>
    </top>
@@ -42,10 +45,13 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" pickOnBounds="false">
                <children>
-                  <Canvas fx:id="canvas" height="1000.0" onMouseClicked="#mouseClickFired" pickOnBounds="true" width="1000.0" />
+                  <Canvas fx:id="canvas" height="1000.0" onMouseClicked="#mouseClickFired" onMouseMoved="#mouseMoveFired" pickOnBounds="true" width="1000.0" />
                </children>
             </AnchorPane>
         </content>
       </ScrollPane>
    </center>
+   <bottom>
+      <ProgressBar prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>

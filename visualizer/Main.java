@@ -1,15 +1,10 @@
 package visualizer;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import cg.GeometryManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.logging.Level;
@@ -32,10 +27,5 @@ public class Main extends Application {
 		} catch (Exception ex) {
 			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		// set up and start the view;
-//		ViewModel m = new ViewModel();
-//		ViewController c = new ViewController(m);
-//		View v = new View(primaryStage, c);
-//		GeometryManager.addObserver(v);
 	}
 }

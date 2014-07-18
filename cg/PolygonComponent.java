@@ -27,16 +27,19 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 		}
 		Iterator<Point> it = super.iterator();
 		Point p, q;
-		if (super.size() > 1) {
-			p = it.next();
-			gc.setLineWidth(GeometryManager.getSize());
-			while (it.hasNext()) {
-				q = it.next();
-				gc.strokeLine(p.getX(), p.getY(),
-						q.getX(), q.getY());
-				p = q;
+		synchronized (this) {
+			if (super.size() > 1) {
+				p = it.next();
+				gc.setLineWidth(GeometryManager.getSize());
+				while (it.hasNext()) {
+					q = it.next();
+					gc.strokeLine(p.getX(), p.getY(),
+							q.getX(), q.getY());
+					p = q;
+				}
 			}
 		}
+		gc.setLineWidth(1);
 		super.paint(gc);
 		gc.setStroke(oldStroke);
 		gc.setFill(oldFill);

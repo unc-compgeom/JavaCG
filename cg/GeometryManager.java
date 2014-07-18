@@ -342,7 +342,7 @@ public class GeometryManager {
 	 * small, it becomes large. If the current draw size is large, it becomes
 	 * small.
 	 */
-	public static void setSmallLarge() {
+	public static void sizeToggle() {
 		if (size == SMALLSIZE) {
 			size = LARGESIZE;
 		} else {

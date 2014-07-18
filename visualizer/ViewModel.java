@@ -176,7 +176,7 @@ public class ViewModel {
 		return pointSet;
 	}
 
-	public void preview(int x, int y) {
+	public void preview(double x, double y) {
 		if (firstPoint == null) {
 			return;
 		}
@@ -185,20 +185,20 @@ public class ViewModel {
 		switch (mode) {
 			case CIRCLE:
 				if (!polygonEnabled) {
-					preview = makeCirclePoints((int) firstPoint.getX(),
-							(int) firstPoint.getY(), x, y);
+					preview = makeCirclePoints(firstPoint.getX(),
+							firstPoint.getY(), x, y);
 				} else {
-					preview = makeCirclePolygon((int) firstPoint.getX(),
-							(int) firstPoint.getY(), x, y);
+					preview = makeCirclePolygon(firstPoint.getX(),
+							firstPoint.getY(), x, y);
 				}
 				break;
 			case LINE:
 				if (!polygonEnabled) {
-					preview = makeLinePoints((int) firstPoint.getX(),
-							(int) firstPoint.getY(), x, y);
+					preview = makeLinePoints(firstPoint.getX(),
+							firstPoint.getY(), x, y);
 				} else {
-					preview = makeLinePolygon((int) firstPoint.getX(),
-							(int) firstPoint.getY(), x, y);
+					preview = makeLinePolygon(firstPoint.getX(),
+							firstPoint.getY(), x, y);
 				}
 				break;
 			default:

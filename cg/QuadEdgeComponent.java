@@ -3,8 +3,7 @@ package cg;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.util.Iterator;
 
 public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 
@@ -98,29 +97,55 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 			gc.setStroke(c);
 			gc.setFill(c);
 		}
-		Edge e = first;
-		do {
-			if (isWall(e) || isWall(e.sym())) {
-				e.paint(gc);
-				e = e.rPrev();
-			} else {
-				e.paint(gc);
-				e = e.oNext();
-			}
-		} while (e != first);
+		synchronized (this) {
+			Edge e = first;
+			do {
+				if (isWall(e) || isWall(e.sym())) {
+					e.paint(gc);
+					e = e.rPrev();
+				} else {
+					e.paint(gc);
+					e = e.oNext();
+				}
+			} while (e != first);
+		}
 		gc.setStroke(oldStroke);
 		gc.setFill(oldFill);
 	}
 
+	public Iterator<Edge> iterator() {
+		return new Iterator<Edge>() {
+			private final Edge e = first;
+			private Edge next = e;
+			private boolean firstCase = first != null;
+
+			@Override
+			public boolean hasNext() {
+				if (firstCase) {
+					firstCase = false;
+					return true;
+				} else {
+					return next != e;
+				}
+			}
+
+			@Override
+			public Edge next() {
+				Edge tmp = next;
+				if (isWall(next) || isWall(next.sym())) {
+					next = next.rPrev();
+				} else {
+					next = next.oNext();
+				}
+				return tmp;
+			}
+		};
+	}
+
 	private boolean isWall(Edge e) {
-		try {
-			return e.orig().compareTo(e.lNext().orig()) >= 0
-					&& e.lNext().orig().compareTo(e.lPrev().orig()) > 0;
-		} catch (NullPointerException ee) {
-			System.out.println(e + " " + e.sym());
-			ee.printStackTrace();
-			return true;
-		}
+		return e.orig().compareTo(e.lNext().orig()) >= 0
+				&& e.lNext().orig().compareTo(e.lPrev().orig()) > 0;
+
 	}
 
 	@Override
