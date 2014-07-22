@@ -120,12 +120,11 @@ public class ViewController implements CGObserver {
 
 	@FXML
 	void sliderDragFired() {
-		GeometryManager.setDelay((int) (speed.getValue() * 1000));
+		GeometryManager.setDelay((int) (Math.exp(speed.getValue()*8))-1);
 	}
 
 	@FXML
 	void sizeFired(ActionEvent event) {
-		System.out.println("size toggled");
 		GeometryManager.sizeToggle();
 	}
 
@@ -142,6 +141,7 @@ public class ViewController implements CGObserver {
 		algorithms.getItems().addAll(Algorithm.values());
 		model = new ViewModel();
 		GeometryManager.addObserver(this);
+		sliderDragFired();
 	}
 
 	@Override

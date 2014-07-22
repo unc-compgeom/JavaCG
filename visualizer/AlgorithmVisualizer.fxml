@@ -34,7 +34,7 @@
             <Button mnemonicParsing="false" onAction="#runFired" text="Run" />
             <Button mnemonicParsing="false" onAction="#resetFired" text="Reset" />
             <Separator orientation="VERTICAL" />
-            <Slider fx:id="speed" blockIncrement="0.0" majorTickUnit=".5" max="1.0" minorTickCount="9" onMouseDragged="#sliderDragFired" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Slider fx:id="speed" blockIncrement="0.0" majorTickUnit=".5" max="1.0" minorTickCount="9" onMouseDragged="#sliderDragFired" showTickLabels="false" showTickMarks="true" value="0.75" />
             <Separator orientation="VERTICAL" />
             <ToggleButton mnemonicParsing="false" onAction="#sizeFired" text="S" />
         </items>
