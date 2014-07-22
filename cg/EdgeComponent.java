@@ -1,7 +1,5 @@
 package cg;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
 import util.ColorSpecial;
 
 
@@ -13,90 +11,72 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 
 	EdgeComponent() {
 		super();
-
+		isReady = true;
 	}
 
 	@Override
-	public Point dest() {
+	public synchronized Point dest() {
 		return sym().orig();
 	}
 
 	@Override
-	public Edge dNext() {
+	public synchronized Edge dNext() {
 		return sym().oNext().sym();
 	}
 
 	@Override
-	public Edge dPrev() {
+	public synchronized Edge dPrev() {
 		return invRot().oNext().invRot();
 	}
 
 	@Override
-	public Edge invRot() {
+	public synchronized Edge invRot() {
 		return rot.rot().rot();
 	}
 
 	@Override
-	public Edge lNext() {
+	public synchronized Edge lNext() {
 		return invRot().oNext().rot();
 	}
 
 	@Override
-	public Edge lPrev() {
+	public synchronized Edge lPrev() {
 		return oNext().sym();
 	}
 
 	@Override
-	public Edge oNext() {
+	public synchronized Edge oNext() {
 		return next;
 	}
 
 	@Override
-	public Edge oPrev() {
+	public synchronized Edge oPrev() {
 		return rot().oNext().rot();
 	}
 
 	@Override
-	public Point orig() {
+	public synchronized Point orig() {
 		return o;
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
-		if (isInvisible()) {
-			return;
-		}
-		Paint oldStroke = gc.getStroke();
-		javafx.scene.paint.Color c = super.getColor();
-		if (c != null) {
-			gc.setStroke(c);
-		}
-		int size = GeometryManager.getSize();
-		gc.setLineWidth(size);
-		gc.strokeLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
-		orig().paint(gc);
-		dest().paint(gc);
-		gc.setStroke(oldStroke);
-		gc.setLineWidth(1);
-	}
-
-	@Override
-	public Edge rNext() {
+	public synchronized Edge rNext() {
 		return rot().oNext().invRot();
 	}
 
 	@Override
-	public Edge rot() {
+	public synchronized Edge rot() {
 		return rot;
 	}
 
 	@Override
-	public Edge rPrev() {
+	public synchronized Edge rPrev() {
 		return sym().oNext();
 	}
 
 	@Override
-	public void setCoordinates(Point origin, Point destination) {
+	public synchronized void setCoordinates(Point origin, Point destination) {
+		isReady = false;
 		if (o == null || dest() == null) {
 			setOrig(origin);
 			setDest(destination);
@@ -123,46 +103,51 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 			setOrig(origin);
 			setDest(destination);
 			setInvisible(false);
+			isReady = true;
+			notifyObservers(this);
+			notifyAll();
 		}
 
 	}
 
 	@Override
-	public void setDest(Point d) {
+	public synchronized void setDest(Point d) {
+		isReady = false;
 		GeometryManager.destroy(d);
 		sym().setOrig(d);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
-	@Override
-	public void setInvisible(boolean isInvisible) {
-		super.setInvisible(isInvisible);
-		o.setInvisible(isInvisible);
-		sym().orig().setInvisible(isInvisible);
-	}
 
 	@Override
-	public void setNext(Edge next) {
+	public synchronized void setNext(Edge next) {
 		this.next = next;
 	}
 
 	@Override
-	public void setOrig(Point o) {
+	public synchronized void setOrig(Point o) {
+		isReady = false;
 		GeometryManager.destroy(o);
 		this.o = o;
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void setRot(Edge rot) {
+	public synchronized void setRot(Edge rot) {
 		this.rot = rot;
 	}
 
 	@Override
-	public Edge sym() {
+	public synchronized Edge sym() {
 		return rot.rot();
 	}
 
 	@Override
-	public String toString() {
+	public synchronized String toString() {
 		return orig() + "-" + dest();
 	}
 }

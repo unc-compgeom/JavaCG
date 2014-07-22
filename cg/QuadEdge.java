@@ -10,7 +10,7 @@ import util.Drawable;
  * @author Vance Miller
  * 
  */
-interface QuadEdge extends Drawable {
+public interface QuadEdge extends Drawable, Iterable<Edge> {
 	/**
 	 * Creates a new QuadEdge collection that connects the destination of
 	 * <tt>a</tt> to the origin of <tt>b</tt>, so that all three have the same

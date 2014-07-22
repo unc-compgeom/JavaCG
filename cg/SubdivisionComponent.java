@@ -19,33 +19,35 @@ import util.DuplicatePointException;
  * @author Vance Miller
  * 
  */
-public class SubdivisionComponent extends AbstractGeometry implements
+public  class SubdivisionComponent extends QuadEdgeComponent implements
 		Subdivision {
 	private Edge startingEdge;
-	private final QuadEdge qe;
 
-	public SubdivisionComponent() {
+	SubdivisionComponent() {
 		// TODO find a triangle large enough to encompass <tt>points</tt>
-		qe = GeometryManager.newQuadEdge();
-		startingEdge = qe.get(0);
-		notifyObservers();
+		super();
+		startingEdge = get(0);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void insertSite(Point p) throws DuplicatePointException {
+	public synchronized void insertSite(Point p) throws DuplicatePointException {
+		isReady = false;
 		Edge e = locate(p);
 		if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
-			qe.deleteEdge(e.oNext());
+			deleteEdge(e.oNext());
 		}
 		// connect the new point to the vertices of the containing triangle
-		Edge base = qe.makeEdge();
+		Edge base = makeEdge();
 		base.setCoordinates(e.orig(), GeometryManager.newPoint(p));
-		qe.splice(base, e);
+		splice(base, e);
 		this.startingEdge = base;
 		// add edges
 		do {
-			base = qe.connect(e, base.sym());
+			base = connect(e, base.sym());
 			e = base.oPrev();
 		} while (e.lNext() != startingEdge);
 		// examine suspect edges and ensure that the Delaunay condition is
@@ -55,9 +57,12 @@ public class SubdivisionComponent extends AbstractGeometry implements
 			if (Predicate.rightOf(t.dest(), e)
 					&& Predicate.isPointInCircle(p, e.orig(), t.dest(),
 							e.dest())) {
-				qe.swap(e);
+				swap(e);
 				e = e.oPrev();
 			} else if (e.oNext() == startingEdge) {
+				isReady = true;
+				notifyObservers(this);
+				notifyAll();
 				return;
 			} else {
 				e = e.oNext().lPrev();
@@ -66,7 +71,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public Edge locate(Point q) throws DuplicatePointException {
+	public synchronized Edge locate(Point q) throws DuplicatePointException {
 		Edge e = startingEdge;
 		if (!Predicate.rightOrAhead(e.dest(), e.orig(), q)) {
 			e = e.sym();
@@ -92,24 +97,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
-		if (isInvisible()) {
-			return;
-		}
-		Paint oldStroke = gc.getStroke();
-		Paint oldFill = gc.getFill();
-		javafx.scene.paint.Color c = super.getColor();
-		if (c != null) {
-			gc.setStroke(c);
-			gc.setFill(c);
-		}
-		qe.paint(gc);
-		gc.setStroke(oldStroke);
-		gc.setFill(oldFill);
-	}
-
-	@Override
-	public void getDual() {
+	public synchronized void getDual() {
 
 	}
 

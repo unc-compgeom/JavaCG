@@ -1,16 +1,6 @@
 package cg;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class PointSetComponent extends AbstractGeometry implements PointSet {
 	private static final long serialVersionUID = -1545417749354389726L;
@@ -22,27 +12,30 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
-	public void add(int index, Point p) {
+	public synchronized void add(int index, Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
-		synchronized (this) {
-			points.add(index, p);
-		}
-		notifyObservers();
+		points.add(index, p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public boolean add(Point p) {
+	public synchronized boolean add(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
 		boolean b;
-		synchronized (this) {
-			b = points.add(p);
-		}
-		notifyObservers();
+		b = points.add(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Point> c) {
+	public synchronized boolean addAll(Collection<? extends Point> c) {
+		isReady = false;
 		synchronized (c) {
 			for (Point point : c) {
 				GeometryManager.destroy(point);
@@ -52,266 +45,216 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 			GeometryManager.destroy((PointSet) c);
 		}
 		boolean b;
-		synchronized (this) {
-			b = points.addAll(c);
-		}
-		notifyObservers();
+		b = points.addAll(c);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends Point> c) {
+	public synchronized boolean addAll(int index, Collection<? extends Point> c) {
+		isReady = false;
 		synchronized (c) {
 			for (Point point : c) {
 				GeometryManager.destroy(point);
 			}
 		}
 		boolean b;
-		synchronized (this) {
-			b = points.addAll(index, c);
-		}
-		notifyObservers();
+		b = points.addAll(index, c);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public void addFirst(Point p) {
+	public synchronized void addFirst(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
-		synchronized (this) {
-			points.addFirst(p);
-		}
-		notifyObservers();
+		points.addFirst(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void addLast(Point p) {
+	public synchronized void addLast(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
-		synchronized (this) {
-			points.addLast(p);
-		}
-		notifyObservers();
+		points.addLast(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void addNoDelay(Point p) {
+	public synchronized void addNoDelay(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
-		synchronized (this) {
-			points.addLast(p);
-		}
-		notifyObserversNoDelay();
+		points.addLast(p);
+		isReady = true;
+		notifyObserversNoDelay(this);
+		notifyAll();
 	}
 
 	@Override
-	public void addNoDelay(float x, float y) {
-		synchronized (this) {
-			points.addLast(new PointComponent(x, y));
-		}
-		notifyObserversNoDelay();
+	public synchronized void addNoDelay(float x, float y) {
+		isReady = false;
+		points.addLast(new PointComponent(x, y));
+		isReady = true;
+		notifyObserversNoDelay(this);
+		notifyAll();
 	}
 
 	@Override
-	public void clear() {
-		synchronized (this) {
-			points.clear();
-		}
-		notifyObservers();
+	public synchronized void clear() {
+		isReady = false;
+		points.clear();
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public boolean contains(Object o) {
-		synchronized (this) {
-			return points.contains(o);
-		}
+	public synchronized boolean contains(Object o) {
+		return points.contains(o);
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
-		synchronized (this) {
-			return points.containsAll(c);
-		}
+	public synchronized boolean containsAll(Collection<?> c) {
+		return points.containsAll(c);
 	}
 
 	@Override
-	public Iterator<Point> descendingIterator() {
-		synchronized (this) {
-			return points.descendingIterator();
-		}
+	public synchronized Iterator<Point> descendingIterator() {
+		return points.descendingIterator();
 	}
 
 	@Override
-	public Point element() {
-		synchronized (this) {
-			return points.element();
-		}
+	public synchronized Point element() {
+		return points.element();
 	}
 
 	@Override
-	public Point get(int index) {
-		// this method should thrown an exception if the index is out of bounds
-		synchronized (this) {
-			return points.get(index);
-		}
-
+	public synchronized Point get(int index) {
+		return points.get(index);
 	}
 
 	@Override
-	public Point getFirst() {
-		synchronized (this) {
-			return points.getFirst();
-		}
+	public synchronized Point getFirst() {
+		return points.getFirst();
 	}
 
 	@Override
-	public Point getLast() {
-		synchronized (this) {
-			return points.getLast();
-		}
+	public synchronized Point getLast() {
+		return points.getLast();
 	}
 
 	@Override
-	public Point getSecond() throws NoSuchElementException {
-		synchronized (this) {
-			if (size() < 2) {
-				throw new NoSuchElementException();
-			}
-			return points.get(1);
+	public synchronized Point getSecond() throws NoSuchElementException {
+		if (size() < 2) {
+			throw new NoSuchElementException();
 		}
+		return points.get(1);
 	}
 
 	@Override
-	public Point getSecondToLast() {
-		synchronized (this) {
-			return points.get(size() - 2);
-		}
+	public synchronized Point getSecondToLast() {
+		return points.get(size() - 2);
 	}
 
 	@Override
-	public int indexOf(Object o) {
-		synchronized (this) {
-			return points.indexOf(o);
-		}
+	public synchronized int indexOf(Object o) {
+		return points.indexOf(o);
 	}
 
 	@Override
-	public boolean isEmpty() {
-		synchronized (this) {
-			return points.isEmpty();
-		}
+	public synchronized boolean isEmpty() {
+		return points.isEmpty();
 	}
 
 	@Override
-	public Iterator<Point> iterator() {
-		synchronized (this) {
-			return points.iterator();
-		}
+	public synchronized Iterator<Point> iterator() {
+		return points.iterator();
 	}
 
 	@Override
-	public int lastIndexOf(Object o) {
-		synchronized (this) {
-			return points.lastIndexOf(o);
-		}
+	public synchronized int lastIndexOf(Object o) {
+		return points.lastIndexOf(o);
 	}
 
 	@Override
-	public ListIterator<Point> listIterator() {
-		synchronized (this) {
-			return points.listIterator();
-		}
+	public synchronized ListIterator<Point> listIterator() {
+		return points.listIterator();
 	}
 
 	@Override
-	public ListIterator<Point> listIterator(int index) {
-		synchronized (this) {
-			return points.listIterator(index);
-		}
+	public synchronized ListIterator<Point> listIterator(int index) {
+		return points.listIterator(index);
 	}
 
 	@Override
-	public boolean offer(Point p) {
+	public synchronized boolean offer(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
 		boolean b;
-		synchronized (this) {
-			b = points.offer(p);
-		}
-		notifyObservers();
+		b = points.offer(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public boolean offerFirst(Point p) {
+	public synchronized boolean offerFirst(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
 		boolean b;
-		synchronized (this) {
-			b = points.offerFirst(p);
-		}
-		notifyObservers();
+		b = points.offerFirst(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public boolean offerLast(Point p) {
+	public synchronized boolean offerLast(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
 		boolean b;
-		synchronized (this) {
-			b = points.offerLast(p);
-		}
-		notifyObservers();
+		b = points.offerLast(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
-		if (isInvisible()) {
-			return;
-		}
-		Paint oldStroke = gc.getStroke();
-		Paint oldFill = gc.getFill();
-		javafx.scene.paint.Color c = super.getColor();
-		if (c != null) {
-			gc.setStroke(c);
-			gc.setFill(c);
-		}
-		for (Point p : points) {
-			p.paint(gc);
-		}
-		gc.setStroke(oldStroke);
-		gc.setFill(oldFill);
+	public synchronized Point peek() {
+		return points.peek();
 	}
 
 	@Override
-	public Point peek() {
-		synchronized (this) {
-			return points.peek();
-		}
+	public synchronized Point peekFirst() {
+		return points.peekFirst();
 	}
 
 	@Override
-	public Point peekFirst() {
-		synchronized (this) {
-			return points.peekFirst();
-		}
+	public synchronized Point peekLast() {
+		return points.peekLast();
 	}
 
 	@Override
-	public Point peekLast() {
-		synchronized (this) {
-			return points.peekLast();
+	public synchronized Point peekSecond() {
+		if (points.size() < 2) {
+			return null;
 		}
+		return points.get(1);
 	}
 
 	@Override
-	public Point peekSecond() {
-		synchronized (this) {
-			if (points.size() < 2) {
-				return null;
-			}
-			return points.get(1);
-		}
-	}
-
-	@Override
-	public Point peekSecondToLast() {
+	public synchronized Point peekSecondToLast() {
 		if (points.isEmpty()) {
 			return null;
 		}
@@ -323,174 +266,170 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 	}
 
 	@Override
-	public Point poll() {
+	public synchronized Point poll() {
 		Point v;
-		synchronized (this) {
-			v = points.poll();
-		}
-		notifyObservers();
+		v = points.poll();
 		return v;
 	}
 
 	@Override
-	public Point pollFirst() {
+	public synchronized Point pollFirst() {
 		Point v;
-		synchronized (this) {
-			v = points.pollFirst();
-		}
-		notifyObservers();
+		v = points.pollFirst();
 		return v;
 	}
 
 	@Override
-	public Point pollLast() {
+	public synchronized Point pollLast() {
 		Point v;
-		synchronized (this) {
-			v = points.pollLast();
-		}
-		notifyObservers();
+		v = points.pollLast();
 		return v;
 	}
 
 	@Override
-	public Point pop() {
+	public synchronized Point pop() {
 		Point v;
-		synchronized (this) {
-			v = points.pop();
-		}
-		notifyObservers();
+		v = points.pop();
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return v;
 	}
 
 	@Override
-	public void push(Point p) {
+	public synchronized void push(Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
-		synchronized (this) {
-			points.push(p);
-		}
-		notifyObservers();
+		points.push(p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public Point remove() {
+	public synchronized Point remove() {
+		isReady = false;
 		Point v;
-		synchronized (this) {
-			v = points.remove();
-		}
-		notifyObservers();
+		v = points.remove();
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return v;
 	}
 
 	@Override
-	public Point remove(int i) {
-		Point v;
-		synchronized (this) {
-			v = points.remove(i);
-
-		}
-		notifyObservers();
+	public synchronized Point remove(int i) {
+		isReady = false;
+		Point v = points.remove(i);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return v;
 	}
 
 	@Override
-	public boolean remove(Object o) {
+	public synchronized boolean remove(Object o) {
+		isReady = false;
 		boolean b;
-		synchronized (this) {
-			b = points.remove(o);
-		}
-		notifyObservers();
+		b = points.remove(o);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public boolean removeAll(java.util.Collection<?> c) {
+	public synchronized boolean removeAll(java.util.Collection<?> c) {
+		isReady = false;
 		boolean b;
-		synchronized (this) {
-			b = points.removeAll(c);
-		}
-		notifyObservers();
+		b = points.removeAll(c);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public Point removeFirst() {
+	public synchronized Point removeFirst() {
+		isReady = false;
 		Point p;
-		synchronized (this) {
-			p = points.removeFirst();
-		}
-		notifyObservers();
+		p = points.removeFirst();
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return p;
 	}
 
 	@Override
-	public boolean removeFirstOccurrence(Object o) {
+	public synchronized boolean removeFirstOccurrence(Object o) {
+		isReady = false;
 		boolean b;
-		synchronized (this) {
-			b = points.removeFirstOccurrence(o);
-		}
-		notifyObservers();
+		b = points.removeFirstOccurrence(o);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return b;
 	}
 
 	@Override
-	public Point removeLast() {
-		synchronized (this) {
-			Point p = points.removeLast();
-			notifyObservers();
-			return p;
-		}
+	public synchronized Point removeLast() {
+		isReady = false;
+		Point p = points.removeLast();
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
+		return p;
 	}
 
 	@Override
-	public boolean removeLastOccurrence(Object o) {
-		synchronized (this) {
-			return points.removeLastOccurrence(o);
-		}
+	public synchronized boolean removeLastOccurrence(Object o) {
+		isReady = false;
+		boolean b = points.removeLastOccurrence(o);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
+		return b;
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
-		synchronized (this) {
-			return points.retainAll(c);
-		}
+	public synchronized boolean retainAll(Collection<?> c) {
+		isReady = false;
+		boolean b =points.retainAll(c);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
+		return b;
 	}
 
 	@Override
-	public Point set(int index, Point p) {
+	public synchronized Point set(int index, Point p) {
+		isReady = false;
 		GeometryManager.destroy(p);
 		Point pt;
-		synchronized (this) {
-			pt = points.set(index, p);
-		}
-		notifyObservers();
+		pt = points.set(index, p);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return pt;
 	}
 
 	@Override
-	public int size() {
-		synchronized (this) {
-			return points.size();
-		}
+	public synchronized int size() {
+		return points.size();
 	}
 
 	@Override
-	public List<Point> subList(int fromIndex, int toIndex) {
-		synchronized (this) {
-			return points.subList(fromIndex, toIndex);
-		}
+	public synchronized List<Point> subList(int fromIndex, int toIndex) {
+		return points.subList(fromIndex, toIndex);
 	}
 
 	@Override
-	public Object[] toArray() {
-		synchronized (this) {
-			return points.toArray();
-		}
+	public synchronized Object[] toArray() {
+		return points.toArray();
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
-		synchronized (this) {
-			return points.toArray(a);
-		}
+	public synchronized <T> T[] toArray(T[] a) {
+		return points.toArray(a);
 	}
 }

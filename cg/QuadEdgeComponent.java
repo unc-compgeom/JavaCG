@@ -31,25 +31,34 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		ea.setInvisible(true);
 		eb.setInvisible(true);
 		ec.setInvisible(true);
+		isReady = true;
 	}
 
 	@Override
-	public Edge connect(Edge a, Edge b) {
+	public synchronized Edge connect(Edge a, Edge b) {
+		isReady = false;
 		Edge e = makeEdge();
 		splice(e, a.lNext());
 		splice(e.sym(), b);
 		e.setCoordinates(a.dest(), b.orig());
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 		return e;
 	}
 
 	@Override
-	public void deleteEdge(Edge e) {
+	public synchronized void deleteEdge(Edge e) {
+		isReady = false;
 		splice(e, e.oPrev());
 		splice(e.sym(), e.sym().oPrev());
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public Edge get(int i) {
+	public synchronized Edge get(int i) {
 		int count = 0;
 		Edge e = first;
 		do {
@@ -86,34 +95,7 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
-		if (isInvisible()) {
-			return;
-		}
-		Paint oldStroke = gc.getStroke();
-		Paint oldFill = gc.getFill();
-		javafx.scene.paint.Color c = super.getColor();
-		if (c != null) {
-			gc.setStroke(c);
-			gc.setFill(c);
-		}
-		synchronized (this) {
-			Edge e = first;
-			do {
-				if (isWall(e) || isWall(e.sym())) {
-					e.paint(gc);
-					e = e.rPrev();
-				} else {
-					e.paint(gc);
-					e = e.oNext();
-				}
-			} while (e != first);
-		}
-		gc.setStroke(oldStroke);
-		gc.setFill(oldFill);
-	}
-
-	public Iterator<Edge> iterator() {
+	public synchronized Iterator<Edge> iterator() {
 		return new Iterator<Edge>() {
 			private final Edge e = first;
 			private Edge next = e;
@@ -149,7 +131,8 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	}
 
 	@Override
-	public void splice(Edge a, Edge b) {
+	public synchronized void splice(Edge a, Edge b) {
+		isReady = false;
 		Edge alpha = a.oNext().rot();
 		Edge beta = b.oNext().rot();
 
@@ -162,10 +145,14 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		b.setNext(t2);
 		alpha.setNext(t3);
 		beta.setNext(t4);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void swap(Edge e) {
+	public synchronized void swap(Edge e) {
+		isReady = false;
 		Edge a = e.oPrev();
 		Edge b = e.sym().oPrev();
 		splice(e, a);
@@ -173,5 +160,8 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		splice(e, a.lNext());
 		splice(e.sym(), b.lNext());
 		e.setCoordinates(a.dest(), b.dest());
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 }

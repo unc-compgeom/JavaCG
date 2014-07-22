@@ -1,6 +1,5 @@
 package cg;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import util.Drawable;
 
@@ -13,11 +12,13 @@ import util.Drawable;
 public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private boolean invisible;
+	protected boolean isReady;
 
 	AbstractGeometry() {
+		isReady = false;
 	}
 
-	private void animateChange(Color oldColor, Color newColor) {
+	private synchronized void animateColorChange(Color oldColor, Color newColor) {
 		if (newColor == null) {
 			return;
 		}
@@ -27,7 +28,7 @@ public abstract class AbstractGeometry implements Drawable {
 		if (oldColor == newColor) {
 			return;
 		}
-		// animateChange
+		// animateColorChange
 		Color tmp = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getOpacity());
 		final int delay = GeometryManager.getDelay();
 		double dr = (newColor.getRed() - tmp.getRed()) / (delay * 1.0);
@@ -38,7 +39,7 @@ public abstract class AbstractGeometry implements Drawable {
 					oldColor.getGreen() + (dg * i), oldColor.getBlue()
 					+ (db * i), oldColor.getOpacity());
 			c = tmp;
-			notifyObserversNoDelay();
+			notifyObserversNoDelay(this);
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -57,36 +58,34 @@ public abstract class AbstractGeometry implements Drawable {
 		return invisible;
 	}
 
-	void notifyObservers() {
-		GeometryManager.notifyObservers();
+	@Override
+	public boolean isReady() {
+		return isReady;
 	}
 
-	void notifyObserversNoDelay() {
-		GeometryManager.notifyObserversNoDelay();
+	void notifyObservers(Drawable d) {
+		GeometryManager.notifyObservers(d);
 	}
 
-	@Override
-	public abstract void paint(GraphicsContext gc);
-
-	@Override
-	public void setColor(Color c) {
-		synchronized (this) {
-			animateChange(this.c, c);
-			this.c = c;
-		}
+	void notifyObserversNoDelay(Drawable d) {
+		GeometryManager.notifyObserversNoDelay(d);
 	}
 
 	@Override
-	public void setColorNoAnim(Color c) {
-		synchronized (this) {
-			this.c = c;
-			notifyObserversNoDelay();
-		}
+	public synchronized void setColor(Color c) {
+		animateColorChange(this.c, c);
+		this.c = c;
 	}
 
 	@Override
-	public void setInvisible(boolean isInvisible) {
+	public synchronized void setColorNoAnim(Color c) {
+		this.c = c;
+		notifyObserversNoDelay(this);
+	}
+
+	@Override
+	public synchronized void setInvisible(boolean isInvisible) {
 		invisible = isInvisible;
-		notifyObserversNoDelay();
+		notifyObserversNoDelay(this);
 	}
 }

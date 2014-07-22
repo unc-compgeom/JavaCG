@@ -1,11 +1,8 @@
 package cg;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
-
 import java.util.List;
 
-public class CircleComponent extends AbstractGeometry implements Circle {
+class CircleComponent extends AbstractGeometry implements Circle {
 	private Point topLeft;
 	private final List<Point> points;
 	private double diameter;
@@ -16,12 +13,11 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 
 	/**
 	 * Create a Circle object given points that lie on its circumference.
-	 * 
-	 * @param points
-	 *            points that lie on the circle's circumference.
-	 * 
+	 *
+	 * @param points points that lie on the circle's circumference.
 	 */
 	CircleComponent(List<Point> points) {
+		super();
 		this.points = points;
 		for (Point point : points) {
 			GeometryManager.destroy(point);
@@ -41,8 +37,8 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			double dXSq = dX * dX;
 			double dYSq = dY * dY;
 			double radius = Math.sqrt((dXSq + dYSq) / 4);
-			diameter = radius*2;
-			topLeft = new PointComponent((float) (a.getX() - (dX / 2) - radius), (float) (a.getY() - dY/2-radius));
+			diameter = radius * 2;
+			topLeft = new PointComponent((float) (a.getX() - (dX / 2) - radius), (float) (a.getY() - dY / 2 - radius));
 		} else if (points.size() > 2) {
 			Point p = points.get(0), q = points.get(1), r = points.get(2);
 			double px = p.getX(), py = p.getY();
@@ -57,35 +53,29 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 					* (px - rx)) / det);
 			Point origin = new PointComponent(x, y); // tmp topLeft
 			double radius = Math.sqrt(p.sub(origin).dot(p.sub(origin)));
-			diameter = radius*2;
-			topLeft = new PointComponent((float)(x-radius), (float)(y-radius));
+			diameter = radius * 2;
+			topLeft = new PointComponent((float) (x - radius), (float) (y - radius));
 		}
+		isReady = true;
 	}
 
 	@Override
-	public List<Point> getPoints() {
+	public synchronized double getDiameter() {
+		return diameter;
+	}
+
+	@Override
+	public synchronized Point getTopLeft() {
+		return topLeft;
+	}
+
+	@Override
+	public synchronized List<Point> getPoints() {
 		return points;
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
-		if (isInvisible()) {
-			return;
-		}
-		Paint oldStroke = gc.getStroke();
-		javafx.scene.paint.Color c = super.getColor();
-		if (c != null) {
-			gc.setStroke(c);
-		}
-		int size = GeometryManager.getSize();
-		gc.setLineWidth(size);
-		gc.strokeOval(topLeft.getX(), topLeft.getY(), diameter, diameter);
-		gc.setStroke(oldStroke);
-		gc.setLineWidth(1);
-	}
-
-	@Override
-	public String toString() {
+	public synchronized String toString() {
 		return "Circle: o = " + topLeft + " r = " + diameter;
 	}
 }

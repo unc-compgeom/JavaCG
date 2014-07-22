@@ -6,28 +6,27 @@ import java.util.List;
 
 /**
  * A circle.
- * 
+ *
  * @author Vance Miller
- * 
  */
 public interface Circle extends Drawable {
-	// /**
-	// * Returns the radius of the circle squared.
-	// *
-	// * @return the radius squared
-	// */
-	// public int getRadiusSquared();
-	//
-	// /**
-	// * Returns a {@link Point} that represents the center of the circle
-	// *
-	// * @return the center of the circle
-	// */
-	// public Point getOrigin();
+	/**
+	 * Returns the diameter of the circle.
+	 *
+	 * @return the diameter
+	 */
+	public double getDiameter();
+
+	/**
+	 * Returns a {@link Point} that represents the top left corner of the circle's bounding box.
+	 *
+	 * @return the top left corner of the circle
+	 */
+	public Point getTopLeft();
 
 	/**
 	 * Returns a list of {@link Point}s on the circumference of the circle.
-	 * 
+	 *
 	 * @return points that define the circle
 	 */
 	public List<Point> getPoints();

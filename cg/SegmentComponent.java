@@ -14,7 +14,7 @@ import java.awt.Graphics2D;
  * homogeneous array stores the homogeneous coordinates of the segment as
  * <W,X,Y>.
  */
-public class SegmentComponent extends AbstractGeometry implements Segment {
+class SegmentComponent extends AbstractGeometry implements Segment {
 
 	private static float getDx(Segment s) {
 		return s.getTail().getX() - s.getHead().getX();
@@ -49,14 +49,14 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public Segment add(Segment v) {
+	public synchronized Segment add(Segment v) {
 		float x = head.getX() + getDx(v);
 		float y = head.getY() + getDy(v);
 		return new SegmentComponent(tail.getX(), tail.getY(), x, y);
 	}
 
 	@Override
-	public Point findIntersection(Segment v) {
+	public synchronized Point findIntersection(Segment v) {
 		double[] homogeneous = getHomogeneous(this);
 		double[] vHomogeneous = getHomogeneous(v);
 		double x0 = homogeneous[1] * vHomogeneous[2] - homogeneous[2]
@@ -71,82 +71,75 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 	}
 
 	@Override
-	public Segment findPerpendicular() {
+	public synchronized Segment findPerpendicular() {
 		return new SegmentComponent(tail.getX(), tail.getY(), -getDy(this)
 				+ tail.getX(), getDx(this) + tail.getY());
 	}
 
 	@Override
-	public Point getHead() {
+	public synchronized Point getHead() {
 		return head;
 	}
 
 	@Override
-	public double getLength() {
+	public synchronized double getLength() {
 		return Math.hypot(getDx(this), getDy(this));
 	}
 
 	@Override
-	public double getLengthSquared() {
+	public synchronized double getLengthSquared() {
 		return Math.pow(getDx(this), 2) + Math.pow(getDy(this), 2);
 	}
 
 	@Override
-	public Point getTail() {
+	public synchronized Point getTail() {
 		return tail;
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
-		if (isInvisible()) {
-			return;
-		}
-		Paint oldStroke = gc.getStroke();
-		javafx.scene.paint.Color c = super.getColor();
-		if (c != null) {
-			gc.setStroke(c);
-		}
-		int size = GeometryManager.getSize();
-		gc.setLineWidth(size);
-		gc.strokeLine(head.getX(), head.getY(), tail.getX(), tail.getY());
-		head.paint(gc);
-		tail.paint(gc);
-		gc.setStroke(oldStroke);
-	}
-
-	@Override
-	public void setHead(Point head) {
+	public synchronized void setHead(Point head) {
+		isReady = false;
 		this.head = head;
-		notifyObservers();
-
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void setInvisible(boolean invisible) {
+	public synchronized void setInvisible(boolean invisible) {
+		isReady = false;
 		super.setInvisible(invisible);
 		tail.setInvisible(invisible);
 		head.setInvisible(invisible);
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public void setTail(Point tail) {
+	public synchronized void setTail(Point tail) {
+		isReady=false;
 		this.tail = tail;
-		notifyObservers();
-
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 
 	@Override
-	public Segment tailReflection() {
+	public synchronized Segment tailReflection() {
 		return new SegmentComponent(tail.getX(), tail.getY(), tail.getX()
 				- getDx(this), tail.getY() - getDy(this));
 	}
 
 	@Override
-	public void translate(Point v) {
+	public synchronized void translate(Point v) {
+		isReady = false;
 		head.setX(head.getX() - tail.getX() + v.getX());
 		head.setY(head.getY() - tail.getY() + v.getY());
 		tail.setX(v.getX());
 		tail.setY(v.getY());
-		notifyObservers();
+		isReady = true;
+		notifyObservers(this);
+		notifyAll();
 	}
 }

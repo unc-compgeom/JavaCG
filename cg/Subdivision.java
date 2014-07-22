@@ -10,7 +10,7 @@ import util.DuplicatePointException;
  * @author Vance Miller
  * 
  */
-public interface Subdivision extends Drawable {
+public interface Subdivision extends QuadEdge {
 	public void getDual();
 
 	/**
