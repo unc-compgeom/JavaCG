@@ -105,7 +105,9 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 			setInvisible(false);
 			isReady = true;
 			notifyObservers(this);
-			notifyAll();
+			synchronized (this) {
+				notifyAll();
+			}
 		}
 
 	}

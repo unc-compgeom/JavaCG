@@ -1,13 +1,5 @@
 package cg;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 /**
  * The segment will have an origin indicating the location of the tail of the
  * segment. The xdir and ydir give magnitudes in the x and y directions. The
@@ -102,7 +94,9 @@ class SegmentComponent extends AbstractGeometry implements Segment {
 		this.head = head;
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -113,16 +107,20 @@ class SegmentComponent extends AbstractGeometry implements Segment {
 		head.setInvisible(invisible);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
 	public synchronized void setTail(Point tail) {
-		isReady=false;
+		isReady = false;
 		this.tail = tail;
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -140,6 +138,8 @@ class SegmentComponent extends AbstractGeometry implements Segment {
 		tail.setY(v.getY());
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 }

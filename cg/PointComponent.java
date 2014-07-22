@@ -72,7 +72,7 @@ public class PointComponent extends AbstractGeometry implements Point {
 		this.x = x;
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized(this){notifyAll();}
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class PointComponent extends AbstractGeometry implements Point {
 		this.y = y;
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized(this){notifyAll();}
 	}
 
 	@Override

@@ -18,7 +18,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.add(index, p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -29,7 +31,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.add(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -48,7 +52,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.addAll(c);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -64,7 +70,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.addAll(index, c);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -75,7 +83,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.addFirst(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -85,7 +95,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.addLast(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -95,7 +107,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.addLast(p);
 		isReady = true;
 		notifyObserversNoDelay(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -104,7 +118,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.addLast(new PointComponent(x, y));
 		isReady = true;
 		notifyObserversNoDelay(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -113,7 +129,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.clear();
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -202,7 +220,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.offer(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -214,7 +234,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.offerFirst(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -226,7 +248,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.offerLast(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -292,7 +316,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		v = points.pop();
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return v;
 	}
 
@@ -303,7 +329,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		points.push(p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -313,7 +341,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		v = points.remove();
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return v;
 	}
 
@@ -323,7 +353,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		Point v = points.remove(i);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return v;
 	}
 
@@ -334,7 +366,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.remove(o);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -345,7 +379,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.removeAll(c);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -356,7 +392,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		p = points.removeFirst();
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return p;
 	}
 
@@ -367,7 +405,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		b = points.removeFirstOccurrence(o);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -377,7 +417,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		Point p = points.removeLast();
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return p;
 	}
 
@@ -387,17 +429,21 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		boolean b = points.removeLastOccurrence(o);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
 	@Override
 	public synchronized boolean retainAll(Collection<?> c) {
 		isReady = false;
-		boolean b =points.retainAll(c);
+		boolean b = points.retainAll(c);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return b;
 	}
 
@@ -409,7 +455,9 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		pt = points.set(index, p);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return pt;
 	}
 

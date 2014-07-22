@@ -150,8 +150,14 @@ public class ViewModel {
 		if (firstPoint == null) {
 			return;
 		}
-		GeometryManager.destroy(preview);
-		preview = null;
+		synchronized (preview) {
+			try {
+				preview.wait();
+			} catch (InterruptedException ignored) {
+			}
+			GeometryManager.destroy(preview);
+			preview = null;
+		}
 
 		float[] coordinates;
 		switch (mode) {
@@ -167,6 +173,7 @@ public class ViewModel {
 								+ mode);
 				return;
 		}
+
 		if (!polygonEnabled) {
 			PointSet tmp = GeometryManager.newPointSet();
 			for (int i = 0; i < coordinates.length; i += 2) {
@@ -180,7 +187,9 @@ public class ViewModel {
 			}
 			preview = tmp;
 		}
-		preview.notifyAll();
+		synchronized (preview) {
+			preview.notifyAll();
+		}
 	}
 
 	public synchronized void reset() {

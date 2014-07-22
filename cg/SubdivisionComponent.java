@@ -1,25 +1,15 @@
 package cg;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
 import predicates.Predicate;
-import util.CG;
-import util.ColorSpecial;
 import util.DuplicatePointException;
 
 /**
  * This class can be used to represent a Delaunay Triangulation. It uses the
  * {@link QuadEdge} data structure to maintain edge data.
- * 
+ *
  * @author Vance Miller
- * 
  */
-public  class SubdivisionComponent extends QuadEdgeComponent implements
+public class SubdivisionComponent extends QuadEdgeComponent implements
 		Subdivision {
 	private Edge startingEdge;
 
@@ -29,7 +19,9 @@ public  class SubdivisionComponent extends QuadEdgeComponent implements
 		startingEdge = get(0);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -56,7 +48,7 @@ public  class SubdivisionComponent extends QuadEdgeComponent implements
 			Edge t = e.oPrev();
 			if (Predicate.rightOf(t.dest(), e)
 					&& Predicate.isPointInCircle(p, e.orig(), t.dest(),
-							e.dest())) {
+					e.dest())) {
 				swap(e);
 				e = e.oPrev();
 			} else if (e.oNext() == startingEdge) {

@@ -160,7 +160,7 @@ public class ViewController implements CGObserver {
 				return null;
 			}
 		};
-		Platform.runLater(t);
+		new Thread(t).start();
 	}
 
 	@FXML
@@ -169,7 +169,6 @@ public class ViewController implements CGObserver {
 			@Override
 			protected Void call() throws Exception {
 				model.reset();
-//		        canvas.getGraphicsContext2D().clearRect(0, 0, 1000, 1000);
 				return null;
 			}
 		};
@@ -217,30 +216,35 @@ public class ViewController implements CGObserver {
 
 	@Override
 	public void update(final Drawable d, boolean isInsertion) {
-//		if (isInsertion) {
-//			Platform.runLater(() -> paintStuff(d));
-//		} else {
 		new Thread(new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				gc.clearRect(0, 0, 1000, 1000);
-				for (Drawable drawable : GeometryManager.getAllGeometry()) {
-					synchronized (drawable) {
-						while (!drawable.isReady()) {
-							System.out.println("waiting for " + drawable.toString());
-							try {
-								drawable.wait();
-							} catch (InterruptedException ignored) {
-							}
+				if (isInsertion) {
+					synchronized (d) {
+						try {
+							d.wait();
+						} catch (InterruptedException ignored) {
 						}
-						paintStuff(drawable);
+						Platform.runLater(() -> paintStuff(d));
+					}
+				} else {
+					Platform.runLater(() -> gc.clearRect(0, 0, 1000, 1000));
+					for (Drawable drawable : GeometryManager.getAllGeometry()) {
+						synchronized (drawable) {
+							while (!drawable.isReady()) {
+								try {
+									drawable.wait();
+								} catch (InterruptedException ignored) {
+								}
+							}
+							Platform.runLater(() -> paintStuff(drawable));
+						}
 					}
 				}
 				return null;
 			}
 
 			private void paintStuff(Drawable d) {
-				System.out.println("Trying to paint " + d.toString());
 				if (d == null || d.isInvisible()) {
 					return;
 				}
@@ -252,6 +256,7 @@ public class ViewController implements CGObserver {
 					gc.setStroke(d.getColor());
 				}
 				gc.setLineWidth(GeometryManager.getSize());
+
 				if (d instanceof Point) {
 					paintPoint((Point) d);
 				} else if (d instanceof Polygon) {
@@ -331,8 +336,6 @@ public class ViewController implements CGObserver {
 			}
 
 		}).start();
-
 	}
-
 
 }

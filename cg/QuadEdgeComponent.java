@@ -1,8 +1,5 @@
 package cg;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
-
 import java.util.Iterator;
 
 public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
@@ -43,7 +40,9 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		e.setCoordinates(a.dest(), b.orig());
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 		return e;
 	}
 
@@ -54,7 +53,9 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		splice(e.sym(), e.sym().oPrev());
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -147,7 +148,9 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		beta.setNext(t4);
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 
 	@Override
@@ -162,6 +165,8 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		e.setCoordinates(a.dest(), b.dest());
 		isReady = true;
 		notifyObservers(this);
-		notifyAll();
+		synchronized (this) {
+			notifyAll();
+		}
 	}
 }

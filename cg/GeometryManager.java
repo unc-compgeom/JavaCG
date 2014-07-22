@@ -249,7 +249,6 @@ public class GeometryManager {
 		synchronized (observers) {
 			for (CGObserver o : observers) {
 				o.update(d, isInsertion);
-
 			}
 		}
 	}
