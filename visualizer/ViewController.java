@@ -8,7 +8,6 @@ import algorithms.Algorithm;
 import cg.GeometryManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -72,37 +71,79 @@ public class ViewController implements CGObserver {
 	}
 
 	@FXML
-	void pointsFired(ActionEvent event) {
-		model.enablePolygon(false);
+	void pointsFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.enablePolygon(false);
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
-	void polygonFired(ActionEvent event) {
-		model.enablePolygon(true);
+	void polygonFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.enablePolygon(true);
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
-	void pointFired(ActionEvent event) {
-		model.setInsertionMode(ViewModel.InsertionMode.INCREMENTAL);
+	void pointFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.setInsertionMode(ViewModel.InsertionMode.INCREMENTAL);
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
-	void circleFired(ActionEvent event) {
-		model.setInsertionMode(ViewModel.InsertionMode.CIRCLE);
+	void circleFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.setInsertionMode(ViewModel.InsertionMode.CIRCLE);
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
-	void lineFired(ActionEvent event) {
-		model.setInsertionMode(ViewModel.InsertionMode.LINE);
+	void lineFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.setInsertionMode(ViewModel.InsertionMode.LINE);
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
-	void randomFired(ActionEvent event) {
-		model.setInsertionMode(ViewModel.InsertionMode.RANDOM);
+	void randomFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.setInsertionMode(ViewModel.InsertionMode.RANDOM);
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
-	void runFired(ActionEvent event) {
+	void runFired() {
 		Task t = new Task() {
 			@Override
 			protected Void call() throws Exception {
@@ -114,18 +155,40 @@ public class ViewController implements CGObserver {
 	}
 
 	@FXML
-	void resetFired(ActionEvent event) {
-		model.reset();
+	void resetFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.reset();
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 	@FXML
 	void sliderDragFired() {
-		GeometryManager.setDelay((int) (Math.exp(speed.getValue()*8))-1);
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				model.runAlgorithm(algorithms.getSelectionModel().getSelectedItem());
+				return null;
+			}
+		};
+		new Thread(t).start();
+		GeometryManager.setDelay((int) (Math.exp(speed.getValue() * 8)) - 1);
 	}
 
 	@FXML
-	void sizeFired(ActionEvent event) {
-		GeometryManager.sizeToggle();
+	void sizeFired() {
+		Task t = new Task() {
+			@Override
+			protected Void call() throws Exception {
+				GeometryManager.sizeToggle();
+				return null;
+			}
+		};
+		new Thread(t).start();
 	}
 
 
@@ -147,9 +210,9 @@ public class ViewController implements CGObserver {
 	@Override
 	public void tellToDraw() {
 		Platform.runLater(
-				new Runnable() {
+				new Task<Void>() {
 					@Override
-					public void run() {
+					public Void call() {
 						GraphicsContext gc = canvas.getGraphicsContext2D();
 						gc.clearRect(0, 0, 1000, 1000);
 						List<Drawable> geometry = GeometryManager.getAllGeometry();
@@ -158,6 +221,7 @@ public class ViewController implements CGObserver {
 								d.paint(gc);
 							}
 						}
+						return null;
 					}
 				}
 		);
