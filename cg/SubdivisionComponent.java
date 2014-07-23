@@ -1,15 +1,10 @@
 package cg;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import predicates.Predicate;
-import util.CG;
-import util.ColorSpecial;
 import util.DuplicatePointException;
 
 /**
@@ -96,16 +91,23 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		if (isInvisible()) {
 			return;
 		}
-		Paint oldStroke = gc.getStroke();
+		// push old values onto the "stack"
 		Paint oldFill = gc.getFill();
-		javafx.scene.paint.Color c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		double oldSize = gc.getLineWidth();
+		Color c = super.getColor();
 		if (c != null) {
-			gc.setStroke(c);
 			gc.setFill(c);
+			gc.setStroke(c.darker());
 		}
+		gc.setLineWidth(GeometryManager.getSize());
+
 		qe.paint(gc);
-		gc.setStroke(oldStroke);
+
+		// restore gc from the "stack"
 		gc.setFill(oldFill);
+		gc.setStroke(oldStroke);
+		gc.setLineWidth(oldSize);
 	}
 
 	@Override

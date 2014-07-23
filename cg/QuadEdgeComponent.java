@@ -1,6 +1,7 @@
 package cg;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.Iterator;
@@ -90,13 +91,17 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		if (isInvisible()) {
 			return;
 		}
-		Paint oldStroke = gc.getStroke();
+		// push old values onto the "stack"
 		Paint oldFill = gc.getFill();
-		javafx.scene.paint.Color c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		double oldSize = gc.getLineWidth();
+		Color c = super.getColor();
 		if (c != null) {
-			gc.setStroke(c);
 			gc.setFill(c);
+			gc.setStroke(c.darker());
 		}
+		gc.setLineWidth(GeometryManager.getSize());
+
 		synchronized (this) {
 			Edge e = first;
 			do {
@@ -109,8 +114,11 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 				}
 			} while (e != first);
 		}
-		gc.setStroke(oldStroke);
+
+		// restore gc from the "stack"
 		gc.setFill(oldFill);
+		gc.setStroke(oldStroke);
+		gc.setLineWidth(oldSize);
 	}
 
 	public Iterator<Edge> iterator() {

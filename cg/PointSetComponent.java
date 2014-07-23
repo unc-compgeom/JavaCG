@@ -1,10 +1,9 @@
 package cg;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -265,18 +264,25 @@ public class PointSetComponent extends AbstractGeometry implements PointSet {
 		if (isInvisible()) {
 			return;
 		}
-		Paint oldStroke = gc.getStroke();
+		// push old values onto the "stack"
 		Paint oldFill = gc.getFill();
-		javafx.scene.paint.Color c = super.getColor();
+		Paint oldStroke = gc.getStroke();
+		//double oldSize = gc.getLineWidth(); // we don't need this for points
+		Color c = super.getColor();
 		if (c != null) {
-			gc.setStroke(c);
 			gc.setFill(c);
+			gc.setStroke(c.darker());
 		}
+		//gc.setLineWidth(GeometryManager.getSize());
+
 		for (Point p : points) {
 			p.paint(gc);
 		}
-		gc.setStroke(oldStroke);
+
+		// restore gc from the "stack"
 		gc.setFill(oldFill);
+		gc.setStroke(oldStroke);
+		//gc.setLineWidth(oldSize);
 	}
 
 	@Override

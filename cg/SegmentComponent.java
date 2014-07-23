@@ -1,12 +1,8 @@
 package cg;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 /**
  * The segment will have an origin indicating the location of the tail of the
@@ -101,17 +97,25 @@ public class SegmentComponent extends AbstractGeometry implements Segment {
 		if (isInvisible()) {
 			return;
 		}
+		// push old values onto the "stack"
+		Paint oldFill = gc.getFill();
 		Paint oldStroke = gc.getStroke();
-		javafx.scene.paint.Color c = super.getColor();
+		double oldSize = gc.getLineWidth();
+		Color c = super.getColor();
 		if (c != null) {
-			gc.setStroke(c);
+			gc.setFill(c);
+			gc.setStroke(c.darker());
 		}
-		int size = GeometryManager.getSize();
-		gc.setLineWidth(size);
+		gc.setLineWidth(GeometryManager.getSize());
+
 		gc.strokeLine(head.getX(), head.getY(), tail.getX(), tail.getY());
 		head.paint(gc);
 		tail.paint(gc);
+
+		// restore gc from the "stack"
+		gc.setFill(oldFill);
 		gc.setStroke(oldStroke);
+		gc.setLineWidth(oldSize);
 	}
 
 	@Override

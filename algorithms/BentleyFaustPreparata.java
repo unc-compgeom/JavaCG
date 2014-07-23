@@ -1,6 +1,7 @@
 package algorithms;
 
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
@@ -125,12 +126,8 @@ class BentleyFaustPreparata {
 		// join
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
-		for (Point point : lower) {
-			hull.add(point);
-		}
-		for (Point point : upper) {
-			hull.add(point);
-		}
+		hull.addAll(lower.stream().collect(Collectors.toList()));
+		hull.addAll(upper.stream().collect(Collectors.toList()));
 		// connect the first and last edges
 		hull.add(hull.getFirst());
 		// clean up

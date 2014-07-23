@@ -18,13 +18,17 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 		if (isInvisible()) {
 			return;
 		}
-		Paint oldStroke = gc.getStroke();
+		// push old values onto the "stack"
 		Paint oldFill = gc.getFill();
+		Paint oldStroke = gc.getStroke();
+		double oldSize = gc.getLineWidth();
 		Color c = super.getColor();
 		if (c != null) {
-			gc.setStroke(c);
 			gc.setFill(c);
+			gc.setStroke(c.darker());
 		}
+		gc.setLineWidth(GeometryManager.getSize());
+
 		Iterator<Point> it = super.iterator();
 		Point p, q;
 		synchronized (this) {
@@ -39,9 +43,11 @@ public class PolygonComponent extends PointSetComponent implements Polygon {
 				}
 			}
 		}
-		gc.setLineWidth(1);
 		super.paint(gc);
-		gc.setStroke(oldStroke);
+
+		// restore gc from the "stack"
 		gc.setFill(oldFill);
+		gc.setStroke(oldStroke);
+		gc.setLineWidth(oldSize);
 	}
 }

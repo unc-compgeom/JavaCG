@@ -11,10 +11,9 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import util.CGObserver;
 import util.Drawable;
 
@@ -40,8 +39,14 @@ public class ViewController implements CGObserver {
 	@FXML // fx:id="pointsPolygon"
 	private ToggleGroup pointsPolygon; // Value injected by FXMLLoader
 
+	@FXML // fx:id="progress"
+	private ProgressBar progressBar; // Value injected by FXMLLoader
+
 	@FXML // fx:id="drawMode"
 	private ToggleGroup drawMode; // Value injected by FXMLLoader
+
+	@FXML // fx:id="scrollPane"
+	private ScrollPane scrollPane; // Value injected by FXMLLoader
 
 	@FXML // fx:id="speed"
 	private Slider speed; // Value injected by FXMLLoader
@@ -135,7 +140,7 @@ public class ViewController implements CGObserver {
 		Task t = new Task() {
 			@Override
 			protected Void call() throws Exception {
-				model.setInsertionMode(ViewModel.InsertionMode.RANDOM);
+				model.makeRandom(10,10,790,590);
 				return null;
 			}
 		};
@@ -147,13 +152,16 @@ public class ViewController implements CGObserver {
 		Task t = new Task() {
 			@Override
 			protected Void call() throws Exception {
+				updateProgress(-1,-1);
 				Algorithm algorithm = algorithms.getSelectionModel().getSelectedItem();
 				if (algorithm != null) {
 					model.runAlgorithm(algorithm);
 				}
+				updateProgress(0, 0);
 				return null;
 			}
 		};
+		progressBar.progressProperty().bind(t.progressProperty());
 		new Thread(t).start();
 	}
 
@@ -200,8 +208,11 @@ public class ViewController implements CGObserver {
 		assert algorithms != null : "fx:id=\"algorithms\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
 		assert canvas != null : "fx:id=\"canvas\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
 		assert pointsPolygon != null : "fx:id=\"pointsPolygon\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
+		assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
 		assert drawMode != null : "fx:id=\"drawMode\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
+		assert scrollPane != null : "fx:id=\"scrollPane\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
 		assert speed != null : "fx:id=\"speed\" was not injected: check your FXML file 'AlgorithmVisualizer.fxml'.";
+
 
 		algorithms.getItems().addAll(Algorithm.values());
 		model = new ViewModel();
@@ -216,12 +227,15 @@ public class ViewController implements CGObserver {
 					@Override
 					public Void call() {
 						GraphicsContext gc = canvas.getGraphicsContext2D();
-						gc.clearRect(0, 0, 1000, 1000);
+						gc.clearRect(0,0,2000,2000);
+						gc.setStroke(Color.BLACK);
+						gc.setFill(Color.BLACK);
+						gc.setLineWidth(1);
 						List<Drawable> geometry = GeometryManager.getAllGeometry();
 						synchronized (geometry) {
-							for (Drawable d : geometry) {
+							geometry.stream().forEach(d -> {
 								d.paint(gc);
-							}
+							});
 						}
 						return null;
 					}

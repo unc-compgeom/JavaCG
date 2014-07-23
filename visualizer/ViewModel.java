@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class ViewModel {
 	enum InsertionMode {
-		CIRCLE(true), INCREMENTAL(false), LINE(true), RANDOM(false);
+		CIRCLE(true), INCREMENTAL(false), LINE(true);
 		final boolean isTwoClick;
 
 		InsertionMode(boolean isTwoClick) {
@@ -82,19 +82,6 @@ public class ViewModel {
 						polygon.addNoDelay((float) x, (float) y);
 					}
 					break;
-				case RANDOM:
-					if (!polygonEnabled) {
-						float[] points = makeRandomCoordinates();
-						for (int i = 0; i < points.length; i += 2) {
-							pointSet.addNoDelay(points[i], points[i + 1]);
-						}
-					} else {
-						float[] points = makeRandomCoordinates();
-						for (int i = 0; i < points.length; i += 2) {
-							polygon.addNoDelay(points[i], points[i + 1]);
-						}
-					}
-					break;
 				default:
 					System.out
 							.println("Unhandled insertion mode in ViewModel.draw(): "
@@ -122,7 +109,7 @@ public class ViewModel {
 	private float[] makeLineCoordinates(double x1, double y1, double x2, double y2) {
 		float x = (float) x1;
 		float y = (float) y1;
-		int numPoints = (int) Math.hypot(x2 - x1, y2 - y1) / 16;
+		int numPoints = (int) Math.hypot(x2 - x1, y2 - y1) / 16 + 2;
 		float[] coordinates = new float[2 * numPoints];
 		double dx = (x2 - x1) / (double) numPoints;
 		double dy = (y2 - y1) / (double) numPoints;
@@ -135,15 +122,25 @@ public class ViewModel {
 		return coordinates;
 	}
 
-	private float[] makeRandomCoordinates() {
+	void makeRandom(float x1, float y1, float x2, float y2) {
+		float width = x2 - x1;
+		float height = y2 - y1;
 		int numPoints = (int) Math.sqrt(width * height) / 16;
-		float[] pointSet = new float[numPoints * 2];
+		float[] points = new float[numPoints * 2];
 		Random Ayn = new Random();
-		for (int i = 0; i < pointSet.length; i += 2) {
-			pointSet[i] = Ayn.nextFloat() * width;
-			pointSet[i + 1] = Ayn.nextFloat() * height;
+		for (int i = 0; i < points.length; i += 2) {
+			points[i] = Ayn.nextFloat() * width + x1;
+			points[i + 1] = Ayn.nextFloat() * height + y1;
 		}
-		return pointSet;
+		if (!polygonEnabled) {
+			for (int i = 0; i < points.length; i += 2) {
+				pointSet.addNoDelay(points[i], points[i + 1]);
+			}
+		} else {
+			for (int i = 0; i < points.length; i += 2) {
+				polygon.addNoDelay(points[i], points[i + 1]);
+			}
+		}
 	}
 
 	public void preview(double x, double y) {
@@ -210,14 +207,7 @@ public class ViewModel {
 	 * @param mode the insertion mode
 	 */
 	public void setInsertionMode(InsertionMode mode) {
-		if (mode == InsertionMode.RANDOM) {
-			InsertionMode tmp = this.mode;
-			this.mode = mode;
-			draw(0, 0);
-			this.mode = tmp;
-		} else {
-			this.mode = mode;
-		}
+		this.mode = mode;
 	}
 
 	public void setWidth(int width) {

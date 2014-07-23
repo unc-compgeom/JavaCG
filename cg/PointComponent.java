@@ -3,6 +3,9 @@ package cg;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.TriangleMesh;
+import org.omg.CORBA.TRANSACTION_MODE;
+import util.ColorSpecial;
 
 
 public class PointComponent extends AbstractGeometry implements Point {
@@ -65,24 +68,30 @@ public class PointComponent extends AbstractGeometry implements Point {
 		if (isInvisible()) {
 			return;
 		}
+		// push old values onto the "stack"
 		Paint oldFill = gc.getFill();
 		Paint oldStroke = gc.getStroke();
+		//double oldSize = gc.getLineWidth(); // we don't need this for points
 		Color c = super.getColor();
 		if (c != null) {
 			gc.setFill(c);
 			gc.setStroke(c.darker());
 		}
-		if (oldFill == null || oldFill == Color.BLACK) {
-			gc.setFill(Color.BLACK);
-			gc.setStroke(Color.BLACK.brighter());
+		gc.setLineWidth(1);
+
+		// draw the point
+		if (gc.getFill() == null || gc.getFill() == Color.BLACK) {
+			gc.setStroke(ColorSpecial.LIGHT_SLATE_GRAY);
 		}
 		int size = GeometryManager.getSize() > 2 ? GeometryManager.getSize()
 				: 2;
 		gc.fillOval((x - size), (y - size), 2 * size, 2 * size);
 		gc.strokeOval((x - size), (y - size), 2 * size, 2 * size);
 
+		// restore gc from the "stack"
 		gc.setFill(oldFill);
 		gc.setStroke(oldStroke);
+		//gc.setLineWidth(oldSize);
 	}
 
 	@Override

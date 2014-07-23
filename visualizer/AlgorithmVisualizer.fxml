@@ -10,7 +10,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualizer.ViewController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="200.0" prefHeight="400.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualizer.ViewController">
    <top>
       <ToolBar minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
         <items>
@@ -41,17 +41,17 @@
       </ToolBar>
    </top>
    <center>
-      <ScrollPane focusTraversable="false" pickOnBounds="false">
+      <ScrollPane fx:id="scrollPane">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" pickOnBounds="false">
+          <AnchorPane>
                <children>
-                  <Canvas fx:id="canvas" height="1000.0" onMouseClicked="#mouseClickFired" onMouseMoved="#mouseMoveFired" pickOnBounds="true" width="1000.0" />
+                  <Canvas fx:id="canvas" height="600.0" onMouseClicked="#mouseClickFired" onMouseMoved="#mouseMoveFired" pickOnBounds="true" width="800.0" />
                </children>
             </AnchorPane>
         </content>
       </ScrollPane>
    </center>
    <bottom>
-      <ProgressBar prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER" />
+      <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>
