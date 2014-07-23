@@ -147,7 +147,10 @@ public class ViewController implements CGObserver {
 		Task t = new Task() {
 			@Override
 			protected Void call() throws Exception {
-				model.runAlgorithm(algorithms.getSelectionModel().getSelectedItem());
+				Algorithm algorithm = algorithms.getSelectionModel().getSelectedItem();
+				if (algorithm != null) {
+					model.runAlgorithm(algorithm);
+				}
 				return null;
 			}
 		};
@@ -171,12 +174,11 @@ public class ViewController implements CGObserver {
 		Task t = new Task() {
 			@Override
 			protected Void call() throws Exception {
-				model.runAlgorithm(algorithms.getSelectionModel().getSelectedItem());
+				GeometryManager.setDelay((int) (Math.exp(speed.getValue() * 8)) - 1);
 				return null;
 			}
 		};
 		new Thread(t).start();
-		GeometryManager.setDelay((int) (Math.exp(speed.getValue() * 8)) - 1);
 	}
 
 	@FXML
