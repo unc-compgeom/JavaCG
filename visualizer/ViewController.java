@@ -234,10 +234,8 @@ public class ViewController implements CGObserver {
 						gc.setLineWidth(1);
 						List<Drawable> geometry = GeometryManager.getAllGeometry();
 						synchronized (geometry) {
-							System.out.println("painting");
 							geometry.stream().forEach(d -> {
 								d.paint(gc);
-								System.out.println("\t"+d);
 							});
 						}
 						return null;

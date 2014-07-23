@@ -82,7 +82,7 @@ public class CircleComponent extends AbstractGeometry implements Circle {
 			gc.setFill(c);
 			gc.setStroke(c.darker());
 		}
-
+		gc.setLineWidth(GeometryManager.getSize());
 		// draw the circle
 		gc.strokeOval(topLeft.getX(), topLeft.getY(), diameter, diameter);
 
