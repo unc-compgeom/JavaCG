@@ -140,7 +140,7 @@ public class ViewController implements CGObserver {
 		Task t = new Task() {
 			@Override
 			protected Void call() throws Exception {
-				model.makeRandom(10,10,790,590);
+				model.makeRandom(10, 10, 790, 590);
 				return null;
 			}
 		};
@@ -227,14 +227,17 @@ public class ViewController implements CGObserver {
 					@Override
 					public Void call() {
 						GraphicsContext gc = canvas.getGraphicsContext2D();
-						gc.clearRect(0,0,2000,2000);
+						gc.clearRect(0,0,800,600);
+
 						gc.setStroke(Color.BLACK);
 						gc.setFill(Color.BLACK);
 						gc.setLineWidth(1);
 						List<Drawable> geometry = GeometryManager.getAllGeometry();
 						synchronized (geometry) {
+							System.out.println("painting");
 							geometry.stream().forEach(d -> {
 								d.paint(gc);
+								System.out.println("\t"+d);
 							});
 						}
 						return null;
