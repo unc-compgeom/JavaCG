@@ -14,9 +14,6 @@ public abstract class AbstractGeometry implements Drawable {
 	private Color c;
 	private boolean invisible;
 
-	AbstractGeometry() {
-	}
-
 	private void animateChange(Color oldColor, Color newColor) {
 		if (newColor == null) {
 			return;

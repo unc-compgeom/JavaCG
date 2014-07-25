@@ -1,31 +1,31 @@
 package algorithms;
 
-import java.util.ListIterator;
-import java.util.stream.Collectors;
-
-import predicates.Predicate;
-import predicates.Predicate.Orientation;
-import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import predicates.Predicate;
+import predicates.Predicate.Orientation;
+import util.ColorSpecial;
+
+import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 class BentleyFaustPreparata {
 	/**
 	 * Computes the convex hull using the Bentley Faust Preparata. Precondition:
-	 * all points are at integer coordinates.
-	 * 
-	 * @param points
-	 *            the raw points
+	 * all points are at integer coordinates.  If points are not at integer coordinates
+	 * they will be rounded to integers.
+	 *
+	 * @param points the raw points
 	 * @return the convex hull
 	 */
 	public static Polygon findConvexHull(PointSet points) {
+		// find min/max vertices
 		ListIterator<Point> it = points.listIterator();
 		Point v = it.next();
 		int minX = (int) v.getX(), maxX = (int) v.getX();
 		Point minMin = v, minMax = v, maxMin = v, maxMax = v;
-		// find min/max vertices
 		while (it.hasNext()) {
 			v = it.next();
 			if (v.getX() < minX) {
@@ -52,12 +52,12 @@ class BentleyFaustPreparata {
 		}
 
 		// divide points into buckets by x coordinate
-		VertexHolder[] buckets = new VertexHolder[maxX - minX + 1];
+		PointHolder[] buckets = new PointHolder[maxX - minX + 1];
 		// include an extra bucket for first/last
-		buckets[0] = new VertexHolder();
+		buckets[0] = new PointHolder();
 		buckets[0].setMin(minMin);
 		buckets[0].setMax(minMax);
-		buckets[buckets.length - 1] = new VertexHolder();
+		buckets[buckets.length - 1] = new PointHolder();
 		buckets[buckets.length - 1].setMin(maxMin);
 		buckets[buckets.length - 1].setMax(maxMax);
 		// get the min/max points for each division
@@ -66,7 +66,7 @@ class BentleyFaustPreparata {
 			v = it.next();
 			int index = (int) (v.getX() - minX);
 			if (buckets[index] == null) {
-				buckets[index] = new VertexHolder();
+				buckets[index] = new PointHolder();
 			}
 			if (Predicate.findOrientation(v, minMin, maxMin) == Predicate.Orientation.CLOCKWISE) {
 				// vertex is below line from minMin to maxMin
@@ -85,10 +85,10 @@ class BentleyFaustPreparata {
 			}
 		}
 		// modification of Monotone Chain
-		// lower
-		Polygon lower = GeometryManager.newPolygon();
-		lower.setColor(ColorSpecial.MAGENTA);
-		lower.add(minMin);
+		// lower convex hull
+		Polygon lowerHull = GeometryManager.newPolygon();
+		lowerHull.setColor(ColorSpecial.MAGENTA);
+		lowerHull.add(minMin);
 		for (int i = 1; i < buckets.length; i++) {
 			if (buckets[i] == null) {
 				continue;
@@ -97,17 +97,18 @@ class BentleyFaustPreparata {
 			if (p == null) {
 				continue;
 			}
-			while (lower.size() > 1
-					&& Predicate.findOrientation(p, lower.getSecondToLast(),
-							lower.getLast()) != Orientation.COUNTERCLOCKWISE) {
-				lower.removeLast();
+			while (lowerHull.size() > 1
+					&& Predicate.findOrientation(p, lowerHull.getSecondToLast(),
+					lowerHull.getLast()) != Orientation.COUNTERCLOCKWISE) {
+				lowerHull.removeLast();
 			}
-			lower.addLast(buckets[i].getMin());
+			lowerHull.addLast(buckets[i].getMin());
 		}
-		// upper
-		Polygon upper = GeometryManager.newPolygon();
-		upper.setColor(ColorSpecial.BLUE);
-		upper.add(maxMax);
+
+		// upper convex hull
+		Polygon upperHull = GeometryManager.newPolygon();
+		upperHull.setColor(ColorSpecial.BLUE);
+		upperHull.add(maxMax);
 		for (int i = buckets.length - 2; i >= 0; i--) {
 			if (buckets[i] == null) {
 				continue;
@@ -116,28 +117,34 @@ class BentleyFaustPreparata {
 			if (p == null) {
 				continue;
 			}
-			while (upper.size() > 1
-					&& Predicate.findOrientation(p, upper.getSecondToLast(),
-							upper.getLast()) != Orientation.COUNTERCLOCKWISE) {
-				upper.removeLast();
+			while (upperHull.size() > 1
+					&& Predicate.findOrientation(p, upperHull.getSecondToLast(),
+					upperHull.getLast()) != Orientation.COUNTERCLOCKWISE) {
+				upperHull.removeLast();
 			}
-			upper.addLast(buckets[i].getMax());
+			upperHull.addLast(buckets[i].getMax());
 		}
-		// join
+
+		// join the upper and lower convex hulls
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
-		hull.addAll(lower.stream().collect(Collectors.toList()));
-		hull.addAll(upper.stream().collect(Collectors.toList()));
+		hull.addAll(lowerHull.stream().collect(Collectors.toList()));
+		hull.addAll(upperHull.stream().collect(Collectors.toList()));
+
 		// connect the first and last edges
 		hull.add(hull.getFirst());
+
 		// clean up
-		GeometryManager.destroy(upper);
-		GeometryManager.destroy(lower);
+		GeometryManager.destroy(upperHull);
+		GeometryManager.destroy(lowerHull);
 		return hull;
 	}
 }
 
-class VertexHolder {
+/**
+ * A helper class to hold two Points.
+ */
+class PointHolder {
 	private Point min;
 	private Point max;
 

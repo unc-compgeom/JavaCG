@@ -1,11 +1,11 @@
 package algorithms;
 
-import javafx.scene.paint.Color;
-import util.CG;
-import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.PointSet;
 import cg.Polygon;
+import javafx.scene.paint.Color;
+import util.CG;
+import util.ColorSpecial;
 
 class Chan {
 

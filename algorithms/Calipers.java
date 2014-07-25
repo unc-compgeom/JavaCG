@@ -1,12 +1,8 @@
 package algorithms;
 
+import cg.*;
 import predicates.Predicate;
 import util.ColorSpecial;
-import cg.GeometryManager;
-import cg.Point;
-import cg.PointSet;
-import cg.Polygon;
-import cg.Segment;
 
 class Calipers {
 

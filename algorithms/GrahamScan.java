@@ -1,27 +1,31 @@
 package algorithms;
 
-import predicates.Predicate;
-import predicates.Predicate.Orientation;
-import util.CG;
-import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import predicates.Predicate;
+import predicates.Predicate.Orientation;
+import util.CG;
+import util.ColorSpecial;
 
 class GrahamScan {
 
+	/**
+	 * Finds the convex hull using the Graham scan.
+	 *
+	 * @param points the point set
+	 * @return a {@link cg.Polygon} representing the convex hull
+	 */
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
 		// degenerate case handling
-		{
-			if (points.size() == 0) {
-				return hull;
-			} else if (points.size() == 1) {
-				hull.add(points.get(0));
-				return hull;
-			}
+		if (points.size() == 0) {
+			return hull;
+		} else if (points.size() == 1) {
+			hull.add(points.get(0));
+			return hull;
 		}
 		// Graham Scan
 		Point smallest = CG.findSmallestYX(points);

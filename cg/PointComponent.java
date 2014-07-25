@@ -3,8 +3,6 @@ package cg;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.TriangleMesh;
-import org.omg.CORBA.TRANSACTION_MODE;
 import util.ColorSpecial;
 
 

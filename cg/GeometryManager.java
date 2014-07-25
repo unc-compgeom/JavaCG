@@ -18,10 +18,10 @@ import java.util.List;
 public class GeometryManager {
 	private static int delay = 150;
 	private static final List<Drawable> dispersedObjects = Collections
-			.synchronizedList(new LinkedList<Drawable>());
+			.synchronizedList(new LinkedList<>());
 	private static final int LARGESIZE = 5;
 	private static final List<CGObserver> observers = Collections
-			.synchronizedList(new LinkedList<CGObserver>());
+			.synchronizedList(new LinkedList<>());
 	private static int size = 1;
 	private static final int SMALLSIZE = 1;
 
@@ -174,9 +174,7 @@ public class GeometryManager {
 	public static PointSet newPointSet(PointSet points) {
 		PointSet s = new PointSetComponent();
 		s.setColor(points.getColor());
-		for (Point point : points) {
-			s.addNoDelay(point);
-		}
+		points.forEach(s::addNoDelay);
 		return (PointSet) buildGeometry(s);
 	}
 

@@ -191,7 +191,7 @@ public class ViewModel {
 			pointSet = GeometryManager.newPointSet();
 		}
 		try {
-			Algorithm.run(algorithm, points);
+			Algorithm.runAlgorithm(algorithm, points);
 		} catch (Exception e) {
 			System.out.println("Exception while running " + algorithm);
 			e.printStackTrace();

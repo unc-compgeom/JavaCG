@@ -1,19 +1,26 @@
 package algorithms;
 
 
-
+import cg.GeometryManager;
+import cg.Point;
+import cg.PointSet;
+import cg.Polygon;
 import javafx.scene.paint.Color;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
 import util.ColorSpecial;
-import cg.GeometryManager;
-import cg.Point;
-import cg.PointSet;
-import cg.Polygon;
+
+import java.util.stream.Collectors;
 
 class MonotoneChain {
 
+	/**
+	 * Computes the convex hull using the monotone chain algorithm
+	 *
+	 * @param points the point set
+	 * @return a {@link cg.Polygon} representing the convex hull
+	 */
 	public static Polygon findConvexHull(PointSet points) {
 		CG.lexicographicalSort(points);
 		// lower hull
@@ -23,7 +30,7 @@ class MonotoneChain {
 			Point p = points.get(i);
 			while (lower.size() > 1
 					&& Predicate.findOrientation(p, lower.getSecondToLast(),
-							lower.getLast()) != Orientation.COUNTERCLOCKWISE) {
+					lower.getLast()) != Orientation.COUNTERCLOCKWISE) {
 				lower.removeLast();
 			}
 			lower.addLast(points.get(i));
@@ -35,7 +42,7 @@ class MonotoneChain {
 			Point p = points.get(i);
 			while (upper.size() > 1
 					&& Predicate.findOrientation(p, upper.getSecondToLast(),
-							upper.getLast()) != Orientation.COUNTERCLOCKWISE) {
+					upper.getLast()) != Orientation.COUNTERCLOCKWISE) {
 				upper.removeLast();
 			}
 			upper.addLast(points.get(i));
@@ -43,12 +50,8 @@ class MonotoneChain {
 		// join
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
-		for (Point p : lower) {
-			hull.add(p);
-		}
-		for (Point p : upper) {
-			hull.add(p);
-		}
+		hull.addAll(lower.stream().collect(Collectors.toList()));
+		hull.addAll(upper.stream().collect(Collectors.toList()));
 		// clean up
 		GeometryManager.destroy(upper);
 		GeometryManager.destroy(lower);

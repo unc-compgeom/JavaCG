@@ -11,7 +11,12 @@ import util.DuplicatePointException;
  * 
  */
 public interface Subdivision extends Drawable {
-	public void getDual();
+
+	/**
+	 * Computes and returns the dual of this graph.
+	 * @return the dual graph
+	 */
+	public Subdivision getDual();
 
 	/**
 	 * Inserts {@link Point} p into the subdivision.

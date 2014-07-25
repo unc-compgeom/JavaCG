@@ -1,14 +1,21 @@
 package algorithms;
 
-import javafx.scene.paint.Color;
-import predicates.Predicate;
-import util.ColorSpecial;
 import cg.Circle;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
+import javafx.scene.paint.Color;
+import predicates.Predicate;
+import util.ColorSpecial;
 
 class Welzl {
+
+	/**
+	 * Find's the smallest enclosing circle by Welzl's algorithm
+	 *
+	 * @param points the point set
+	 * @return a {@link Circle} representing the smallest enclosing circle
+	 */
 	public static Circle findSmallestEnclosingCircle(PointSet points) {
 		Circle result;
 		PointSet s = GeometryManager.newPointSet(points);

@@ -14,7 +14,7 @@
 //public class CGToolBar {
 //
 //	public static ToolBar makeToolBar(ViewController a) {
-//		Button enablePolygon, makePoint, makeCircle, makeLine, makeRandom, run, reset;
+//		Button enablePolygon, makePoint, makeCircle, makeLine, makeRandom, runAlgorithm, reset;
 //		ComboBox<Algorithm> algorithms;
 //		Slider speed;
 //		ToolBar tb = new ToolBar(
@@ -27,7 +27,7 @@
 //				new Separator(Orientation.VERTICAL),
 //				algorithms = new ComboBox<Algorithm>(
 //						FXCollections.observableArrayList(Algorithm.values())),
-//				run = new Button("Run"),
+//				runAlgorithm = new Button("Run"),
 //				reset = new Button("Reset"),
 //				new Separator(Orientation.VERTICAL),
 //				speed = new Slider(0, 35,
@@ -70,8 +70,8 @@
 //
 //		// random points
 //		makeRandom.setOnAction((event) -> a.actionPerformed(new ActionEvent(tb, ActionEvent.ACTION_PERFORMED, "makeRandom")));
-//		// run
-//		run.setOnAction((event) -> {
+//		// runAlgorithm
+//		runAlgorithm.setOnAction((event) -> {
 //			a.actionPerformed(new ActionEvent(tb,
 //					ActionEvent.ACTION_PERFORMED, algorithms.getSelectionModel().getSelectedItem().toString()));
 //		});

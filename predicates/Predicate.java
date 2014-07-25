@@ -12,18 +12,6 @@ public class Predicate {
 		CLOCKWISE, COLINEAR, COUNTERCLOCKWISE
 	}
 
-	public static int ahead = 0;
-	public static int ccw = 0;
-	public static int findOrientation = 0;
-	public static int isLeftOrInside = 0;
-	public static int isPointInCircle = 0;
-	public static int leftOf = 0;
-	public static int leftOrAhead = 0;
-	public static int onEdge = 0;
-	public static int rightOf = 0;
-	public static int rightOrAhead = 0;
-	public static int triArea = 0;
-
 	/**
 	 * Tests if {@link Point} p is ahead of the segment from q to r.
 	 *
@@ -33,7 +21,6 @@ public class Predicate {
 	 * @return true iff <tt>p</tt> is ahead of <tt>qr</tt>.
 	 */
 	private static boolean ahead(Point p, Point q, Point r) {
-		ahead++;
 		return p.sub(q).dot(r.sub(q)) > CG.distSquared(q, r);
 	}
 
@@ -46,12 +33,10 @@ public class Predicate {
 	 * @return true iff a, b, and color are oriented counterclockwise.
 	 */
 	private static boolean ccw(Point a, Point b, Point c) {
-		ccw++;
 		return triArea(a, b, c) > 0;
 	}
 
 	public static Orientation findOrientation(Point p, Point q, Point r) {
-		findOrientation++;
 		// find the determinant of the matrix
 		// [[px, py, 1]
 		// [qx, qy, 1]
@@ -73,7 +58,6 @@ public class Predicate {
 	}
 
 	public static boolean isLeftOrInside(Point p, Point q, Point r) {
-		isLeftOrInside++;
 		/* test = (qx-px)*(ry-py) - (qy-py)*(rx-px); */
 		double det = (q.getX() - p.getX()) * (r.getY() - p.getY())
 				- (q.getY() - p.getY()) * (r.getX() - p.getX());
@@ -93,7 +77,6 @@ public class Predicate {
 	 * @return true iff s is inside or on the boundary of the circle
 	 */
 	public static boolean isPointInCircle(Point s, Circle c) {
-		isPointInCircle++;
 		// correctly handles the case of the null circle (no points).
 		// correctly handles the case of the one-point circle (one point).
 		// correctly handles the case of the two-point circle (diameter).
@@ -129,7 +112,6 @@ public class Predicate {
 			GeometryManager.destroy(tmp);
 			return isInCircle;
 		} else {
-			isPointInCircle--;
 			Point p0 = points.get(0), p1 = points.get(1), p2 = points.get(2);
 			if (ccw(p0, p1, p2)) {
 				return isPointInCircle(s, points.get(0), points.get(1),
@@ -153,7 +135,6 @@ public class Predicate {
 	 * @return true iff <tt>test</tt> is in the circle
 	 */
 	public static boolean isPointInCircle(Point test, Point a, Point b, Point c) {
-		isPointInCircle++;
 		float ax = a.getX(), ay = a.getY();
 		float bx = b.getX(), by = b.getY();
 		float cx = c.getX(), cy = c.getY();
@@ -167,7 +148,7 @@ public class Predicate {
 			return false;
 		}
 		// animation code
-		List<Point> points = new ArrayList<Point>(3);
+		List<Point> points = new ArrayList<>(3);
 		points.add(a);
 		points.add(b);
 		points.add(c);
@@ -205,18 +186,15 @@ public class Predicate {
 	}
 
 	public static boolean leftOf(Point p, Edge e) {
-		leftOf++;
 		return triArea(p, e.orig(), e.dest()) > 0;
 	}
 
 	public static boolean leftOrAhead(Point p, Point q, Point r) {
-		leftOrAhead++;
 		double tmp = triArea(p, q, r);
 		return tmp > 0 || tmp == 0 && ahead(p, q, r);
 	}
 
 	public static boolean onEdge(Point p, Edge e) {
-		onEdge++;
 		Point a = e.orig();
 		Point b = e.dest();
 		if (triArea(a, b, p) == 0) {
@@ -229,12 +207,10 @@ public class Predicate {
 	}
 
 	public static boolean rightOf(Point p, Edge e) {
-		rightOf++;
 		return triArea(p, e.orig(), e.dest()) < 0;
 	}
 
 	public static boolean rightOrAhead(Point p, Point q, Point r) {
-		rightOrAhead++;
 		double tmp = triArea(p, q, r);
 		return tmp < 0 || tmp == 0 && ahead(p, q, r);
 	}
@@ -251,7 +227,6 @@ public class Predicate {
 	 * @return twice the signed area
 	 */
 	private static double triArea(Point a, Point b, Point c) {
-		triArea++;
 		return b.sub(a).getX() * c.sub(a).getY() - b.sub(a).getY()
 				* c.sub(a).getX();
 	}

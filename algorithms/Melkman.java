@@ -1,14 +1,21 @@
 package algorithms;
 
-import predicates.Predicate;
-import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import predicates.Predicate;
+import util.ColorSpecial;
 
 class Melkman {
 
+	/**
+	 * Computes the convex hull using Melkman's algorithm.
+	 * Precondition: the input point set is a simple polygon (no edges intersect).
+	 *
+	 * @param points the point set
+	 * @return a {@link cg.Polygon} representing the convex hull
+	 */
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
@@ -21,7 +28,7 @@ class Melkman {
 			if (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 					hull.getLast(), points.get(i))
 					|| !Predicate.isLeftOrInside(points.get(i),
-							hull.getFirst(), hull.getSecond())) {
+					hull.getFirst(), hull.getSecond())) {
 				while (!Predicate.isLeftOrInside(hull.getSecondToLast(),
 						hull.getLast(), points.get(i))) {
 					// fails when initial points are colinear

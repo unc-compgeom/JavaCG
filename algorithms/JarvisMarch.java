@@ -1,15 +1,22 @@
 package algorithms;
 
-import predicates.Predicate;
-import predicates.Predicate.Orientation;
-import util.CG;
-import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import predicates.Predicate;
+import predicates.Predicate.Orientation;
+import util.CG;
+import util.ColorSpecial;
 
 class JarvisMarch {
+
+	/**
+	 * Finds the convex hull using the Jarvis March.
+	 *
+	 * @param points the point set
+	 * @return a {@link cg.Polygon} representing the convex hull
+	 */
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);

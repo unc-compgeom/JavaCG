@@ -1,13 +1,13 @@
 package algorithms;
 
-import predicates.Predicate;
-import predicates.Predicate.Orientation;
-import util.CG;
-import util.ColorSpecial;
 import cg.GeometryManager;
 import cg.Point;
 import cg.PointSet;
 import cg.Polygon;
+import predicates.Predicate;
+import predicates.Predicate.Orientation;
+import util.CG;
+import util.ColorSpecial;
 
 class QuickHull {
 	private static double distance(Point A, Point B, Point C) {
@@ -22,6 +22,12 @@ class QuickHull {
 		return num;
 	}
 
+	/**
+	 * Computes the convex hull recursively with the QuickHull algorithm.
+	 *
+	 * @param points the point set
+	 * @return a {@link cg.Polygon} representing the convex hull
+	 */
 	public static Polygon findConvexHull(PointSet points) {
 		Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
@@ -70,7 +76,7 @@ class QuickHull {
 	}
 
 	private static Point[] findMinMaxX(PointSet points) {
-		Point[] minMax = { points.get(0), points.get(0) };
+		Point[] minMax = {points.get(0), points.get(0)};
 		for (Point point : points) {
 			if (point.getX() < minMax[0].getX()) {
 				minMax[0] = point;

@@ -13,14 +13,9 @@ import java.util.Random;
 
 public class CG {
 
-	// method call counters
-	public static int cross = 0;
-	public static int distSquared = 0;
-	public static int findSmallestYX = 0;
-	public static int lexicographicalSort = 0;
-	public static int randomColor = 0;
-	public static int sortByAngle = 0;
-
+	/**
+	 * Causes the calling thread to sleep for the current animation delay.
+	 */
 	public static void animationDelay() {
 		try {
 			Thread.sleep(GeometryManager.getDelay());
@@ -38,7 +33,6 @@ public class CG {
 	 */
 	public static double distSquared(Point p, Point q) {
 		// increment the call counter
-		distSquared++;
 		// do work
 		double dx = p.getX() - q.getX(), dy = p.getY() - q.getY();
 		return dx * dx + dy * dy;
@@ -54,7 +48,6 @@ public class CG {
 	 */
 	public static Point findSmallestYX(PointSet points) {
 		// increment the call counter
-		findSmallestYX++;
 		// do work
 		Point min = points.get(0);
 		double minY = min.getY();
@@ -97,9 +90,8 @@ public class CG {
 	 */
 	public static void lexicographicalSort(PointSet points) {
 		// increment the call counter
-		lexicographicalSort++;
 		// do work
-		PriorityQueue<Point> sorter = new PriorityQueue<Point>();
+		PriorityQueue<Point> sorter = new PriorityQueue<>();
 		sorter.addAll(points);
 		PointSet sorted = GeometryManager.newPointSet();
 		sorted.setColor(ColorSpecial.CYAN);
@@ -112,7 +104,6 @@ public class CG {
 
 	public static Color randomColor() {
 		// increment the call counter
-		randomColor++;
 		// do work
 		Random Ayn = new Random();
 		return new Color(Ayn.nextDouble(), Ayn.nextDouble(), Ayn.nextDouble(), 1);
@@ -128,32 +119,27 @@ public class CG {
 	 */
 	public static PointSet sortByAngle(PointSet points, final Point compare) {
 		// increment the call counter
-		sortByAngle++;
 		// do work
-		PriorityQueue<Point> sorter = new PriorityQueue<Point>(11,
-				new Comparator<Point>() {
-					@Override
-					public int compare(Point p, Point q) {
-						Orientation o = Predicate
-								.findOrientation(q, compare, p);
-						if (o == Orientation.CLOCKWISE) {
+		PriorityQueue<Point> sorter = new PriorityQueue<>(11,
+				(p, q) -> {
+					Orientation o = Predicate
+							.findOrientation(q, compare, p);
+					if (o == Orientation.CLOCKWISE) {
+						return -1;
+					} else if (o == Orientation.COUNTERCLOCKWISE) {
+						return 1;
+					} else {
+						// co-linear
+						double dP = distSquared(compare, p);
+						double dQ = distSquared(compare, q);
+						if (dP < dQ) {
 							return -1;
-						} else if (o == Orientation.COUNTERCLOCKWISE) {
+						} else if (dP > dQ) {
 							return 1;
 						} else {
-							// colinear
-							double dP = distSquared(compare, p);
-							double dQ = distSquared(compare, q);
-							if (dP < dQ) {
-								return -1;
-							} else if (dP > dQ) {
-								return 1;
-							} else {
-								return 0;
-							}
+							return 0;
 						}
 					}
-
 				});
 		sorter.addAll(points);
 		PointSet sorted = GeometryManager.newPointSet();
