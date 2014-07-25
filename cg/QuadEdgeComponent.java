@@ -20,12 +20,12 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		ea.setCoordinates(a, b);
 
 		Edge eb = makeEdge();
-		splice(ea.sym(), eb);
 		eb.setCoordinates(b, c);
+		splice(ea.sym(), eb);
 
 		Edge ec = makeEdge();
-		splice(eb.sym(), ec);
 		ec.setCoordinates(c, a);
+		splice(eb.sym(), ec);
 
 		splice(ec.sym(), ea);
 		this.first = ec;
@@ -37,9 +37,9 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	@Override
 	public Edge connect(Edge a, Edge b) {
 		Edge e = makeEdge();
+		e.setCoordinates(a.dest(), b.orig());
 		splice(e, a.lNext());
 		splice(e.sym(), b);
-		e.setCoordinates(a.dest(), b.orig());
 		return e;
 	}
 
@@ -176,10 +176,10 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	public void swap(Edge e) {
 		Edge a = e.oPrev();
 		Edge b = e.sym().oPrev();
+		e.setCoordinates(a.dest(), b.dest());
 		splice(e, a);
 		splice(e.sym(), b);
 		splice(e, a.lNext());
 		splice(e.sym(), b.lNext());
-		e.setCoordinates(a.dest(), b.dest());
 	}
 }

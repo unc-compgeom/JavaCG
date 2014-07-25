@@ -156,15 +156,6 @@ class Calipers {
 	 * 
 	 * @param points
 	 *            the point set
-	 * @param hull
-	 *            the convex hull to be drawn by the algorithm (initially empty)
-	 * @param widthLine
-	 *            the line segment to be calculated by the algorithm (initially
-	 *            empty);
-	 * 
-	 * @param diameterLine
-	 *            the line segment to be calculated by the algorithm (initially
-	 *            empty);
 	 * 
 	 * @return the convex hull
 	 */
