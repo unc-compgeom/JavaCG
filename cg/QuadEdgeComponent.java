@@ -1,42 +1,42 @@
 package cg;
 
+import java.util.Iterator;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
-import java.util.Iterator;
 
 public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 
 	private final Edge first;
 
 	QuadEdgeComponent() {
-		int scale = 16364;
-		Point a = new PointComponent(-1 * scale - 1, 2 * scale);
-		Point b = new PointComponent(-1 * scale, -1 * scale);
-		Point c = new PointComponent(2 * scale, -1 * scale);
+		final int scale = 16364;
+		final Point a = new PointComponent(-1 * scale - 1, 2 * scale);
+		final Point b = new PointComponent(-1 * scale, -1 * scale);
+		final Point c = new PointComponent(2 * scale, -1 * scale);
 
-		Edge ea = makeEdge();
+		final Edge ea = makeEdge();
 		ea.setCoordinates(a, b);
 
-		Edge eb = makeEdge();
+		final Edge eb = makeEdge();
 		eb.setCoordinates(b, c);
 		splice(ea.sym(), eb);
 
-		Edge ec = makeEdge();
+		final Edge ec = makeEdge();
 		ec.setCoordinates(c, a);
 		splice(eb.sym(), ec);
 
 		splice(ec.sym(), ea);
-		this.first = ec;
+		first = ec;
 		ea.setInvisible(true);
 		eb.setInvisible(true);
 		ec.setInvisible(true);
 	}
 
 	@Override
-	public Edge connect(Edge a, Edge b) {
-		Edge e = makeEdge();
+	public Edge connect(final Edge a, final Edge b) {
+		final Edge e = makeEdge();
 		e.setCoordinates(a.dest(), b.orig());
 		splice(e, a.lNext());
 		splice(e.sym(), b);
@@ -44,13 +44,13 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	}
 
 	@Override
-	public void deleteEdge(Edge e) {
+	public void deleteEdge(final Edge e) {
 		splice(e, e.oPrev());
 		splice(e.sym(), e.sym().oPrev());
 	}
 
 	@Override
-	public Edge get(int i) {
+	public Edge get(final int i) {
 		int count = 0;
 		Edge e = first;
 		do {
@@ -66,9 +66,44 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		throw new IndexOutOfBoundsException();
 	}
 
+	private boolean isWall(final Edge e) {
+		return e.orig().compareTo(e.lNext().orig()) >= 0
+				&& e.lNext().orig().compareTo(e.lPrev().orig()) > 0;
+
+	}
+
+	public Iterator<Edge> iterator() {
+		return new Iterator<Edge>() {
+			private final Edge e = first;
+			private Edge next = e;
+			private boolean firstCase = first != null;
+
+			@Override
+			public boolean hasNext() {
+				if (firstCase) {
+					firstCase = false;
+					return true;
+				} else {
+					return next != e;
+				}
+			}
+
+			@Override
+			public Edge next() {
+				final Edge tmp = next;
+				if (isWall(next) || isWall(next.sym())) {
+					next = next.rPrev();
+				} else {
+					next = next.oNext();
+				}
+				return tmp;
+			}
+		};
+	}
+
 	@Override
 	public Edge makeEdge() {
-		Edge[] edges = new Edge[4];
+		final Edge[] edges = new Edge[4];
 		edges[0] = new EdgeComponent();
 		edges[1] = new EdgeComponent();
 		edges[2] = new EdgeComponent();
@@ -87,15 +122,15 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
+	public void paint(final GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
 		// push old values onto the "stack"
-		Paint oldFill = gc.getFill();
-		Paint oldStroke = gc.getStroke();
-		double oldSize = gc.getLineWidth();
-		Color c = super.getColor();
+		final Paint oldFill = gc.getFill();
+		final Paint oldStroke = gc.getStroke();
+		final double oldSize = gc.getLineWidth();
+		final Color c = super.getColor();
 		if (c != null) {
 			gc.setFill(c);
 			gc.setStroke(c.darker());
@@ -121,50 +156,15 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 		gc.setLineWidth(oldSize);
 	}
 
-	public Iterator<Edge> iterator() {
-		return new Iterator<Edge>() {
-			private final Edge e = first;
-			private Edge next = e;
-			private boolean firstCase = first != null;
-
-			@Override
-			public boolean hasNext() {
-				if (firstCase) {
-					firstCase = false;
-					return true;
-				} else {
-					return next != e;
-				}
-			}
-
-			@Override
-			public Edge next() {
-				Edge tmp = next;
-				if (isWall(next) || isWall(next.sym())) {
-					next = next.rPrev();
-				} else {
-					next = next.oNext();
-				}
-				return tmp;
-			}
-		};
-	}
-
-	private boolean isWall(Edge e) {
-		return e.orig().compareTo(e.lNext().orig()) >= 0
-				&& e.lNext().orig().compareTo(e.lPrev().orig()) > 0;
-
-	}
-
 	@Override
-	public void splice(Edge a, Edge b) {
-		Edge alpha = a.oNext().rot();
-		Edge beta = b.oNext().rot();
+	public void splice(final Edge a, final Edge b) {
+		final Edge alpha = a.oNext().rot();
+		final Edge beta = b.oNext().rot();
 
-		Edge t1 = b.oNext();
-		Edge t2 = a.oNext();
-		Edge t3 = beta.oNext();
-		Edge t4 = alpha.oNext();
+		final Edge t1 = b.oNext();
+		final Edge t2 = a.oNext();
+		final Edge t3 = beta.oNext();
+		final Edge t4 = alpha.oNext();
 
 		a.setNext(t1);
 		b.setNext(t2);
@@ -173,9 +173,9 @@ public class QuadEdgeComponent extends AbstractGeometry implements QuadEdge {
 	}
 
 	@Override
-	public void swap(Edge e) {
-		Edge a = e.oPrev();
-		Edge b = e.sym().oPrev();
+	public void swap(final Edge e) {
+		final Edge a = e.oPrev();
+		final Edge b = e.sym().oPrev();
 		e.setCoordinates(a.dest(), b.dest());
 		splice(e, a);
 		splice(e.sym(), b);

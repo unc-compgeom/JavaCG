@@ -1,20 +1,20 @@
 package algorithms;
 
-import cg.GeometryManager;
-import cg.Point;
-import cg.PointSet;
-import cg.Polygon;
 import predicates.Predicate;
 import predicates.Predicate.Orientation;
 import util.CG;
 import util.ColorSpecial;
+import cg.GeometryManager;
+import cg.Point;
+import cg.PointSet;
+import cg.Polygon;
 
 class QuickHull {
-	private static double distance(Point A, Point B, Point C) {
-		float ABx = B.getX() - A.getX();
-		float ABy = B.getY() - A.getY();
-		float ACx = A.getX() - C.getX();
-		float ACy = A.getY() - C.getY();
+	private static double distance(final Point A, final Point B, final Point C) {
+		final float ABx = B.getX() - A.getX();
+		final float ABy = B.getY() - A.getY();
+		final float ACx = A.getX() - C.getX();
+		final float ACy = A.getY() - C.getY();
 		double num = ABx * ACy - ABy * ACx;
 		if (num < 0) {
 			num = -num;
@@ -25,13 +25,14 @@ class QuickHull {
 	/**
 	 * Computes the convex hull recursively with the QuickHull algorithm.
 	 *
-	 * @param points the point set
+	 * @param points
+	 *            the point set
 	 * @return a {@link cg.Polygon} representing the convex hull
 	 */
-	public static Polygon findConvexHull(PointSet points) {
-		Polygon hull = GeometryManager.newPolygon();
+	public static Polygon findConvexHull(final PointSet points) {
+		final Polygon hull = GeometryManager.newPolygon();
 		hull.setColor(ColorSpecial.PASTEL_GREEN);
-		Point[] minMax = findMinMaxX(points);
+		final Point[] minMax = findMinMaxX(points);
 		hull.add(minMax[0]);
 		hull.add(minMax[1]);
 		// divide the point set
@@ -42,13 +43,14 @@ class QuickHull {
 		return hull;
 	}
 
-	private static void findHull(PointSet points, Polygon hull, Point a, Point b) {
-		PointSet sub = GeometryManager.newPointSet();
+	private static void findHull(final PointSet points, final Polygon hull,
+			final Point a, final Point b) {
+		final PointSet sub = GeometryManager.newPointSet();
 		sub.setColor(CG.randomColor());
 
 		// get only points counterclockwise of segment ab
-		for (Point point : points) {
-			Orientation o = Predicate.findOrientation(point, a, b);
+		for (final Point point : points) {
+			final Orientation o = Predicate.findOrientation(point, a, b);
 			if (o == Orientation.COUNTERCLOCKWISE) {
 				sub.add(point);
 			}
@@ -60,8 +62,8 @@ class QuickHull {
 		// find farthest point from segment ab
 		Point c = sub.get(0);
 		double distance = 0;
-		for (Point point : sub) {
-			double newDist = distance(a, b, point);
+		for (final Point point : sub) {
+			final double newDist = distance(a, b, point);
 			if (newDist > distance) {
 				distance = newDist;
 				c = point;
@@ -75,9 +77,9 @@ class QuickHull {
 		GeometryManager.destroy(sub);
 	}
 
-	private static Point[] findMinMaxX(PointSet points) {
-		Point[] minMax = {points.get(0), points.get(0)};
-		for (Point point : points) {
+	private static Point[] findMinMaxX(final PointSet points) {
+		final Point[] minMax = { points.get(0), points.get(0) };
+		for (final Point point : points) {
 			if (point.getX() < minMax[0].getX()) {
 				minMax[0] = point;
 			} else if (point.getX() > minMax[1].getX()) {

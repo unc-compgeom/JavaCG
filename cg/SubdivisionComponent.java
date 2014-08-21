@@ -1,6 +1,5 @@
 package cg;
 
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -10,9 +9,9 @@ import util.DuplicatePointException;
 /**
  * This class can be used to represent a Delaunay Triangulation. It uses the
  * {@link QuadEdge} data structure to maintain edge data.
- * 
+ *
  * @author Vance Miller
- * 
+ *
  */
 public class SubdivisionComponent extends AbstractGeometry implements
 		Subdivision {
@@ -27,7 +26,12 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public void insertSite(Point p) throws DuplicatePointException {
+	public Subdivision getDual() {
+		return null;
+	}
+
+	@Override
+	public void insertSite(final Point p) throws DuplicatePointException {
 		Edge e = locate(p);
 		if (Predicate.onEdge(p, e)) {
 			e = e.oPrev();
@@ -37,7 +41,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		Edge base = qe.makeEdge();
 		base.setCoordinates(e.orig(), GeometryManager.newPoint(p));
 		qe.splice(base, e);
-		this.startingEdge = base;
+		startingEdge = base;
 		// add edges
 		do {
 			base = qe.connect(e, base.sym());
@@ -46,7 +50,7 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		// examine suspect edges and ensure that the Delaunay condition is
 		// satisfied
 		do {
-			Edge t = e.oPrev();
+			final Edge t = e.oPrev();
 			if (Predicate.rightOf(t.dest(), e)
 					&& Predicate.isPointInCircle(p, e.orig(), t.dest(),
 							e.dest())) {
@@ -61,12 +65,12 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public Edge locate(Point q) throws DuplicatePointException {
+	public Edge locate(final Point q) throws DuplicatePointException {
 		Edge e = startingEdge;
 		if (!Predicate.rightOrAhead(e.dest(), e.orig(), q)) {
 			e = e.sym();
 		}
-		Point p = e.orig();
+		final Point p = e.orig();
 		if (p == q) {
 			throw new DuplicatePointException(q);
 		}
@@ -87,15 +91,15 @@ public class SubdivisionComponent extends AbstractGeometry implements
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
+	public void paint(final GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
 		// push old values onto the "stack"
-		Paint oldFill = gc.getFill();
-		Paint oldStroke = gc.getStroke();
-		double oldSize = gc.getLineWidth();
-		Color c = super.getColor();
+		final Paint oldFill = gc.getFill();
+		final Paint oldStroke = gc.getStroke();
+		final double oldSize = gc.getLineWidth();
+		final Color c = super.getColor();
 		if (c != null) {
 			gc.setFill(c);
 			gc.setStroke(c.darker());
@@ -110,73 +114,46 @@ public class SubdivisionComponent extends AbstractGeometry implements
 		gc.setLineWidth(oldSize);
 	}
 
-	@Override
-	public void getDual() {
-
-	}
-
-	private boolean isWall(Edge e) {
-		try {
-			return e.orig().compareTo(e.lNext().orig()) >= 0
-					&& e.lNext().orig().compareTo(e.lPrev().orig()) > 0;
-		} catch (NullPointerException ee) {
-			System.out.println(e + " " + e.sym());
-			ee.printStackTrace();
-			return true;
-		}
-	}
-
-	private void traverse(Edge start) {
-		Edge e = start;
-		do {
-			// something to e
-			if (isWall(e) || isWall(e.sym())) {
-				e = e.rPrev();
-			} else {
-				e = e.oNext();
-			}
-		} while (e != start);
-	}
-
-//	private void fixTriangle(Edge e1, Edge e2, Edge e3) {
-//		Point center = getCenter(e1, e2, e3);
-//		System.out
-//				.println("e1.rot() dest " + e1.rot().dest() + " -> " + center);
-//		System.out
-//				.println("e2.rot() dest " + e2.rot().dest() + " -> " + center);
-//		System.out
-//				.println("e3.rot() dest " + e3.rot().dest() + " -> " + center);
-//		e1.rot().setDest(center);
-//		e2.rot().setDest(center);
-//		e3.rot().setDest(center);
-//	}
-//
-//	private Point getCenter(Edge e1, Edge e2, Edge e3) {
-//		Point p = e1.orig(), q = e2.orig(), r = e3.orig();
-//		Color o1 = p.getColor(), o2 = q.getColor(), o3 = r.getColor();
-//		p.setColor(ColorSpecial.AMARANTH);
-//		q.setColor(ColorSpecial.AMARANTH);
-//		r.setColor(ColorSpecial.AMARANTH);
-//		List<Point> points = new ArrayList<Point>(3);
-//		points.add(p);
-//		points.add(q);
-//		points.add(r);
-//		Circle c = GeometryManager.newCircle(points);
-//		CG.animationDelay();
-//		GeometryManager.destroy(c);
-//		p.setColor(o1);
-//		q.setColor(o2);
-//		r.setColor(o3);
-//		double px = p.getX(), py = p.getY();
-//		double qx = q.getX(), qy = q.getY();
-//		double rx = r.getX(), ry = r.getY();
-//
-//		double det = (px - qx) * (py - ry) - (py - qy) * (px - rx);
-//		float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py - qy)
-//				* (p.plus(r).div(2).dot(p.sub(r)))) / det);
-//		float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
-//				.plus(q).div(2).dot(p.sub(q))
-//				* (px - rx)) / det);
-//		return new PointComponent(x, y);
-//	}
+	// private void fixTriangle(Edge e1, Edge e2, Edge e3) {
+	// Point center = getCenter(e1, e2, e3);
+	// System.out
+	// .println("e1.rot() dest " + e1.rot().dest() + " -> " + center);
+	// System.out
+	// .println("e2.rot() dest " + e2.rot().dest() + " -> " + center);
+	// System.out
+	// .println("e3.rot() dest " + e3.rot().dest() + " -> " + center);
+	// e1.rot().setDest(center);
+	// e2.rot().setDest(center);
+	// e3.rot().setDest(center);
+	// }
+	//
+	// private Point getCenter(Edge e1, Edge e2, Edge e3) {
+	// Point p = e1.orig(), q = e2.orig(), r = e3.orig();
+	// Color o1 = p.getColor(), o2 = q.getColor(), o3 = r.getColor();
+	// p.setColor(ColorSpecial.AMARANTH);
+	// q.setColor(ColorSpecial.AMARANTH);
+	// r.setColor(ColorSpecial.AMARANTH);
+	// List<Point> points = new ArrayList<Point>(3);
+	// points.add(p);
+	// points.add(q);
+	// points.add(r);
+	// Circle c = GeometryManager.newCircle(points);
+	// CG.animationDelay();
+	// GeometryManager.destroy(c);
+	// p.setColor(o1);
+	// q.setColor(o2);
+	// r.setColor(o3);
+	// double px = p.getX(), py = p.getY();
+	// double qx = q.getX(), qy = q.getY();
+	// double rx = r.getX(), ry = r.getY();
+	//
+	// double det = (px - qx) * (py - ry) - (py - qy) * (px - rx);
+	// float x = (float) ((p.plus(q).div(2).dot(p.sub(q)) * (py - ry) - (py -
+	// qy)
+	// * (p.plus(r).div(2).dot(p.sub(r)))) / det);
+	// float y = (float) (((px - qx) * p.plus(r).div(2).dot(p.sub(r)) - p
+	// .plus(q).div(2).dot(p.sub(q))
+	// * (px - rx)) / det);
+	// return new PointComponent(x, y);
+	// }
 }

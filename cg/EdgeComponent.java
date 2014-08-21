@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import util.ColorSpecial;
 
-
 class EdgeComponent extends AbstractGeometry implements Edge {
 
 	private Edge next;
@@ -63,22 +62,23 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public void paint(GraphicsContext gc) {
+	public void paint(final GraphicsContext gc) {
 		if (isInvisible()) {
 			return;
 		}
 		// push old values onto the "stack"
-		Paint oldFill = gc.getFill();
-		Paint oldStroke = gc.getStroke();
-		double oldSize = gc.getLineWidth();
-		Color c = super.getColor();
+		final Paint oldFill = gc.getFill();
+		final Paint oldStroke = gc.getStroke();
+		final double oldSize = gc.getLineWidth();
+		final Color c = super.getColor();
 		if (c != null) {
 			gc.setFill(c);
 			gc.setStroke(c.darker());
 		}
 		gc.setLineWidth(GeometryManager.getSize());
 
-		gc.strokeLine(orig().getX(), orig().getY(), dest().getX(), dest().getY());
+		gc.strokeLine(orig().getX(), orig().getY(), dest().getX(), dest()
+				.getY());
 
 		// restore gc from the "stack"
 		gc.setFill(oldFill);
@@ -102,7 +102,7 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public void setCoordinates(Point origin, Point destination) {
+	public void setCoordinates(final Point origin, final Point destination) {
 		if (o == null || dest() == null) {
 			setOrig(origin);
 			setDest(destination);
@@ -117,12 +117,12 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 			final Point oChange = oldO.sub(newO).div(delay);
 			final Point dChange = oldD.sub(newD).div(delay);
 			for (int i = 0; i < delay; i++) {
-				Segment anim = GeometryManager.newSegment(
+				final Segment anim = GeometryManager.newSegment(
 						oldO.sub(oChange.mult(i)), oldD.sub(dChange.mult(i)));
 				anim.setColorNoAnim(ColorSpecial.YELLOW_ROSE);
 				try {
 					Thread.sleep(1);
-				} catch (InterruptedException ignored) {
+				} catch (final InterruptedException ignored) {
 				}
 				GeometryManager.destroy(anim);
 			}
@@ -134,31 +134,31 @@ class EdgeComponent extends AbstractGeometry implements Edge {
 	}
 
 	@Override
-	public void setDest(Point d) {
+	public void setDest(final Point d) {
 		GeometryManager.destroy(d);
 		sym().setOrig(d);
 	}
 
 	@Override
-	public void setInvisible(boolean isInvisible) {
+	public void setInvisible(final boolean isInvisible) {
 		super.setInvisible(isInvisible);
 		o.setInvisible(isInvisible);
 		sym().orig().setInvisible(isInvisible);
 	}
 
 	@Override
-	public void setNext(Edge next) {
+	public void setNext(final Edge next) {
 		this.next = next;
 	}
 
 	@Override
-	public void setOrig(Point o) {
+	public void setOrig(final Point o) {
 		GeometryManager.destroy(o);
 		this.o = o;
 	}
 
 	@Override
-	public void setRot(Edge rot) {
+	public void setRot(final Edge rot) {
 		this.rot = rot;
 	}
 

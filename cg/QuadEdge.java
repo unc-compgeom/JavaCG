@@ -6,9 +6,9 @@ import util.Drawable;
  * A collection of four directed edges designed for representing general
  * subdivisions of orientable manifolds. This data structure is described in a
  * paper by Guibas and Stolfi (1985).
- * 
+ *
  * @author Vance Miller
- * 
+ *
  */
 interface QuadEdge extends Drawable {
 	/**
@@ -16,7 +16,7 @@ interface QuadEdge extends Drawable {
 	 * <tt>a</tt> to the origin of <tt>b</tt>, so that all three have the same
 	 * left face after the connection is complete and the data pointers of the
 	 * new edge are set.
-	 * 
+	 *
 	 * @param a
 	 *            an edge
 	 * @param b
@@ -27,7 +27,7 @@ interface QuadEdge extends Drawable {
 
 	/**
 	 * Disconnects edge e from the collection of edges.
-	 * 
+	 *
 	 * @param e
 	 *            the edge to delete
 	 */
@@ -37,7 +37,7 @@ interface QuadEdge extends Drawable {
 	 * Gets the {@link Edge} at index i. Edges are numbered in the order in
 	 * which they are traversed. Order is arbitrary and will not be consistent
 	 * between splices.
-	 * 
+	 *
 	 * @param i
 	 *            edge number
 	 * @return the edge at traversal location i
@@ -46,7 +46,7 @@ interface QuadEdge extends Drawable {
 
 	/**
 	 * Creates an empty edge quartet.
-	 * 
+	 *
 	 * @return the edge
 	 */
 	public Edge makeEdge();
@@ -59,7 +59,7 @@ interface QuadEdge extends Drawable {
 	 * same ring, Splice will break it into two separate pieces. Thus, Splice
 	 * can be used both to attach the two edges together, and to break them
 	 * apart.
-	 * 
+	 *
 	 * @param a
 	 *            an edge
 	 * @param b
@@ -69,7 +69,7 @@ interface QuadEdge extends Drawable {
 
 	/**
 	 * Turns an edge counterclockwise inside its enclosing quadrilateral.
-	 * 
+	 *
 	 * @param e
 	 *            the edge to swap
 	 */

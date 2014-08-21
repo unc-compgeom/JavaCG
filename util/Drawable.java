@@ -26,10 +26,11 @@ public interface Drawable {
 	public boolean isInvisible();
 
 	/**
-	 * Tells this object to paint itself.  The fill, stroke, and lineWidth
-	 * of the graphics context must be set before calling this method.
+	 * Tells this object to paint itself. The fill, stroke, and lineWidth of the
+	 * graphics context must be set before calling this method.
 	 *
-	 * @param gc Graphics context
+	 * @param gc
+	 *            Graphics context
 	 */
 	public void paint(GraphicsContext gc);
 
@@ -37,7 +38,8 @@ public interface Drawable {
 	 * Sets the color of this object. The object will be painted with this
 	 * color. The color transition is animated.
 	 *
-	 * @param c the color
+	 * @param c
+	 *            the color
 	 */
 	public void setColor(Color c);
 
@@ -45,7 +47,8 @@ public interface Drawable {
 	 * Sets the color of this object. The object will be painted with this
 	 * color. The color transition is not animated.
 	 *
-	 * @param c the color
+	 * @param c
+	 *            the color
 	 */
 	public void setColorNoAnim(Color c);
 
@@ -53,7 +56,8 @@ public interface Drawable {
 	 * Sets the visibility of this object. The object will not be painted if it
 	 * is invisible.
 	 *
-	 * @param isInvisible is the object invisible
+	 * @param isInvisible
+	 *            is the object invisible
 	 */
 	public void setInvisible(boolean isInvisible);
 }

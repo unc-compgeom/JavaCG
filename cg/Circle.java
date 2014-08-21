@@ -1,14 +1,14 @@
 package cg;
 
-import util.Drawable;
-
 import java.util.List;
+
+import util.Drawable;
 
 /**
  * A circle.
- * 
+ *
  * @author Vance Miller
- * 
+ *
  */
 public interface Circle extends Drawable {
 	// /**
@@ -27,7 +27,7 @@ public interface Circle extends Drawable {
 
 	/**
 	 * Returns a list of {@link Point}s on the circumference of the circle.
-	 * 
+	 *
 	 * @return points that define the circle
 	 */
 	public List<Point> getPoints();

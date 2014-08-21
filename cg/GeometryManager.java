@@ -1,11 +1,11 @@
 package cg;
 
-import util.CGObserver;
-import util.Drawable;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import util.CGObserver;
+import util.Drawable;
 
 /**
  * This class consists of many static methods that enable an algorithm designer
@@ -16,16 +16,7 @@ import java.util.List;
  * @author Vance Miller
  */
 public class GeometryManager {
-	private static int delay = 150;
-	private static final List<Drawable> dispersedObjects = Collections
-			.synchronizedList(new LinkedList<>());
-	private static final int LARGESIZE = 5;
-	private static final List<CGObserver> observers = Collections
-			.synchronizedList(new LinkedList<>());
-	private static int size = 1;
-	private static final int SMALLSIZE = 1;
-
-	public static void addObserver(CGObserver o) {
+	public static void addObserver(final CGObserver o) {
 		synchronized (observers) {
 			observers.add(o);
 		}
@@ -36,10 +27,11 @@ public class GeometryManager {
 	 * this method inside a factory constructor before returning the new
 	 * geometry.
 	 *
-	 * @param d the geometry to be built
+	 * @param d
+	 *            the geometry to be built
 	 * @return the finished geometry
 	 */
-	private static Drawable buildGeometry(Drawable d) {
+	private static Drawable buildGeometry(final Drawable d) {
 		synchronized (dispersedObjects) {
 			dispersedObjects.add(d);
 			return d;
@@ -49,9 +41,10 @@ public class GeometryManager {
 	/**
 	 * Remove one {@link Drawable} object from the set of drawn objects.
 	 *
-	 * @param d The <tt>Drawable</tt> to remove.
+	 * @param d
+	 *            The <tt>Drawable</tt> to remove.
 	 */
-	public static void destroy(Drawable d) {
+	public static void destroy(final Drawable d) {
 		synchronized (dispersedObjects) {
 			dispersedObjects.remove(d);
 		}
@@ -102,11 +95,12 @@ public class GeometryManager {
 	 * <code>Circle c</code>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 *
-	 * @param c the circle to clone Points on the circumference of the circle.
+	 * @param c
+	 *            the circle to clone Points on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
-	public static Circle newCircle(Circle c) {
-		Circle ci = new CircleComponent(c);
+	public static Circle newCircle(final Circle c) {
+		final Circle ci = new CircleComponent(c);
 		return (Circle) buildGeometry(ci);
 	}
 
@@ -116,11 +110,12 @@ public class GeometryManager {
 	 * This factory constructor automatically registers observers with the
 	 * object and sets its draw size.
 	 *
-	 * @param points Points on the circumference of the circle.
+	 * @param points
+	 *            Points on the circumference of the circle.
 	 * @return <tt>Circle</tt> object
 	 */
-	public static Circle newCircle(List<Point> points) {
-		Circle c = new CircleComponent(points);
+	public static Circle newCircle(final List<Point> points) {
+		final Circle c = new CircleComponent(points);
 		return (Circle) buildGeometry(c);
 	}
 
@@ -129,12 +124,14 @@ public class GeometryManager {
 	 * <code>y</code>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 *
-	 * @param x the x-coordinate of the point
-	 * @param y the y-coordinate of the point
+	 * @param x
+	 *            the x-coordinate of the point
+	 * @param y
+	 *            the y-coordinate of the point
 	 * @return a <tt>Point</tt> object
 	 */
-	public static Point newPoint(float x, float y) {
-		Point v = new PointComponent(x, y);
+	public static Point newPoint(final float x, final float y) {
+		final Point v = new PointComponent(x, y);
 		return (Point) buildGeometry(v);
 	}
 
@@ -143,11 +140,12 @@ public class GeometryManager {
 	 * This factory constructor automatically registers observers with the
 	 * object and sets its draw size.
 	 *
-	 * @param p the point that contains the location of the new point
+	 * @param p
+	 *            the point that contains the location of the new point
 	 * @return a <tt>Point</tt> object
 	 */
-	public static Point newPoint(Point p) {
-		Point pt = new PointComponent(p);
+	public static Point newPoint(final Point p) {
+		final Point pt = new PointComponent(p);
 		return (Point) buildGeometry(pt);
 	}
 
@@ -158,7 +156,7 @@ public class GeometryManager {
 	 * @return a <tt>PointSet</tt> object
 	 */
 	public static PointSet newPointSet() {
-		PointSet vs = new PointSetComponent();
+		final PointSet vs = new PointSetComponent();
 		return (PointSet) buildGeometry(vs);
 	}
 
@@ -167,12 +165,13 @@ public class GeometryManager {
 	 * constructor automatically registers observers with the object and sets
 	 * its draw size.
 	 *
-	 * @param points A <tt>PointSet</tt> to clone and insert into the new
-	 *               </tt>PointSet</tt>
+	 * @param points
+	 *            A <tt>PointSet</tt> to clone and insert into the new
+	 *            </tt>PointSet</tt>
 	 * @return A clone of the <tt>points</tt>
 	 */
-	public static PointSet newPointSet(PointSet points) {
-		PointSet s = new PointSetComponent();
+	public static PointSet newPointSet(final PointSet points) {
+		final PointSet s = new PointSetComponent();
 		s.setColor(points.getColor());
 		points.forEach(s::addNoDelay);
 		return (PointSet) buildGeometry(s);
@@ -185,7 +184,7 @@ public class GeometryManager {
 	 * @return an empty <tt>Polygon</tt> object
 	 */
 	public static Polygon newPolygon() {
-		Polygon p = new PolygonComponent();
+		final Polygon p = new PolygonComponent();
 		return (Polygon) buildGeometry(p);
 	}
 
@@ -196,7 +195,7 @@ public class GeometryManager {
 	 * @return an empty <tt>QuadEdge</tt> object
 	 */
 	public static QuadEdge newQuadEdge() {
-		QuadEdge q = new QuadEdgeComponent();
+		final QuadEdge q = new QuadEdgeComponent();
 		return (QuadEdge) buildGeometry(q);
 	}
 
@@ -205,14 +204,19 @@ public class GeometryManager {
 	 * <tt>Point(x2, y2)</tt>. This factory constructor automatically registers
 	 * observers with the object and sets its draw size.
 	 *
-	 * @param x1 X-coordinate of tail
-	 * @param y1 Y-coordinate of tail
-	 * @param x2 X-coordinate of head
-	 * @param y2 Y-coordinate of head
+	 * @param x1
+	 *            X-coordinate of tail
+	 * @param y1
+	 *            Y-coordinate of tail
+	 * @param x2
+	 *            X-coordinate of head
+	 * @param y2
+	 *            Y-coordinate of head
 	 * @return a <tt>Point</tt> object
 	 */
-	public static Segment newSegment(int x1, int y1, int x2, int y2) {
-		Segment v = new SegmentComponent(x1, y1, x2, y2);
+	public static Segment newSegment(final int x1, final int y1, final int x2,
+			final int y2) {
+		final Segment v = new SegmentComponent(x1, y1, x2, y2);
 		return (Segment) buildGeometry(v);
 	}
 
@@ -221,12 +225,14 @@ public class GeometryManager {
 	 * factory constructor automatically registers observers with the object and
 	 * sets its draw size.
 	 *
-	 * @param p1 The tail of the segment
-	 * @param p2 The head of the segment
+	 * @param p1
+	 *            The tail of the segment
+	 * @param p2
+	 *            The head of the segment
 	 * @return a <tt>Segment</tt> object
 	 */
-	public static Segment newSegment(Point p1, Point p2) {
-		Segment s = new SegmentComponent(p1, p2);
+	public static Segment newSegment(final Point p1, final Point p2) {
+		final Segment s = new SegmentComponent(p1, p2);
 		return (Segment) buildGeometry(s);
 	}
 
@@ -238,7 +244,7 @@ public class GeometryManager {
 	 * @return a <tt>Subdivision</tt> object
 	 */
 	public static Subdivision newSubdivision() {
-		Subdivision s = new SubdivisionComponent();
+		final Subdivision s = new SubdivisionComponent();
 		return (Subdivision) buildGeometry(s);
 	}
 
@@ -247,7 +253,7 @@ public class GeometryManager {
 	 */
 	private static void notifyAllObservers() {
 		synchronized (observers) {
-			for (CGObserver o : observers) {
+			for (final CGObserver o : observers) {
 				o.tellToDraw();
 			}
 		}
@@ -261,7 +267,7 @@ public class GeometryManager {
 		notifyAllObservers();
 		try {
 			Thread.sleep(delay);
-		} catch (InterruptedException ignored) {
+		} catch (final InterruptedException ignored) {
 		}
 	}
 
@@ -299,9 +305,10 @@ public class GeometryManager {
 	/**
 	 * Remove {@link CGObserver} <tt>o</tt> from all geometry objects.
 	 *
-	 * @param o The <tt>CGObserver</tt> to remove
+	 * @param o
+	 *            The <tt>CGObserver</tt> to remove
 	 */
-	public static void removeObserver(CGObserver o) {
+	public static void removeObserver(final CGObserver o) {
 		synchronized (observers) {
 			observers.remove(o);
 		}
@@ -311,9 +318,10 @@ public class GeometryManager {
 	 * Set the one delay to rule them all. All geometry objects will animate at
 	 * this speed.
 	 *
-	 * @param i The animation delay in nanoseconds
+	 * @param i
+	 *            The animation delay in nanoseconds
 	 */
-	public static void setDelay(int i) {
+	public static void setDelay(final int i) {
 		delay = i;
 	}
 
@@ -330,4 +338,18 @@ public class GeometryManager {
 		}
 		notifyAllObservers();
 	}
+
+	private static int delay = 150;
+
+	private static final List<Drawable> dispersedObjects = Collections
+			.synchronizedList(new LinkedList<>());
+
+	private static final int LARGESIZE = 5;
+
+	private static final List<CGObserver> observers = Collections
+			.synchronizedList(new LinkedList<>());
+
+	private static int size = 1;
+
+	private static final int SMALLSIZE = 1;
 }

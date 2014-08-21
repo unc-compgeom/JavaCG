@@ -11,16 +11,16 @@ public class DuplicatePointException extends Exception {
 		this(null, null, null);
 	}
 
-	public DuplicatePointException(Point duplicate) {
+	public DuplicatePointException(final Point duplicate) {
 		this(null, null, duplicate);
 	}
 
-	public DuplicatePointException(String message, Point duplicate) {
+	public DuplicatePointException(final String message, final Point duplicate) {
 		this(message, null, duplicate);
 	}
 
-	private DuplicatePointException(String message, Throwable cause,
-	                                Point duplicate) {
+	private DuplicatePointException(final String message,
+			final Throwable cause, final Point duplicate) {
 		super(message, cause);
 		this.duplicate = duplicate;
 	}
